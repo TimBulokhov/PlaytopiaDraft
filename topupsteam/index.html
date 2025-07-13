@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пополнение баланса Steam - Playtopia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 22px;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: white;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .main-layout-grid {
+            display: grid;
+            grid-template-rows: 720px auto;
+            width: 100%;
+        }
+
+        .container-and-info {
+            height: 100%;
+        }
+
+        .main-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        min-height: 100vh;
+        background: #fff;
+        font-size: 16px;
+    }
+
+    .container-and-info {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 1600px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 0 0 0 0;
+        min-height: 650px;
+    }
+    .container {
+        max-width: 480px;
+        margin: 40px 0 0 0;
+        padding: 0 20px;
+        flex: 0 0 480px;
+    }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 28px rgba(21,96,189,0.13);
+            padding: 32px;
+            border: 2px solid #1560BD !important;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            gap: 16px;
+        }
+
+        .steam-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #111D2E 0%, #1560BD 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .steam-icon::before {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.9;
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label, .info-title {
+            font-size: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #1560BD;
+            box-shadow: 0 0 0 3px rgba(21,96,189,0.1);
+        }
+
+        .help-button {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .help-button:hover {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .amount-section {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .amount-input {
+            flex: 1;
+        }
+
+        .currency-chips {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .currency-chip {
+            padding: 6px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            color: #444;
+            transition: all 0.2s ease;
+        }
+
+        .currency-chip.active {
+            background: #1560BD;
+            color: white;
+            border-color: #1560BD;
+            font-weight: 600;
+        }
+
+        .commission-info,
+        .form-group .commission-info + div,
+        .form-group > div[style*='Минимальная сумма'],
+        .form-group > div[style*='Выберите валюту пополнения'] {
+            font-size: 15px !important;
+            color: #444 !important;
+            font-weight: 400 !important;
+        }
+
+        .pay-button {
+            width: 100%;
+            padding: 16px 0;
+            background: #1560BD;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 24px;
+        }
+
+        .pay-button:hover {
+            background: #0B3C6E;
+            transform: translateY(-1px);
+        }
+
+        .pay-button:disabled {
+            background: #ccc !important;
+            color: #fff !important;
+            cursor: pointer;
+            opacity: 1 !important;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #1560BD;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .success-message {
+            color: #2e7d32;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        #conversion-result {
+            font-size: 18px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .form-group .amount-section {
+            margin-bottom: 24px;
+        }
+
+        .pay-btn {
+            width: 100%;
+            background: #1560BD;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 0;
+            margin-top: 18px;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            box-shadow: 0 2px 8px rgba(21,96,189,0.08);
+        }
+
+        .pay-btn:disabled {
+            background: #ffe0b3;
+            color: #b3b3b3;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        button.pay-button:disabled,
+        .pay-button[disabled] {
+            background: #ccc !important;
+            color: #fff !important;
+            cursor: pointer !important;
+            opacity: 1 !important;
+            box-shadow: none !important;
+        }
+
+        .login-faq-modal-btn {
+            display:inline-block;
+            background:#1560BD;
+            color:#fff;
+            font-weight:600;
+            padding:12px 24px;
+            border-radius:8px;
+            text-decoration:none;
+            font-size:16px;
+            transition:background 0.2s;
+            border:none;
+            cursor:pointer;
+        }
+
+        .login-faq-modal-btn:hover {
+            background:#0B3C6E;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 72px;
+            margin: 40px 0 0 96px;
+            flex: 1;
+            max-width: 1200px;
+        }
+
+        .info-card {
+            background: #f7faff;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(21,96,189,0.08);
+            padding: 56px 40px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-height: 320px;
+            border: 1.5px solid #e3eaf6;
+        }
+
+        .info-icon {
+            width: 54px;
+            height: 54px;
+            margin-bottom: 10px;
+            font-size: 54px !important;
+        }
+
+        .info-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+        .info-text {
+            font-size: 15px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .info-text a {
+            color: #1560BD;
+            text-decoration: underline;
+        }
+
+        .input-faq-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1560BD;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            outline: none;
+            box-shadow: none;
+            transition: none;
+        }
+
+        .input-faq-btn:hover, .input-faq-btn:focus {
+            background: #1560BD;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .input-faq-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .input-faq-btn-new {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-faq-btn-new svg {
+            display: block;
+        }
+
+        .input-faq-btn-new:focus {
+            outline: 2px solid #1560BD;
+        }
+
+        .input-faq-btn-clean {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none !important;
+            border: none !important;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-faq-btn-clean svg {
+            display: block;
+        }
+
+        .input-faq-btn-clean:focus {
+            outline: 2px solid #1560BD;
+        }
+
+        .input-faq-btn-clean, .input-faq-btn-clean:focus, .input-faq-btn-clean:hover {
+            background: none !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .swc-section {
+        width: 100%;
+        margin: 115px 0 0 0;
+        padding: 0;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 1600px;
+        box-sizing: border-box;
+        margin-left: auto;
+        margin-right: auto;
+    }
+        .swc-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 14px;
+            text-align: left;
+            padding-left: 0;
+        }
+        .swc-cards {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 18px;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 100%;
+            min-width: 0;
+        }
+        .swc-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(21,96,189,0.10);
+            border: 2px solid transparent;
+            transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+            cursor: pointer;
+            padding: 8px 8px 0 8px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            min-width: 0;
+            min-height: 180px;
+            flex: 1 1 0;
+            max-width: 180px;
+        }
+        .swc-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+        }
+        .swc-card:hover, .swc-card:focus {
+            border-color: #1560BD;
+            box-shadow: 0 4px 24px rgba(21,96,189,0.18);
+            transform: scale(1.045);
+            z-index: 2;
+        }
+        @media (max-width: 1200px) {
+            .swc-title { font-size: 20px; }
+            .swc-cards { gap: 10px; }
+            .swc-card { min-height: 120px; max-width: 110px; }
+        }
+        @media (max-width: 900px) {
+            .swc-title { font-size: 18px; }
+            .swc-cards { gap: 6px; }
+            .swc-card { min-height: 90px; max-width: 80px; }
+        }
+        @media (max-width: 700px) {
+            .swc-cards {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: space-between;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .swc-card {
+                flex: 1 1 45vw;
+                min-width: 120px;
+                max-width: 48vw;
+                margin-bottom: 10px;
+                min-height: 0;
+                padding: 4px 4px 0 4px;
+                box-sizing: border-box;
+                outline: none;
+            }
+            .swc-card:active,
+            .swc-card:focus {
+                border-color: #1560BD !important;
+                box-shadow: 0 4px 24px rgba(21,96,189,0.18) !important;
+                transform: scale(1.045) !important;
+                z-index: 2;
+            }
+        }
+        #amountError {
+            min-height: 24px;
+            display: none;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 400;
+            margin-top: 10px;
+            color: #ff4444;
+            transition: color 0.2s;
+            visibility: hidden;
+            min-height: 24px;
+            position: relative;
+            z-index: 2;
+        }
+        #amountError[style*='display:none'] {
+            color: #ff4444;
+            visibility: hidden !important;
+        }
+        .form-spacer { display: none; }
+        #conversion-note-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 15px;
+            color: #444;
+        }
+        #conversion-faq {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        @media (max-width: 700px) {
+            html {
+                font-size: 16px;
+            }
+            .main-layout-grid {
+                grid-template-rows: auto auto;
+                display: block !important;
+                width: 100%;
+            }
+            .container-and-info,
+            .swc-section {
+                width: 100% !important;
+                max-width: 100vw !important;
+                margin: 0 !important;
+                padding: 0 4px !important;
+                box-sizing: border-box;
+                display: block !important;
+                margin-top: 18px !important;
+            }
+            .info-cards {
+                grid-template-columns: 1fr !important;
+                gap: 18px !important;
+                margin: 24px 0 0 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .info-card {
+                min-height: unset !important;
+                padding: 28px 12px 18px 12px !important;
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-layout-grid">
+        <div class="container-and-info">
+            <div class="container">
+                <div id="rate-error" style="display:none;color:#d32f2f;font-size:14px;margin-bottom:12px;"></div>
+                <div class="header">
+                    <div class="steam-icon"></div>
+                    <div class="header-text">
+                        <h1>Пополнение баланса Steam</h1>
+                        <p>
+                            Официальный сервис Playtopia
+                        </p>
+                    </div>
+                </div>
+                <form id="steamForm">
+                    <div class="form-group">
+                        <label class="form-label" for="steamLogin">Логин Steam</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="steamLogin" 
+                                class="form-input" 
+                                placeholder="Введите логин Steam"
+                                required
+                            >
+                            <button id="login-faq-btn" type="button" class="input-faq-btn-clean" aria-label="Справка по логину Steam"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="11" fill="#1560BD"/><text x="11" y="16" text-anchor="middle" font-size="15" fill="#fff" font-family="Inter, Arial, sans-serif" font-weight="bold">i</text></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="amount">Сумма пополнения, ₽</label>
+                        <div class="amount-section">
+                            <div class="amount-input">
+                                <input 
+                                    type="number" 
+                                    id="amount" 
+                                    class="form-input" 
+                                    placeholder="Введите сумму в рублях"
+                                    min="1"
+                                    step="1"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        <div style="font-size:13px;color:#888;margin-top:2px;">Только целое число, без копеек</div>
+                        <hr style="border: none; border-top: 1.5px solid #222; margin: 18px 0 14px 0;">
+                        <div style="font-size:13px;color:#888;line-height:1.7;">
+                            <div>Комиссия 7%</div>
+                            <div>Минимальная сумма пополнения 25 рублей</div>
+                        </div>
+                        <div style="font-size:15px;color:#444;margin-top:10px;margin-bottom:8px;">Выберите валюту аккаунта</div>
+                        <div class="currency-chips">
+                            <div class="currency-chip active" data-currency="₽">₽</div>
+                            <div class="currency-chip" data-currency="$">$</div>
+                            <div class="currency-chip" data-currency="₸">₸</div>
+                        </div>
+                    </div>
+                    <div id="conversion-block" style="margin: 24px 0 0 0; display: none;">
+                        <div style="font-size: 15px; color: #666; margin-bottom: 8px;">Вы получите на баланс Steam:</div>
+                        <div id="conversion-result" style="font-size:18px;font-weight:600;"></div>
+                    </div>
+                    <div id="conversion-note-block"><span>Сумма может отличаться из-за внутренней конвертации Steam!</span><span id="conversion-faq" style="cursor:pointer;display:inline-flex;align-items:center;">
+<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#1560BD"/><text x="12" y="17" text-anchor="middle" font-size="16" fill="#fff" font-family="Arial">?</text></svg>
+</span></div>
+                    <div id="conversion-tooltip" style="display:none;position:absolute;z-index:1000;background:#222;color:#fff;padding:12px 16px;border-radius:8px;font-size:14px;max-width:320px;box-shadow:0 4px 16px rgba(0,0,0,0.15);"></div>
+
+                    <button id="payButton" type="submit" class="pay-button" disabled>Оплатить <span id="totalAmount">0.00 ₽</span></button>
+                    <div id="amountError" style="color:#ff4444;font-size:15px;font-weight:400;margin-top:10px;display:none;min-height:24px;text-align:center;"></div>
+
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>Обработка платежа...</p>
+                    </div>
+
+                    <div class="error-message" id="errorMessage" style="display:none;"></div>
+                    <div class="success-message" id="successMessage" style="display:none;"></div>
+                </form>
+            </div>
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-icon"> <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.61148 20.3146C3.46586 26.4961 9.20214 31 15.9912 31C24.2806 31 31.0008 24.2841 31.0008 16C31.0008 7.71575 24.2806 1 15.9912 1C8.03653 1 1.52774 7.18399 1.01367 15.0034C1.985 16.6335 2.36389 17.6416 1.61148 20.3146Z" fill="url(#paint0_linear_6323_82119)"></path><path d="M15.2174 12.2438C15.2174 12.269 15.2174 12.2943 15.2186 12.318L11.5457 17.65C10.9507 17.6229 10.3537 17.7272 9.78758 17.9603C9.53802 18.062 9.30418 18.1869 9.08477 18.3311L1.0196 15.0131C1.01966 15.0131 0.832975 18.0813 1.61071 20.368L7.31233 22.7191C7.59861 23.9976 8.47626 25.1191 9.77109 25.6586C11.8896 26.5431 14.3322 25.535 15.2135 23.4169C15.4428 22.8633 15.5498 22.2826 15.5343 21.7032L20.7896 17.95C20.8321 17.9513 20.8759 17.9526 20.9185 17.9526C24.0634 17.9526 26.6196 15.3903 26.6196 12.2438C26.6196 9.09702 24.0634 6.53711 20.9185 6.53711C17.7748 6.53711 15.2174 9.09702 15.2174 12.2438ZM14.3361 23.0487C13.654 24.6852 11.7722 25.4616 10.1365 24.7805C9.38187 24.4663 8.81214 23.8908 8.48348 23.2045L10.3394 23.9732C11.5457 24.4753 12.9297 23.9036 13.4311 22.6985C13.9341 21.492 13.3635 20.1066 12.1578 19.6045L10.2393 18.8101C10.9796 18.5294 11.8212 18.5191 12.6075 18.8461C13.4002 19.1757 14.0153 19.7963 14.3413 20.5895C14.6672 21.3826 14.6659 22.2581 14.3361 23.0487ZM20.9185 16.047C18.8248 16.047 17.1203 14.341 17.1203 12.2438C17.1203 10.1483 18.8248 8.44179 20.9185 8.44179C23.0134 8.44179 24.7179 10.1483 24.7179 12.2438C24.7179 14.341 23.0134 16.047 20.9185 16.047ZM18.0724 12.238C18.0724 10.6604 19.3505 9.3808 20.9249 9.3808C22.5006 9.3808 23.7787 10.6604 23.7787 12.238C23.7787 13.8158 22.5006 15.0942 20.9249 15.0942C19.3505 15.0942 18.0724 13.8158 18.0724 12.238Z" fill="white"></path><defs><linearGradient id="paint0_linear_6323_82119" x1="16.0073" y1="1" x2="16.0073" y2="31" gradientUnits="userSpaceOnUse"><stop stop-color="#111D2E"></stop><stop offset="0.21248" stop-color="#051839"></stop><stop offset="0.40695" stop-color="#0A1B48"></stop><stop offset="0.5811" stop-color="#132E62"></stop><stop offset="0.7376" stop-color="#144B7E"></stop><stop offset="0.87279" stop-color="#136497"></stop><stop offset="1" stop-color="#1387B8"></stop></linearGradient></defs></svg> </div>
+                    <div class="info-title">Логин Steam</div>
+                    <div class="info-text">Ваш логин — это уникальный идентификатор для входа в Steam.<br>Он не меняется после регистрации.<br>Проверьте логин перед оплатой.<br><a href="https://store.steampowered.com/account/" target="_blank">Узнать свой логин Steam</a></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"> <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#1560BD"/><path d="M12 7v4" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="#fff"/></svg> </div>
+                    <div class="info-title">Ограничения</div>
+                    <div class="info-text">Пополнение доступно только для аккаунтов с СНГ регионами.<br>Проверьте, чтобы страна и валюта аккаунта были подходящими.<br>Для пополнения аккаунтов Турции, Аргентины и других регионов — используйте Steam Wallet Codes.</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"> <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#1560BD"/><path d="M12 6v6l4 2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> </div>
+                    <div class="info-title">Оплата заказа</div>
+                    <div class="info-text">Зачисление обычно происходит мгновенно.<br>Сумма может отличаться из-за конвертации.</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#1560BD" width="32" height="32"><circle cx="12" cy="12" r="12" fill="#1560BD"/><path stroke-linecap="round" stroke-linejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" fill="#fff"/></svg> </div>
+                    <div class="info-title">Новый аккаунт Steam</div>
+                    <div class="info-text">Если это первое пополнение —<br>регион и валюта аккаунта могут измениться.<br>Рекомендуем пополнить на минимальную сумму для проверки.</div>
+                </div>
+            </div>
+        </div>
+        <section class="swc-section">
+            <h2 class="swc-title">Steam Wallet Codes</h2>
+            <div class="swc-cards">
+                <div class="swc-card"><img src="/static/SWC5.png" alt="$5 Steam Wallet Code"></div>
+                <div class="swc-card"><img src="/static/SWC10.png" alt="$10 Steam Wallet Code"></div>
+                <div class="swc-card"><img src="/static/SWC20.png" alt="$20 Steam Wallet Code"></div>
+                <div class="swc-card"><img src="/static/SWC25.png" alt="$25 Steam Wallet Code"></div>
+                <div class="swc-card"><img src="/static/SWC50.png" alt="$50 Steam Wallet Code"></div>
+                <div class="swc-card"><img src="/static/SWC100.png" alt="$100 Steam Wallet Code"></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="login-faq-modal" style="display:none;position:fixed;z-index:2000;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+        <div style="background:#23232b;color:#fff;border-radius:16px;max-width:420px;width:90vw;padding:32px 24px 24px 24px;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+            <button id="login-faq-close" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:#fff;font-size:24px;line-height:1;">
+                <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.5859 12.0001L5.29297 6.70718L6.70718 5.29297L12.0001 10.5859L17.293 5.29297L18.7072 6.70718L13.4143 12.0001L18.7072 17.293L17.293 18.7072L12.0001 13.4143L6.70718 18.7072L5.29297 17.293L10.5859 12.0001Z" fill="#fff"/></svg>
+            </button>
+            <header style="margin-bottom:18px;"><p style="font-size:20px;font-weight:600;text-align:center;">Как узнать свой логин?</p></header>
+            <div style="margin-bottom:18px;">
+                <p style="margin-bottom:12px;">Ваш логин — это уникальный идентификатор для входа в Steam.<br>Он не меняется после регистрации.<br>Проверьте логин перед оплатой!</p>
+                <img alt="steam login screenshot" src="/static/login.png" style="width:100%;height:auto;border-radius:8px;margin-bottom:12px;">
+                <p style="margin-bottom:0;">Если логин введён неверно, средства поступят на другой аккаунт.</p>
+            </div>
+            <div style="text-align:center;margin-top:18px;">
+                <a href="https://store.steampowered.com/account/" target="_blank" class="login-faq-modal-btn">Посмотреть свой логин Steam</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('steamForm');
+        const steamLoginInput = document.getElementById('steamLogin');
+        const amountInput = document.getElementById('amount');
+        const totalAmountSpan = document.getElementById('totalAmount');
+        const payButton = document.getElementById('payButton');
+        const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const currencyChips = document.querySelectorAll('.currency-chip');
+
+        const COMMISSION = 0.07; // 7% комиссия
+        let rates = { USD: 0, RUB: 1, KZT: 0 };
+        let selectedCurrency = 'RUB';
+
+        // Получаем курсы валют с cbr-xml-daily.ru (ЦБ РФ)
+        async function fetchRates() {
+            try {
+                const res = await fetch('https://www.cbr-xml-daily.ru/latest.js');
+                const data = await res.json();
+                if (!data.rates || !data.rates.USD || !data.rates.KZT) throw new Error('Нет данных о курсе');
+                rates.USD = data.rates.USD;
+                rates.KZT = data.rates.KZT;
+                rates.RUB = 1;
+                document.getElementById('rate-error').style.display = 'none';
+                updateTotalAmount();
+                updateConversionBlock();
+            } catch (e) {
+                document.getElementById('rate-error').textContent = 'Не удалось получить курс валют. Попробуйте позже.';
+                document.getElementById('rate-error').style.display = 'block';
+                payButton.disabled = true;
+            }
+        }
+
+        // Кнопки валют — только визуальный эффект
+        currencyChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                currencyChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                selectedCurrency = chip.dataset.currency === '$' ? 'USD' : chip.dataset.currency === '₸' ? 'KZT' : 'RUB';
+                updateConversionBlock();
+            });
+        });
+
+        // Обновление общей суммы
+        function updateTotalAmount() {
+            const amountRub = parseFloat(amountInput.value.replace(',', '.')) || 0;
+            const total = amountRub > 0 ? (amountRub * (1 + COMMISSION)) : 0;
+            totalAmountSpan.textContent = total.toFixed(2) + ' ₽';
+        }
+        amountInput.addEventListener('input', updateTotalAmount);
+        updateTotalAmount();
+        validateAmountAndTogglePayButton();
+
+        // Обновление блока конвертации
+        function updateConversionBlock() {
+            const amountRub = parseFloat(amountInput.value.replace(',', '.')) || 0;
+            const block = document.getElementById('conversion-block');
+            const result = document.getElementById('conversion-result');
+            if (amountRub > 0 && rates.USD > 0 && rates.KZT > 0) {
+                block.style.display = 'block';
+                let text = '';
+                if (selectedCurrency === 'RUB') {
+                    text = `~${amountRub.toFixed(2)} ₽`;
+                } else if (selectedCurrency === 'USD') {
+                    text = `~${(amountRub * rates.USD).toFixed(2)} $`;
+                } else if (selectedCurrency === 'KZT') {
+                    text = `~${(amountRub * rates.KZT).toFixed(2)} ₸`;
+                }
+                result.textContent = text;
+            } else {
+                block.style.display = 'none';
+            }
+        }
+        amountInput.addEventListener('input', updateConversionBlock);
+        fetchRates();
+
+        // FAQ тултип для конвертации
+        const conversionFaq = document.getElementById('conversion-faq');
+        const conversionTooltip = document.getElementById('conversion-tooltip');
+        // Tooltip для справки о конвертации: hover для десктопа, tap/click для мобильных
+        function isMobile() {
+            return window.matchMedia('(max-width: 700px)').matches;
+        }
+        let tooltipVisible = false;
+        function showConversionTooltip() {
+            const conversionTooltip = document.getElementById('conversion-tooltip');
+            conversionTooltip.innerHTML = 'На ваш аккаунт поступает сумма в долларах&nbsp;$<br>Steam автоматически конвертирует её в валюту аккаунта — тенге ₸, рубли ₽ или доллары СНГ $.<br><br><b>Итоговая сумма может отличаться из-за внутренней конвертации.</b>';
+            if (isMobile()) {
+                conversionTooltip.style.display = 'block';
+                conversionTooltip.style.left = '50%';
+                conversionTooltip.style.right = 'unset';
+                conversionTooltip.style.top = 'unset';
+                conversionTooltip.style.bottom = '12px';
+                conversionTooltip.style.transform = 'translateX(-50%)';
+            } else {
+                const rect = conversionFaq.getBoundingClientRect();
+                conversionTooltip.style.display = 'block';
+                conversionTooltip.style.left = (rect.right + 8) + 'px';
+                conversionTooltip.style.top = (rect.top - 8) + 'px';
+            }
+            tooltipVisible = true;
+        }
+        function hideConversionTooltip() {
+            const conversionTooltip = document.getElementById('conversion-tooltip');
+            conversionTooltip.style.display = 'none';
+            tooltipVisible = false;
+        }
+        // Для десктопа — hover
+        conversionFaq.addEventListener('mouseenter', (e) => {
+            if (!isMobile()) showConversionTooltip();
+        });
+        conversionFaq.addEventListener('mouseleave', () => {
+            if (!isMobile()) hideConversionTooltip();
+        });
+        // Для мобильных — tap/click
+        conversionFaq.addEventListener('click', (e) => {
+            if (isMobile()) {
+                e.stopPropagation();
+                if (tooltipVisible) {
+                    hideConversionTooltip();
+                } else {
+                    showConversionTooltip();
+                }
+            }
+        });
+        // Скрывать tooltip при клике вне его
+        document.body.addEventListener('click', function(e) {
+            if (tooltipVisible && isMobile()) {
+                const conversionTooltip = document.getElementById('conversion-tooltip');
+                if (!conversionTooltip.contains(e.target) && e.target !== conversionFaq) {
+                    hideConversionTooltip();
+                }
+            }
+        });
+
+        // FAQ модалка для логина
+        const loginFaqBtn = document.getElementById('login-faq-btn');
+        const loginFaqModal = document.getElementById('login-faq-modal');
+        const loginFaqClose = document.getElementById('login-faq-close');
+        loginFaqBtn.addEventListener('mouseenter', () => {
+            loginFaqBtn.style.background = '#444';
+        });
+        loginFaqBtn.addEventListener('mouseleave', () => {
+            loginFaqBtn.style.background = '#23232b';
+        });
+        loginFaqBtn.addEventListener('click', () => {
+            loginFaqModal.style.display = 'flex';
+        });
+        loginFaqClose.addEventListener('click', () => {
+            loginFaqModal.style.display = 'none';
+        });
+        loginFaqModal.addEventListener('click', (e) => {
+            if (e.target === loginFaqModal) loginFaqModal.style.display = 'none';
+        });
+
+        function validateAmountAndTogglePayButton() {
+            const amountRub = parseFloat(amountInput.value.replace(',', '.'));
+            if (amountInput.value.trim() === "") {
+                payButton.disabled = true;
+                amountError.style.visibility = 'hidden';
+                amountError.style.display = 'none';
+                amountError.textContent = '';
+            } else if (amountRub >= 25) {
+                payButton.disabled = false;
+                amountError.style.visibility = 'hidden';
+                amountError.style.display = 'none';
+                amountError.textContent = '';
+            } else {
+                payButton.disabled = true;
+                amountError.style.visibility = 'visible';
+                amountError.style.display = 'block';
+                amountError.textContent = 'Минимальная сумма пополнения 25 рублей';
+            }
+        }
+        amountInput.addEventListener('input', function(e) {
+            // Удаляем всё, кроме цифр
+            let val = amountInput.value.replace(/[^0-9]/g, '');
+            if (val !== amountInput.value) {
+                amountInput.value = val;
+            }
+            validateAmountAndTogglePayButton();
+        });
+        validateAmountAndTogglePayButton();
+
+        amountInput.addEventListener('keydown', function(e) {
+            if (e.key === '.' || e.key === ',' || e.key === 'e') {
+                e.preventDefault();
+            }
+        });
+
+        // Отправка формы на сервер
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            loading.style.display = 'block';
+            payButton.disabled = true;
+            
+            const login = steamLoginInput.value.trim();
+            const amount = parseFloat(amountInput.value.replace(',', '.'));
+            
+            try {
+                const response = await fetch('/process_payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        steam_login: login, 
+                        amount: amount 
+                    })
+                });
+                
+                const result = await response.json();
+                loading.style.display = 'none';
+                
+                if (response.ok && result.success) {
+                    successMessage.textContent = `Заказ успешно создан! ID заказа: ${result.order_id}, сумма пополнения: ${amount.toFixed(2)} руб.`;
+                    successMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                } else {
+                    errorMessage.textContent = result.error || 'Произошла ошибка при создании заказа';
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                }
+            } catch (err) {
+                loading.style.display = 'none';
+                errorMessage.textContent = 'Ошибка соединения с сервером';
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+            
+            payButton.disabled = false;
+        });
+    </script>
+</body>
+</html>
