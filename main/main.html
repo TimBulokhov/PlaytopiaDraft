@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playtopia — Главная</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            background: #fff;
+            color: #222;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px 32px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        .logo {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: #1560BD;
+            margin-right: 24px;
+            letter-spacing: 1px;
+        }
+        .catalog-btn {
+            background: #38df4e;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            font-size: 2rem;
+            font-weight: 900;
+            padding: 18px 48px 18px 72px;
+            margin-right: 32px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .catalog-btn::before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: none;
+            z-index: 1;
+            /* SVG иконка */
+            background-image: url('data:image/svg+xml;utf8,<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="36" height="36" rx="18" fill="none"/><rect x="8" y="11" width="20" height="2.5" rx="1.25" fill="white"/><rect x="8" y="17" width="20" height="2.5" rx="1.25" fill="white"/><rect x="8" y="23" width="20" height="2.5" rx="1.25" fill="white"/></svg>');
+            background-repeat: no-repeat;
+            background-size: 36px 36px;
+        }
+        .nav {
+            display: flex;
+            gap: 32px;
+            flex: 1;
+            justify-content: center;
+        }
+        .nav-item {
+            color: #222;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        .nav-item:hover {
+            color: #1560BD;
+        }
+        .search-box {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .search-input {
+            width: 320px;
+            padding: 8px 12px;
+            border: 1.5px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        .profile-cart {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            margin-left: 32px;
+        }
+        .profile-link, .cart-link {
+            color: #222;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .profile-link:hover, .cart-link:hover {
+            color: #1560BD;
+        }
+        .main-banners {
+            display: flex;
+            gap: 32px;
+            margin: 48px 0 32px 0;
+            justify-content: center;
+        }
+        .banner {
+            background: #111D2E;
+            color: #fff;
+            border-radius: 16px;
+            min-width: 320px;
+            max-width: 380px;
+            min-height: 140px;
+            padding: 28px 32px 24px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-shadow: 0 4px 24px rgba(21,96,189,0.10);
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .banner:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(21,96,189,0.18);
+        }
+        .banner-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .banner-desc {
+            font-size: 1rem;
+            color: #e0e0e0;
+            margin-bottom: 18px;
+        }
+        .banner-btn {
+            background: #fff;
+            color: #1560BD;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 8px 24px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .banner-btn:hover {
+            background: #1560BD;
+            color: #fff;
+        }
+        .xbox-banner {
+            background: #107C10;
+            color: #fff;
+            min-width: 320px;
+            max-width: 380px;
+            min-height: 140px;
+            padding: 28px 32px 24px 32px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 4px 24px rgba(16,124,16,0.10);
+        }
+        .section {
+            margin: 32px auto;
+            max-width: 1200px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(21,96,189,0.04);
+            padding: 24px 32px;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            display: inline-block;
+            padding: 4px 18px;
+            background: #fff;
+        }
+        @media (max-width: 900px) {
+            .main-banners { flex-direction: column; gap: 18px; align-items: center; }
+            .banner, .xbox-banner { min-width: 90vw; max-width: 98vw; }
+            .section { padding: 12px 4vw; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <span class="logo">Playtopia</span>
+        <button class="catalog-btn">Каталог</button>
+        <nav class="nav">
+          <div class="Navigation_headerBot__tZDBj" data-sentry-component="Navigation" data-sentry-source-file="Navigation.jsx">
+            <div class="Navigation_headerMenu__uoNuS">
+              <ul style="display:flex;gap:48px;list-style:none;margin:0;padding:0;align-items:center;">
+                <li>
+                  <a href="/catalog/playstation-games" class="nav-item">
+                    <span class="Navigation_headerMenuImg__YXSV_" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:#1B1D22;border-radius:10px;margin-right:10px;">
+                      <!-- PlayStation SVG -->
+                      <svg width="28" height="28" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="600" height="600" rx="206" fill="black"></rect>
+                        <g clip-path="url(#clip0_1536_15202)">
+                          <path d="M93.6311 370.209C77.5847 380.957 83.0344 401.394 117.398 411.082C153.373 423.057 191.747 425.969 229.118 419.56C230.903 419.312 232.672 418.958 234.416 418.5V382.623L197.933 394.43C184.387 398.825 169.92 399.556 156 396.55C145.252 393.371 147.372 386.861 160.239 381.412L234.416 355.677V316.015L131.325 351.438C117.907 355.812 105.207 362.137 93.6311 370.209ZM342.351 209.594V313.895C386.403 335.392 420.766 313.895 420.766 258.036C420.766 202.176 400.935 175.23 342.351 154.794C310.935 143.75 278.822 134.799 246.224 127.999V438.482L321.914 461.038V199.905C321.914 188.097 321.914 179.62 330.543 182.799C342.351 185.978 342.351 197.786 342.351 209.594ZM482.076 345.837C451.066 334.947 418.062 330.918 385.343 334.029C368.765 335.276 352.451 338.896 336.901 344.777L333.722 345.837V387.618L403.509 361.883C417.056 357.496 431.521 356.765 445.442 359.764C456.19 362.943 454.07 369.452 441.203 374.902L334.328 415.624V456.497L482.681 400.486C493.461 396.402 503.298 390.17 511.595 382.168C519.164 371.874 515.985 356.888 482.681 346.14L482.076 345.837Z" fill="white"></path>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1536_15202">
+                            <rect width="430" height="430" fill="white" transform="translate(85 85)"></rect>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </span>
+                    PlayStation
+                  </a>
+                </li>
+                <li>
+                  <a href="/catalog/xgp-activation-ultimate" class="nav-item">
+                    <span class="Navigation_headerMenuImg__YXSV_" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:#1B1D22;border-radius:10px;margin-right:10px;">
+                      <!-- Game Pass SVG -->
+                      <svg width="28" height="28" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="600" height="600" rx="206" fill="black"></rect>
+                        <path d="M500 300C500 410.462 410.456 500 300 500C189.544 500 100 410.462 100 300C100 189.55 189.544 100 300 100C410.456 100 500 189.538 500 300Z" fill="#666666"></path>
+                        <path d="M500 300C500 410.462 410.456 500 300 500C189.544 500 100 410.462 100 300C100 189.55 189.544 100 300 100C410.456 100 500 189.538 500 300Z" fill="url(#paint0_radial_1064_14531)"></path>
+                        <path d="M500 300C500 410.462 410.456 500 300 500C189.544 500 100 410.462 100 300C100 189.55 189.544 100 300 100C410.456 100 500 189.538 500 300Z" fill="url(#paint1_radial_1064_14531)"></path>
+                        <path d="M500 300C500 410.462 410.456 500 300 500C189.544 500 100 410.462 100 300C100 189.55 189.544 100 300 100C410.456 100 500 189.538 500 300Z" fill="url(#paint2_radial_1064_14531)"></path>
+                        <path d="M249.259 212.393C227.172 239.469 134.665 349.512 142.869 423.917C148.583 431.231 154.878 438.09 161.529 444.541C160.557 387.583 226.639 326.633 278.21 280.623L249.247 212.393H249.259Z" fill="black"></path>
+                        <path d="M249.245 212.394C227.172 239.468 134.663 349.507 142.869 423.915C148.578 431.235 154.873 438.088 161.526 444.533C160.559 387.587 226.634 326.621 278.21 280.62L249.245 212.394Z" fill="url(#paint3_linear_1064_14531)"></path>
+                        <path d="M194.969 129.897C183.487 136.923 172.735 145.089 162.875 154.271C194.599 160.368 226.419 188.619 243.869 212.021C259.062 236.048 267.316 258.07 278.042 280.8C285.505 274.349 293.054 268 300.688 261.754L300.64 163.032C277.003 148.175 237.933 128.625 195.34 129.897C195.244 129.957 195.053 129.837 194.969 129.897Z" fill="black"></path>
+                        <path d="M194.969 129.897C183.487 136.923 172.735 145.089 162.875 154.271C194.599 160.368 226.419 188.619 243.869 212.021C259.062 236.048 267.316 258.07 278.042 280.8C285.505 274.349 293.054 268 300.688 261.754L300.64 163.032C277.003 148.175 237.933 128.625 195.34 129.897C195.244 129.957 195.053 129.837 194.969 129.897Z" fill="url(#paint4_linear_1064_14531)"></path>
+                        <path d="M350.824 212.477C372.827 239.577 465.027 349.716 456.846 424.169C451.156 431.483 444.884 438.354 438.257 444.817C439.217 387.812 373.361 326.801 321.956 280.755L350.824 212.477Z" fill="black"></path>
+                        <path d="M350.82 212.467C372.82 239.565 465.023 349.709 456.845 424.168C451.121 431.471 444.908 438.37 438.249 444.816C439.214 387.81 373.356 326.804 321.951 280.752L350.82 212.467Z" fill="url(#paint5_linear_1064_14531)"></path>
+                        <path d="M404.921 129.9C416.364 136.939 427.084 145.111 436.921 154.296C405.302 160.397 373.575 188.672 356.194 212.094C341.052 236.141 332.813 258.182 322.123 280.944C314.885 274.71 307.528 268.368 299.551 261.882L299.599 163.064C323.159 148.194 362.099 128.627 404.552 129.9C404.635 129.96 404.837 129.84 404.921 129.9Z" fill="black"></path>
+                        <path d="M404.921 129.9C416.364 136.939 427.084 145.111 436.921 154.296C405.302 160.397 373.575 188.672 356.194 212.094C341.052 236.141 332.813 258.182 322.123 280.944C314.885 274.71 307.528 268.368 299.551 261.882L299.599 163.064C323.159 148.194 362.099 128.627 404.552 129.9C404.635 129.96 404.837 129.84 404.921 129.9Z" fill="url(#paint6_linear_1064_14531)"></path>
+                        <defs>
+                          <radialGradient id="paint0_radial_1064_14531" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(296.416 278.564) rotate(90) scale(291.425 255.851)"><stop stop-color="white"></stop><stop offset="1" stop-color="white"></stop></radialGradient>
+                          <radialGradient id="paint1_radial_1064_14531" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(296.416 278.564) rotate(90) scale(291.425 255.851)"><stop stop-color="white"></stop><stop offset="1" stop-color="white"></stop></radialGradient>
+                          <radialGradient id="paint2_radial_1064_14531" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(296.416 278.564) rotate(90) scale(291.425 255.851)"><stop stop-color="white"></stop><stop offset="1" stop-color="white"></stop></radialGradient>
+                          <linearGradient id="paint3_linear_1064_14531" x1="227.665" y1="356.072" x2="180.165" y2="300.252" gradientUnits="userSpaceOnUse"><stop></stop><stop offset="1" stop-opacity="0"></stop></linearGradient>
+                          <linearGradient id="paint4_linear_1064_14531" x1="225.643" y1="222.284" x2="269.115" y2="125.618" gradientUnits="userSpaceOnUse"><stop></stop><stop offset="1" stop-opacity="0"></stop></linearGradient>
+                          <linearGradient id="paint5_linear_1064_14531" x1="373.036" y1="355.465" x2="325.403" y2="299.939" gradientUnits="userSpaceOnUse"><stop></stop><stop offset="1" stop-opacity="0"></stop></linearGradient>
+                          <linearGradient id="paint6_linear_1064_14531" x1="374.643" y1="217.339" x2="412.001" y2="156.877" gradientUnits="userSpaceOnUse"><stop></stop><stop offset="1" stop-opacity="0"></stop></linearGradient>
+                        </defs>
+                      </svg>
+                    </span>
+                    Game Pass
+                  </a>
+                </li>
+                <li>
+                  <a href="/catalog/games-1" class="nav-item">
+                    <span class="Navigation_headerMenuImg__YXSV_" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#1B1D22;border-radius:10px;margin-right:10px;">
+                      <!-- Игры SVG -->
+                      <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.285645" width="28" height="28" rx="10" fill="#1B1D22"></rect>
+                        <path d="M8.22314 20.6666C7.38981 20.6666 6.67801 20.368 6.08773 19.7708C5.49745 19.1735 5.18842 18.4513 5.16064 17.6041C5.16064 17.4791 5.16759 17.3541 5.18148 17.2291C5.19537 17.1041 5.2162 16.9791 5.24398 16.8541L6.99398 9.85409C7.18842 9.10409 7.58426 8.49645 8.18148 8.03117C8.7787 7.56589 9.45926 7.33325 10.2231 7.33325H18.3481C19.112 7.33325 19.7926 7.56589 20.3898 8.03117C20.987 8.49645 21.3829 9.10409 21.5773 9.85409L23.3273 16.8541C23.3551 16.9791 23.3794 17.1076 23.4002 17.2395C23.4211 17.3714 23.4315 17.4999 23.4315 17.6249C23.4315 18.4721 23.1294 19.1909 22.5252 19.7812C21.9211 20.3714 21.1954 20.6666 20.3481 20.6666C19.7648 20.6666 19.2231 20.5138 18.7231 20.2083C18.2231 19.9027 17.8481 19.486 17.5981 18.9583L17.0148 17.7499C16.9454 17.611 16.8412 17.5069 16.7023 17.4374C16.5634 17.368 16.4176 17.3333 16.2648 17.3333H12.3065C12.1537 17.3333 12.0079 17.368 11.869 17.4374C11.7301 17.5069 11.6259 17.611 11.5565 17.7499L10.9731 18.9583C10.7231 19.486 10.3481 19.9027 9.84814 20.2083C9.34814 20.5138 8.80648 20.6666 8.22314 20.6666ZM15.5356 13.1666C15.7718 13.1666 15.9697 13.0867 16.1294 12.927C16.2891 12.7673 16.369 12.5694 16.369 12.3333C16.369 12.0971 16.2891 11.8992 16.1294 11.7395C15.9697 11.5798 15.7718 11.4999 15.5356 11.4999C15.2995 11.4999 15.1016 11.5798 14.9419 11.7395C14.7822 11.8992 14.7023 12.0971 14.7023 12.3333C14.7023 12.5694 14.7822 12.7673 14.9419 12.927C15.1016 13.0867 15.2995 13.1666 15.5356 13.1666ZM17.2023 11.4999C17.4384 11.4999 17.6363 11.4201 17.7961 11.2603C17.9558 11.1006 18.0356 10.9027 18.0356 10.6666C18.0356 10.4305 17.9558 10.2326 17.7961 10.0728C17.6363 9.91311 17.4384 9.83325 17.2023 9.83325C16.9662 9.83325 16.7683 9.91311 16.6086 10.0728C16.4488 10.2326 16.369 10.4305 16.369 10.6666C16.369 10.9027 16.4488 11.1006 16.6086 11.2603C16.7683 11.4201 16.9662 11.4999 17.2023 11.4999ZM17.2023 14.8333C17.4384 14.8333 17.6363 14.7534 17.7961 14.5937C17.9558 14.4339 18.0356 14.236 18.0356 13.9999C18.0356 13.7638 17.9558 13.5659 17.7961 13.4062C17.6363 13.2464 17.4384 13.1666 17.2023 13.1666C16.9662 13.1666 16.7683 13.2464 16.6086 13.4062C16.4488 13.5659 16.369 13.7638 16.369 13.9999C16.369 14.236 16.4488 14.4339 16.6086 14.5937C16.7683 14.7534 16.9662 14.8333 17.2023 14.8333ZM18.869 13.1666C19.1051 13.1666 19.303 13.0867 19.4627 12.927C19.6225 12.7673 19.7023 12.5694 19.7023 12.3333C19.7023 12.0971 19.6225 11.8992 19.4627 11.7395C19.303 11.5798 19.1051 11.4999 18.869 11.4999C18.6329 11.4999 18.435 11.5798 18.2752 11.7395C18.1155 11.8992 18.0356 12.0971 18.0356 12.3333C18.0356 12.5694 18.1155 12.7673 18.2752 12.927C18.435 13.0867 18.6329 13.1666 18.869 13.1666ZM11.369 14.4166C11.5495 14.4166 11.6988 14.3576 11.8169 14.2395C11.935 14.1214 11.994 13.9721 11.994 13.7916V12.9583H12.8273C13.0079 12.9583 13.1572 12.8992 13.2752 12.7812C13.3933 12.6631 13.4523 12.5138 13.4523 12.3333C13.4523 12.1527 13.3933 12.0034 13.2752 11.8853C13.1572 11.7673 13.0079 11.7083 12.8273 11.7083H11.994V10.8749C11.994 10.6944 11.935 10.5451 11.8169 10.427C11.6988 10.3089 11.5495 10.2499 11.369 10.2499C11.1884 10.2499 11.0391 10.3089 10.9211 10.427C10.803 10.5451 10.744 10.6944 10.744 10.8749V11.7083H9.91064C9.73009 11.7083 9.58078 11.7673 9.46273 11.8853C9.34467 12.0034 9.28564 12.1527 9.28564 12.3333C9.28564 12.5138 9.34467 12.6631 9.46273 12.7812C9.58078 12.8992 9.73009 12.9583 9.91064 12.9583H10.744V13.7916C10.744 13.9721 10.803 14.1214 10.9211 14.2395C11.0391 14.3576 11.1884 14.4166 11.369 14.4166Z" fill="white"></path>
+                    </span>
+                    Игры
+                  </a>
+                </li>
+                <li>
+                  <a href="/catalog/all-services" class="nav-item">
+                    <span class="Navigation_headerMenuImg__YXSV_" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#1B1D22;border-radius:10px;margin-right:10px;">
+                      <!-- Подписки SVG -->
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="28" height="28" rx="10" fill="#1B1D22"></rect>
+                        <path d="M7.72933 16.25C7.59044 15.8889 7.48988 15.5242 7.42766 15.1558C7.36488 14.7881 7.3335 14.4167 7.3335 14.0417C7.3335 12.1806 7.97933 10.5972 9.271 9.29167C10.5627 7.98611 12.1391 7.33333 14.0002 7.33333H14.146L13.396 6.58333C13.2432 6.43056 13.1668 6.23611 13.1668 6C13.1668 5.76389 13.2432 5.56944 13.396 5.41667C13.5488 5.26389 13.7432 5.1875 13.9793 5.1875C14.2154 5.1875 14.4099 5.26389 14.5627 5.41667L16.7293 7.58333C16.8127 7.66667 16.8718 7.75694 16.9068 7.85417C16.9413 7.95139 16.9585 8.05556 16.9585 8.16667C16.9585 8.27778 16.9413 8.38194 16.9068 8.47917C16.8718 8.57639 16.8127 8.66667 16.7293 8.75L14.5627 10.9167C14.4099 11.0694 14.2154 11.1458 13.9793 11.1458C13.7432 11.1458 13.5488 11.0694 13.396 10.9167C13.2432 10.7639 13.1668 10.5694 13.1668 10.3333C13.1668 10.0972 13.2432 9.90278 13.396 9.75L14.146 9H14.0002C12.6113 9 11.4307 9.48944 10.4585 10.4683C9.48627 11.4478 9.00016 12.6389 9.00016 14.0417C9.00016 14.3194 9.02461 14.5903 9.0735 14.8542C9.12183 15.1181 9.19461 15.3819 9.29183 15.6458C9.34738 15.7847 9.36127 15.9339 9.3335 16.0933C9.30572 16.2533 9.23627 16.3889 9.12516 16.5C8.87516 16.75 8.60794 16.8508 8.3235 16.8025C8.0385 16.7536 7.84044 16.5694 7.72933 16.25ZM13.4377 22.5833L11.271 20.4167C11.1877 20.3333 11.1288 20.2431 11.0943 20.1458C11.0593 20.0486 11.0418 19.9444 11.0418 19.8333C11.0418 19.7222 11.0593 19.6181 11.0943 19.5208C11.1288 19.4236 11.1877 19.3333 11.271 19.25L13.4377 17.0833C13.5904 16.9306 13.7849 16.8542 14.021 16.8542C14.2571 16.8542 14.4516 16.9306 14.6043 17.0833C14.7571 17.2361 14.8335 17.4306 14.8335 17.6667C14.8335 17.9028 14.7571 18.0972 14.6043 18.25L13.8543 19H14.0002C15.3891 19 16.5696 18.5106 17.5418 17.5317C18.5141 16.5522 19.0002 15.3611 19.0002 13.9583C19.0002 13.6806 18.976 13.4097 18.9277 13.1458C18.8788 12.8819 18.8057 12.6181 18.7085 12.3542C18.6529 12.2153 18.6391 12.0658 18.6668 11.9058C18.6946 11.7464 18.7641 11.6111 18.8752 11.5C19.1252 11.25 19.3924 11.1492 19.6768 11.1975C19.9618 11.2464 20.1599 11.4306 20.271 11.75C20.4099 12.1111 20.5107 12.4756 20.5735 12.8433C20.6357 13.2117 20.6668 13.5833 20.6668 13.9583C20.6668 15.8194 20.021 17.4028 18.7293 18.7083C17.4377 20.0139 15.8613 20.6667 14.0002 20.6667H13.8543L14.6043 21.4167C14.7571 21.5694 14.8335 21.7639 14.8335 22C14.8335 22.2361 14.7571 22.4306 14.6043 22.5833C14.4516 22.7361 14.2571 22.8125 14.021 22.8125C13.7849 22.8125 13.5904 22.7361 13.4377 22.5833Z" fill="white"></path>
+                    </span>
+                    Подписки
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="search-box">
+            <input class="search-input" type="text" placeholder="Поиск...">
+        </div>
+        <div class="profile-cart">
+            <a class="profile-link" href="#">Профиль</a>
+            <a class="cart-link" href="#">Корзина</a>
+        </div>
+    </header>
+    <main>
+        <section class="main-banners">
+            <div class="banner" onclick="window.location.href='/steamtopup/steamtopup.html'">
+                <span class="banner-title">Steam</span>
+                <span class="banner-desc">Моментально и безопасно</span>
+                <button class="banner-btn">Пополнить</button>
+            </div>
+            <div class="banner">
+                <span class="banner-title">PlayStation</span>
+                <span class="banner-desc">Комиссия 0%</span>
+                <button class="banner-btn">Пополнить</button>
+            </div>
+            <div class="xbox-banner">
+                <span>Подписки Xbox Game Pass</span>
+            </div>
+        </section>
+        <section class="section">
+            <span class="section-title">Скидки</span>
+        </section>
+        <section class="section">
+            <span class="section-title">Новинки</span>
+            <div id="games-list" style="display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px;"></div>
+            <script>
+            fetch('/parser/games.json')
+              .then(r => r.json())
+              .then(games => {
+                const list = document.getElementById('games-list');
+                games.forEach(game => {
+                  const card = document.createElement('div');
+                  card.style = 'width: 210px; background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(21,96,189,0.07); padding: 12px 12px 16px 12px; display: flex; flex-direction: column; align-items: center; position: relative;';
+                  // Картинка игры или платформа
+                  let img = game.img && game.img.length > 0 ? game.img : '/steamtopup/static/' + game.platform.img;
+                  card.innerHTML = `
+                    <a href="${game.link}" target="_blank" style="text-decoration:none;color:inherit;display:block;width:100%">
+                      <div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;border-radius:10px;overflow:hidden;margin-bottom:10px;">
+                        <img src="${img}" alt="${game.title}" style="max-width:100%;max-height:100%;object-fit:cover;">
+                      </div>
+                      <div style="font-weight:700;font-size:1.05rem;min-height:44px;line-height:1.2;margin-bottom:6px;">${game.title}</div>
+                      <div style="font-size:1rem;color:#1560BD;font-weight:700;margin-bottom:6px;">${game.price}</div>
+                      <div style="display:flex;align-items:center;gap:7px;">
+                        <img src="/steamtopup/static/${game.platform.img}" alt="${game.platform.name}" style="width:28px;height:28px;object-fit:contain;">
+                        <span style="font-size:1rem;color:#222;font-weight:500;">${game.platform.name}</span>
+                      </div>
+                    </a>
+                  `;
+                  list.appendChild(card);
+                });
+              });
+            </script>
+        </section>
+    </main>
+</body>
+</html>

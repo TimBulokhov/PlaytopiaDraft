@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template_string
+from flask import Flask, request, jsonify, render_template_string, send_from_directory
 from flask_cors import CORS
 import json
 import subprocess
@@ -10,7 +10,7 @@ CORS(app)  # Добавляем поддержку CORS
 
 # Читаем HTML файл
 def get_html_content():
-    with open('index.html', 'r', encoding='utf-8') as f:
+    with open('../main/main.html', 'r', encoding='utf-8') as f:
         return f.read()
 
 @app.route('/')
@@ -93,6 +93,14 @@ def process_payment():
             'success': False,
             'error': f'Ошибка сервера: {str(e)}'
         }), 500
+
+@app.route('/steamtopup/<path:filename>')
+def steamtopup_static(filename):
+    return send_from_directory(os.path.join(os.path.dirname(__file__)), filename)
+
+@app.route('/parser/games.json')
+def serve_games_json():
+    return send_from_directory('parser', 'games.json')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
