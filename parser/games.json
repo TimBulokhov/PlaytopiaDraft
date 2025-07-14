@@ -1,482 +1,717 @@
 [
   {
     "title": "EA SPORTS FC™ 25",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202409/2712/1e1c42b14d92280e17bda697b8c4ae13ff9f91bdb10fca89.png",
     "price": "2.899,99 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 79%",
+    "subscription_icon": "psplus",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/10009762",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "eFootball™",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-tr/concept/10002427",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "19/9/2024",
+    "voice": "",
+    "subtitles": ""
   },
   {
     "title": "Forza Horizon 5",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202501/2717/42b3ee6b1b2094212231b0b0a82824f687fc5c4dc9bde31c.png",
     "price": "1.541,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 25%",
+    "subscription_icon": "psplus",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/10010647",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "28/4/2025",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
   },
   {
     "title": "Grand Theft Auto V (PlayStation®5)",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/K6mmm89oNII1iI1aqaClO0wh.png",
     "price": "699,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/201930",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "14/3/2022",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
   },
   {
     "title": "Minecraft",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202407/0401/670c294ded3baf4fa11068db2ec6758c63f7daeb266a35a1.png",
     "price": "849,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/212779",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "Fortnite",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-tr/concept/228748",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "22/10/2024",
+    "voice": "",
+    "subtitles": "Английский, Русский"
   },
   {
     "title": "DEATH STRANDING 2: ON THE BEACH",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2513/edfe6715333de858548e594e2a545b024fbe4b93c894124a.png",
     "price": "3.449,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/10001538",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "25/6/2025",
+    "voice": "Английский, Русский",
+    "subtitles": "Английский, Русский"
   },
   {
     "title": "NBA 2K25",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0521/e8ef2a542e532c17d91215173917798c5dbca0e8f5b0fc9c.png",
     "price": "2.900,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Deluxe",
+    "subscription_icon": "psplus",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/10010481",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "4/9/2024",
+    "voice": "Английский",
+    "subtitles": "Английский"
   },
   {
     "title": "Diablo® IV",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202506/2618/f607b71280f7af833d20ac3e9dde480cb28891011eb296d4.png",
     "price": "1.799,99 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/231761",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "Call of Duty®",
-    "img": "",
-    "price": "2.799,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10001130",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "9/6/2024",
+    "voice": "Английский, Русский",
+    "subtitles": "Английский, Русский"
   },
   {
     "title": "ASTRO BOT",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png",
     "price": "2.999,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
     "link": "https://store.playstation.com/en-tr/concept/10002684",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "Marvel's Spider-Man",
-    "img": "",
-    "price": "270,73 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10000762",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "NBA 2K26",
-    "img": "",
-    "price": "2.900,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10014149",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "UNCHARTED: Legacy of Thieves Collection",
-    "img": "",
-    "price": "499,60 TL",
-    "link": "https://store.playstation.com/en-tr/concept/205354",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "VALORANT",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-tr/concept/10010048",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "Split Fiction",
-    "img": "",
-    "price": "1.800,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10005449",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "F1® 25",
-    "img": "",
-    "price": "2.900,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10011830",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "ELDEN RING",
-    "img": "",
-    "price": "1.499,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10000333",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "Assassin’s Creed Shadows",
-    "img": "",
-    "price": "2.799,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10009909",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "Mortal Kombat 11",
-    "img": "",
-    "price": "349,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/231756",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "UFC® 5",
-    "img": "",
-    "price": "2.900,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/10002788",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "It Takes Two  PS4™ & PS5™",
-    "img": "",
-    "price": "1.499,99 TL",
-    "link": "https://store.playstation.com/en-tr/concept/234689",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "Red Dead Redemption 2",
-    "img": "",
-    "price": "2.099,00 TL",
-    "link": "https://store.playstation.com/en-tr/concept/209441",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "A Way Out",
-    "img": "",
-    "price": "314,70 TL",
-    "link": "https://store.playstation.com/en-tr/concept/227061",
-    "platform": {
-      "name": "PS5",
-      "img": "ps5.png"
-    }
-  },
-  {
-    "title": "EA SPORTS FC™ 25",
-    "img": "",
-    "price": "Rs 4,999",
-    "link": "https://store.playstation.com/en-in/concept/10009762",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Forza Horizon 5",
-    "img": "",
-    "price": "Rs 3,999",
-    "link": "https://store.playstation.com/en-in/concept/10010647",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "DEATH STRANDING 2: ON THE BEACH",
-    "img": "",
-    "price": "Rs 4,999",
-    "link": "https://store.playstation.com/en-in/concept/10001538",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "F1® 25",
-    "img": "",
-    "price": "Rs 4,999",
-    "link": "https://store.playstation.com/en-in/concept/10011830",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Grand Theft Auto V (PlayStation®5)",
-    "img": "",
-    "price": "Rs 1,669",
-    "link": "https://store.playstation.com/en-in/concept/201930",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "WWE 2K25",
-    "img": "",
-    "price": "Rs 4,999",
-    "link": "https://store.playstation.com/en-in/concept/10010684",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Cricket 24",
-    "img": "",
-    "price": "Rs 1,319",
-    "link": "https://store.playstation.com/en-in/concept/10008264",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Fortnite",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-in/concept/228748",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "eFootball™",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-in/concept/10002427",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "5/9/2024",
+    "voice": "",
+    "subtitles": "Английский, Русский"
   },
   {
     "title": "Call of Duty®",
-    "img": "",
-    "price": "Rs 5,599",
-    "link": "https://store.playstation.com/en-in/concept/10001130",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "TEKKEN 8",
-    "img": "",
-    "price": "Rs 3,499",
-    "link": "https://store.playstation.com/en-in/concept/10006270",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Assassin’s Creed Shadows",
-    "img": "",
-    "price": "Rs 5,599",
-    "link": "https://store.playstation.com/en-in/concept/10009909",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Clair Obscur: Expedition 33",
-    "img": "",
-    "price": "Rs 2,999",
-    "link": "https://store.playstation.com/en-in/concept/10008503",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Ghost of Yōtei",
-    "img": "",
-    "price": "Rs 4,999",
-    "link": "https://store.playstation.com/en-in/concept/10003923",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Apex Legends™",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-in/concept/232352",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202505/2820/4fb2feea131361bc482c81e9948d5abc8fb8908adf80e317.png",
+    "price": "2.799,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10001130",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "24/10/2024",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
   },
   {
     "title": "Marvel's Spider-Man",
-    "img": "",
-    "price": "Rs 2,319",
-    "link": "https://store.playstation.com/en-in/concept/10000762",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Black Myth: Wukong",
-    "img": "",
-    "price": "Rs 3,999",
-    "link": "https://store.playstation.com/en-in/concept/10007144",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Red Dead Redemption 2",
-    "img": "",
-    "price": "Rs 4,599",
-    "link": "https://store.playstation.com/en-in/concept/209441",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202011/0402/C784xeOFo2wViCf4m5bxgoeH.png",
+    "price": "270,73 TL",
+    "old_price": "466,78 TL",
+    "discount_percent": "-42%",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10000762",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "3/5/2023",
+    "voice": "Английский",
+    "subtitles": "Английский"
   },
   {
     "title": "ELDEN RING",
-    "img": "",
-    "price": "Rs 3,499",
-    "link": "https://store.playstation.com/en-in/concept/10000333",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Genshin Impact",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-in/concept/10000896",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202107/0902/fS3Hhaq06TqLrbjMVplA8MaY.png",
+    "price": "1.499,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 40%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10000333",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "24/2/2022",
+    "voice": "",
+    "subtitles": ""
   },
   {
     "title": "UNCHARTED: Legacy of Thieves Collection",
-    "img": "",
-    "price": "Rs 1,199",
-    "link": "https://store.playstation.com/en-in/concept/205354",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202111/2000/gTUWTlvPHzxFJ2JAxtDyI2eS.png",
+    "price": "499,60 TL",
+    "old_price": "1.249,00 TL",
+    "discount_percent": "-60%",
+    "subscription": "Extra",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/205354",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "27/1/2022",
+    "voice": "Английский, Русский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "Assassin’s Creed Shadows",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202404/1815/e67713e008d1cdb83ebf71916c193a5c03ae7e12b85133d2.png",
+    "price": "2.799,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 25%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10009909",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "19/3/2025",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "NBA 2K26",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202506/2509/ec1eec85d9130210701491db769cb9874cc09f6512ebca20.png",
+    "price": "2.900,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10014149",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "4/9/2025",
+    "voice": "",
+    "subtitles": ""
+  },
+  {
+    "title": "Split Fiction",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2918/90ad70c1ef581f93454184750cba9e0ca37bc7e30a4d1f55.png",
+    "price": "1.800,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 10%",
+    "subscription_icon": "eaplay",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10005449",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "6/3/2025",
+    "voice": "Английский",
+    "subtitles": "Английский"
+  },
+  {
+    "title": "Red Dead Redemption 2",
+    "img": "https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA08519_00/12/i_3da1cf7c41dc7652f9b639e1680d96436773658668c7dc3930c441291095713b/i/icon0.png",
+    "price": "2.099,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 75%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/209441",
+    "platforms": [
+      "PS4"
+    ],
+    "region": "tr",
+    "release_date": "25/10/2018",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "F1® 25",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202505/1521/44c15449fbe9485987e27e2fa2c86008a7b4a89d9ab7e0a8.png",
+    "price": "2.900,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Game Trial",
+    "subscription_icon": "eaplay",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10011830",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "30/5/2025",
+    "voice": "Английский",
+    "subtitles": "Английский"
+  },
+  {
+    "title": "It Takes Two  PS4™ & PS5™",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202012/0815/0Xqi1LgRoEtJ5zlFprpd54Vu.png",
+    "price": "1.499,99 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 70%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/234689",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "25/3/2021",
+    "voice": "",
+    "subtitles": ""
+  },
+  {
+    "title": "UFC® 5",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202309/0421/418704276d35ce02e8cb532c6ca3826cf866ad2ec66c0b17.png",
+    "price": "2.900,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Extra",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10002788",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "26/10/2023",
+    "voice": "Английский",
+    "subtitles": "Английский"
   },
   {
     "title": "Mortal Kombat 11",
-    "img": "",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202009/0123/bF1qmEL5RM6aMfL0oLcxRe8B.png",
+    "price": "349,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/231756",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "17/11/2020",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "Mortal Kombat 1",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202305/1515/1cc63f4f4b2c9a9852fabefba4ca7eea936b1ef7867811a5.png",
+    "price": "1.749,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Deluxe",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10004911",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "18/9/2023",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "EA SPORTS FC™ 25",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202409/2712/1e1c42b14d92280e17bda697b8c4ae13ff9f91bdb10fca89.png",
+    "price": "Rs 4,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 79%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10009762",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "19/9/2024",
+    "voice": "",
+    "subtitles": ""
+  },
+  {
+    "title": "Forza Horizon 5",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202501/2717/42b3ee6b1b2094212231b0b0a82824f687fc5c4dc9bde31c.png",
+    "price": "Rs 3,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 25%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10010647",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "28/4/2025",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "DEATH STRANDING 2: ON THE BEACH",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2513/edfe6715333de858548e594e2a545b024fbe4b93c894124a.png",
+    "price": "Rs 4,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10001538",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "25/6/2025",
+    "voice": "Английский, Русский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "F1® 25",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202505/1521/44c15449fbe9485987e27e2fa2c86008a7b4a89d9ab7e0a8.png",
+    "price": "Rs 4,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Game Trial",
+    "subscription_icon": "eaplay",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10011830",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "30/5/2025",
+    "voice": "Английский",
+    "subtitles": "Английский"
+  },
+  {
+    "title": "Grand Theft Auto V (PlayStation®5)",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/K6mmm89oNII1iI1aqaClO0wh.png",
+    "price": "Rs 1,669",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/201930",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "14/3/2022",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "WWE 2K25",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202501/1623/068123d291265a61f85713615aa2f255077fbf164186908e.png",
+    "price": "Rs 4,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Deluxe",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10010684",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "13/3/2025",
+    "voice": "Английский",
+    "subtitles": "Английский"
+  },
+  {
+    "title": "Cricket 24",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202309/2212/a6bb1fd25e7a9d428abeecf1f36ec068433c99bfeebad46c.png",
+    "price": "Rs 1,319",
+    "old_price": "Rs 4,399",
+    "discount_percent": "-70%",
+    "subscription": "Extra",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10008264",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "4/10/2023",
+    "voice": "Английский",
+    "subtitles": "Английский"
+  },
+  {
+    "title": "TEKKEN 8",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202212/2009/04S9doVJzhHa0OE8o8wax88S.png",
+    "price": "Rs 3,499",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 50%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10006270",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "25/1/2024",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "Assassin’s Creed Shadows",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202404/1815/e67713e008d1cdb83ebf71916c193a5c03ae7e12b85133d2.png",
+    "price": "Rs 5,599",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 25%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10009909",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "19/3/2025",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "Call of Duty®",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202505/2820/4fb2feea131361bc482c81e9948d5abc8fb8908adf80e317.png",
+    "price": "Rs 5,599",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10001130",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "24/10/2024",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "Ghost of Yōtei",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202504/2116/050bb77f895515e0b0e906b0b9d75b6174b37eece097b462.png",
+    "price": "Rs 4,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10003923",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "1/10/2025",
+    "voice": "",
+    "subtitles": ""
+  },
+  {
+    "title": "Clair Obscur: Expedition 33",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202501/2217/e5833a53529ff9879e87689f1e8b04d45ba7e6c97fa791e2.png",
     "price": "Rs 2,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10008503",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "24/4/2025",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "Red Dead Redemption 2",
+    "img": "https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA08519_00/12/i_3da1cf7c41dc7652f9b639e1680d96436773658668c7dc3930c441291095713b/i/icon0.png",
+    "price": "Rs 4,599",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 75%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/209441",
+    "platforms": [
+      "PS4"
+    ],
+    "region": "in",
+    "release_date": "25/10/2018",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "Marvel's Spider-Man",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202011/0402/C784xeOFo2wViCf4m5bxgoeH.png",
+    "price": "Rs 2,319",
+    "old_price": "Rs 3,999",
+    "discount_percent": "-42%",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10000762",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "3/5/2023",
+    "voice": "Английский",
+    "subtitles": "Английский"
+  },
+  {
+    "title": "Black Myth: Wukong",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2117/bd406f42e9352fdb398efcf21a4ffe575b2306ac40089d21.png",
+    "price": "Rs 3,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Deluxe",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10007144",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "20/8/2024",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
+  },
+  {
+    "title": "ELDEN RING",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202107/0902/fS3Hhaq06TqLrbjMVplA8MaY.png",
+    "price": "Rs 3,499",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 40%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10000333",
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "24/2/2022",
+    "voice": "",
+    "subtitles": ""
+  },
+  {
+    "title": "Mortal Kombat 11",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202009/0123/bF1qmEL5RM6aMfL0oLcxRe8B.png",
+    "price": "Rs 2,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
     "link": "https://store.playstation.com/en-in/concept/231756",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
+    "platforms": [
+      "PS4",
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "17/11/2020",
+    "voice": "Английский",
+    "subtitles": "Английский, Русский"
   },
   {
-    "title": "Roblox",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-in/concept/223118",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
-  },
-  {
-    "title": "Marvel Rivals",
-    "img": "",
-    "price": "Free",
-    "link": "https://store.playstation.com/en-in/concept/10010451",
-    "platform": {
-      "name": "PS4",
-      "img": "ps4.png"
-    }
+    "title": "UNCHARTED: Legacy of Thieves Collection",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202111/2000/gTUWTlvPHzxFJ2JAxtDyI2eS.png",
+    "price": "Rs 1,199",
+    "old_price": "Rs 2,999",
+    "discount_percent": "-60%",
+    "subscription": "Extra",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/205354",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "27/1/2022",
+    "voice": "Английский, Русский",
+    "subtitles": "Английский, Русский"
   }
 ]

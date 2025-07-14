@@ -1,84 +1,159 @@
-import requests
+import asyncio
+import aiohttp
 from bs4 import BeautifulSoup
 import json
 import re
+import os
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
 }
 
-PLATFORMS = {
-    'ps5': {'name': 'PS5', 'img': 'ps5.png'},
-    'ps4': {'name': 'PS4', 'img': 'ps4.png'},
-    'xbox': {'name': 'Xbox', 'img': 'xbox.png'},
-}
+GAMES_JSON = os.path.join(os.path.dirname(__file__), 'games.json')
 
-def parse_playstation(url, platform):
+async def fetch(session, url):
+    async with session.get(url, headers=HEADERS, timeout=20) as resp:
+        return await resp.text()
+
+async def get_game_details(session, game_url):
+    try:
+        html = await fetch(session, game_url)
+        soup = BeautifulSoup(html, 'html.parser')
+        # Дата выхода
+        release_date = ''
+        date_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#releaseDate-value'})
+        if date_dd:
+            release_date = date_dd.text.strip()
+        # Озвучка
+        voice = ''
+        voice_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#voice-value'})
+        if voice_dd:
+            langs = [x.strip() for x in voice_dd.text.split(',')]
+            voice = []
+            if 'English' in langs:
+                voice.append('Английский')
+            if 'Russian' in langs:
+                voice.append('Русский')
+            voice = ', '.join(voice) if voice else ''
+        # Субтитры
+        subtitles = ''
+        subs_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#subtitles-value'})
+        if subs_dd:
+            langs = [x.strip() for x in subs_dd.text.split(',')]
+            subtitles = []
+            if 'English' in langs:
+                subtitles.append('Английский')
+            if 'Russian' in langs:
+                subtitles.append('Русский')
+            subtitles = ', '.join(subtitles) if subtitles else ''
+        # Платформы
+        platforms = []
+        platform_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#platform-value'})
+        if platform_dd:
+            platforms = [x.strip() for x in platform_dd.text.split(',')]
+        return release_date, voice, subtitles, platforms
+    except Exception:
+        return '', '', '', []
+
+async def parse_playstation_async(url, region):
+    import requests
     games = []
     resp = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(resp.text, 'html.parser')
-    for li in soup.find_all('li', class_=re.compile('^psw-l-w-')):
+    cards = soup.find_all('li', class_=re.compile('^psw-l-w-'))
+    game_links = []
+    for li in cards:
         a = li.find('a', class_='psw-link')
         if not a:
             continue
-        title = a.find('span', class_='psw-t-body')
-        title = title.text.strip() if title else 'No title'
-        img = a.find('img', class_=re.compile('psw-fade-in'))
-        img_url = img['src'] if img else ''
-        price = a.find('span', class_=re.compile('price'))
-        if not price:
-            price = a.find('span', class_=re.compile('psw-m-r-3'))
-        price = price.text.strip() if price else '—'
-        link = a['href'] if a.has_attr('href') else '#'
-        games.append({
-            'title': title,
-            'img': img_url,
-            'price': price,
-            'link': 'https://store.playstation.com' + link,
-            'platform': PLATFORMS[platform],
-        })
-    return games
-
-def parse_xbox(url):
-    games = []
-    resp = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(resp.text, 'html.parser')
-    for li in soup.find_all('li'):
-        a = li.find('a', class_=re.compile('ProductCard-module__cardWrapper'))
-        if not a:
-            a = li.find('a', class_=re.compile('Button-module__buttonBase'))
-        if not a:
+        # Название только из <span class='psw-t-body'>
+        title_tag = a.find('span', class_='psw-t-body')
+        title = title_tag.text.strip() if title_tag else 'No title'
+        # Картинка
+        img_url = ''
+        # Ищем img с data-qa, содержащим 'game-art#image#image'
+        img_tag = a.find('img', {'data-qa': re.compile('game-art#image#image')})
+        if img_tag:
+            srcset = img_tag.get('srcset', '')
+            if srcset:
+                srcset_items = [s.strip().split(' ')[0] for s in srcset.split(',')]
+                found_440 = [u for u in srcset_items if 'w=440' in u and 'thumb=false' in u]
+                found_230 = [u for u in srcset_items if 'w=230' in u and 'thumb=false' in u]
+                if found_440:
+                    img_url = found_440[0]
+                elif found_230:
+                    img_url = found_230[0]
+                else:
+                    img_url = img_tag.get('src', '')
+            else:
+                img_url = img_tag.get('src', '')
+        # Цена
+        price = ''
+        old_price = ''
+        discount = ''
+        # Парсим discount_percent из discount-badge
+        discount_badge = li.find('div', {'data-qa': re.compile('discount-badge')})
+        if discount_badge:
+            span = discount_badge.find('span')
+            if span and span.text.strip().startswith('-'):
+                discount = span.text.strip()
+        # Цена
+        price_span = a.find('span', {'data-qa': re.compile('price#display-price')})
+        if price_span:
+            price = price_span.text.strip()
+        # old_price только из <span data-qa='price#original-price'> или <s>
+        old_price_tag = a.find('span', {'data-qa': re.compile('price#original-price')})
+        if not old_price_tag:
+            old_price_tag = a.find('s')
+        old_price = old_price_tag.text.strip() if old_price_tag else ''
+        subscription = ''
+        subscription_icon = ''
+        upsell_save = a.find('span', {'data-qa': re.compile('service-upsell#descriptorText')})
+        upsell_block = a.find_parent('div', class_='psw-service-upsell') or a.find('div', class_='psw-service-upsell')
+        if upsell_block:
+            if upsell_block.find('span', class_='psw-icon--3rd-party-ea'):
+                subscription_icon = 'eaplay'
+            elif upsell_block.find('span', class_='psw-icon--ps-plus'):
+                subscription_icon = 'psplus'
+        if upsell_save:
+            subscription = upsell_save.get_text(strip=True)
+        link = a.get('href')
+        if not link:
             continue
-        title = a.find('span', class_=re.compile('ProductCard-module__title'))
-        title = title.text.strip() if title else 'No title'
-        img = a.find('img')
-        img_url = img['src'] if img else ''
-        price = a.find('span', class_=re.compile('ProductCard-module__price'))
-        if not price:
-            price = a.find('span', class_=re.compile('Price-module__boldText'))
-        price = price.text.strip() if price else '—'
-        link = a['href'] if a.has_attr('href') else '#'
+        full_link = 'https://store.playstation.com' + link
+        price_clean = price.strip().lower().replace(' ', '')
+        if not price_clean or price_clean in ['free', 'бесплатно']:
+            continue
+        game_links.append((full_link, title, img_url, price, old_price, discount, subscription, subscription_icon, region))
+    async with aiohttp.ClientSession() as session:
+        tasks = [get_game_details(session, link) for link, *_ in game_links]
+        details_list = await asyncio.gather(*tasks)
+    for (full_link, title, img_url, price, old_price, discount, subscription, subscription_icon, region), (release_date, voice, subtitles, platforms) in zip(game_links, details_list):
         games.append({
             'title': title,
             'img': img_url,
             'price': price,
-            'link': link,
-            'platform': PLATFORMS['xbox'],
+            'old_price': old_price,
+            'discount_percent': discount,
+            'subscription': subscription,
+            'subscription_icon': subscription_icon,
+            'product_type': '',
+            'link': full_link,
+            'platforms': platforms,
+            'region': region,
+            'release_date': release_date,
+            'voice': voice,
+            'subtitles': subtitles
         })
     return games
 
-def main():
+async def main_async():
     all_games = []
-    # PlayStation TR
-    all_games += parse_playstation('https://store.playstation.com/en-tr/pages/browse/1', 'ps5')
-    # PlayStation IN
-    all_games += parse_playstation('https://store.playstation.com/en-in/pages/browse/1', 'ps4')
-    # Xbox TR
-    all_games += parse_xbox('https://www.xbox.com/tr-TR/games/browse')
-    # Xbox IN
-    all_games += parse_xbox('https://www.xbox.com/en-IN/games/browse')
-    with open('parser/games.json', 'w', encoding='utf-8') as f:
+    all_games += await parse_playstation_async('https://store.playstation.com/en-tr/pages/browse/1', 'tr')
+    all_games += await parse_playstation_async('https://store.playstation.com/en-in/pages/browse/1', 'in')
+    with open(GAMES_JSON, 'w', encoding='utf-8') as f:
         json.dump(all_games, f, ensure_ascii=False, indent=2)
 
 if __name__ == '__main__':
-    main() 
+    print('Парсинг запущен...')
+    asyncio.run(main_async()) 

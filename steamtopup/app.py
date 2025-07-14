@@ -10,7 +10,8 @@ CORS(app)  # Добавляем поддержку CORS
 
 # Читаем HTML файл
 def get_html_content():
-    with open('../main/main.html', 'r', encoding='utf-8') as f:
+    main_html_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'main', 'main.html')
+    with open(main_html_path, 'r', encoding='utf-8') as f:
         return f.read()
 
 @app.route('/')
@@ -98,9 +99,21 @@ def process_payment():
 def steamtopup_static(filename):
     return send_from_directory(os.path.join(os.path.dirname(__file__)), filename)
 
+@app.route('/allgames/allgames.html')
+def allgames_page():
+    allgames_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'allgames')
+    return send_from_directory(allgames_path, 'allgames.html')
+
+@app.route('/steamtopup/steamtopup.html')
+def steamtopup_page():
+    steamtopup_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'steamtopup')
+    return send_from_directory(steamtopup_path, 'steamtopup.html')
+
 @app.route('/parser/games.json')
 def serve_games_json():
-    return send_from_directory('parser', 'games.json')
+    import os
+    parser_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'parser')
+    return send_from_directory(parser_dir, 'games.json')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
