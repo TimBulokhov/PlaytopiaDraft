@@ -5,20 +5,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пополнение баланса Steam - Playtopia</title>
     <style>
-        * {
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        body {
             font-family: 'Segoe UI', 'Arial', sans-serif;
             background: #fff;
+            min-height: 100vh;
+            min-width: 100vw;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-width: 100vw;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 32px 48px 0 48px;
+            box-sizing: border-box;
+            min-height: 100px;
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
             color: #181818;
-            line-height: 1.6;
+            letter-spacing: 2px;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            text-decoration: none;
+            user-select: none;
+        }
+        .catalog-btn {
+            display: flex;
+            align-items: center;
+            background: #47D651;
+            border-radius: 12px;
+            padding: 0 32px 0 20px;
+            height: 56px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(71,214,81,0.08);
+            margin-left: 32px;
+            transition: background 0.2s;
+        }
+        .catalog-btn:hover {
+            background: #36b94c;
+        }
+        .burger {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-right: 16px;
+        }
+        .burger-line {
+            width: 28px;
+            height: 4px;
+            background: #fff;
+            border-radius: 2px;
+            margin: 2px 0;
+        }
+        .search-bar {
+            flex: 1;
+            max-width: 420px;
+            margin: 0 48px;
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 0 16px;
+            height: 48px;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .search-bar input {
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            flex: 1;
+            outline: none;
+            padding: 0 8px;
+        }
+        .search-bar svg {
+            width: 24px;
+            height: 24px;
+            fill: #888;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .header-link {
+            font-size: 1.2rem;
+            color: #181818;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 8px;
+            transition: color 0.2s;
+        }
+        .header-link:hover {
+            color: #47D651;
+        }
+        .nav {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin-top: 32px;
+          margin-bottom: 32px;
+        }
+        .nav-list {
+          display: flex;
+          gap: 80px;
+          background: #fff;
+          border-radius: 16px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+          padding: 16px 48px;
+          align-items: center;
+        }
+        .nav-list li {
+          list-style: none;
+        }
+        .nav-list a {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: #181818;
+          font-size: 1.15rem;
+          font-weight: 500;
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        .nav-list a:hover {
+          color: #47D651;
+        }
+        .nav-list svg {
+          display: block;
+          width: 32px;
+          height: 32px;
+        }
+        @media (max-width: 900px) {
+          .nav-list {
+            gap: 24px;
+            padding: 8px 8px;
+          }
+        }
+        @media (max-width: 600px) {
+          .nav-list {
+            flex-direction: column;
+            gap: 8px;
+            padding: 8px 4px;
+          }
+        }
+        @media (max-width: 900px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 8px 4px 0 4px;
+            }
+            .logo {
+                font-size: 1.5rem;
+            }
+            .catalog-btn {
+                height: 40px;
+                font-size: 1rem;
+                padding: 0 16px 0 10px;
+            }
+            .header-right {
+                gap: 16px;
+            }
         }
         .main-layout-grid {
-            display: grid;
-            grid-template-rows: 720px auto;
+            display: flex;
+            flex-direction: column;
             width: 100%;
         }
         .container-and-info {
@@ -58,147 +224,6 @@
             box-shadow: 0 6px 28px rgba(21,96,189,0.13);
             padding: 32px;
             border: 2px solid #1560BD !important;
-        }
-
-        .header {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 32px 48px 0 48px;
-            box-sizing: border-box;
-            min-height: 100px;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #181818;
-            letter-spacing: 2px;
-            font-family: 'Segoe UI', 'Arial', sans-serif;
-            text-decoration: none;
-            user-select: none;
-        }
-
-        .catalog-btn {
-            display: flex;
-            align-items: center;
-            background: #47D651;
-            border-radius: 12px;
-            padding: 0 32px 0 20px;
-            height: 56px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(71,214,81,0.08);
-            margin-left: 32px;
-            transition: background 0.2s;
-        }
-
-        .catalog-btn:hover {
-            background: #36b94c;
-        }
-
-        .burger {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            margin-right: 16px;
-        }
-
-        .burger-line {
-            width: 28px;
-            height: 4px;
-            background: #fff;
-            border-radius: 2px;
-            margin: 2px 0;
-        }
-
-        .nav {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin: 0;
-        }
-
-        .nav-list {
-            display: flex;
-            gap: 80px;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
-            padding: 16px 48px;
-            align-items: center;
-        }
-
-        .nav-list li {
-            list-style: none;
-        }
-
-        .nav-list a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #181818;
-            font-size: 1.15rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .nav-list a:hover {
-            color: #47D651;
-        }
-
-        .nav-list svg {
-            display: block;
-            width: 32px;
-            height: 32px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .header-link {
-            font-size: 1.2rem;
-            color: #181818;
-            text-decoration: none;
-            font-weight: 500;
-            margin-left: 8px;
-            transition: color 0.2s;
-        }
-
-        .header-link:hover {
-            color: #47D651;
-        }
-
-        @media (max-width: 900px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-                padding: 8px 4px 0 4px;
-            }
-            .logo {
-                font-size: 1.5rem;
-            }
-            .catalog-btn {
-                height: 40px;
-                font-size: 1rem;
-                padding: 0 16px 0 10px;
-            }
-            .nav-list {
-                gap: 24px;
-                padding: 8px 12px;
-            }
-            .header-right {
-                gap: 16px;
-            }
         }
 
         .header-text h1 {
@@ -435,24 +460,24 @@
         .info-cards {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 72px;
-            margin: 40px 0 0 96px;
-            flex: 1;
-            max-width: 1200px;
+            gap: 75px;
+            max-width: 850px;
+            margin-bottom: 75px;
+            margin-left: 175px;
         }
-
         .info-card {
-            background: #f7faff;
-            border-radius: 14px;
-            box-shadow: 0 2px 12px rgba(21,96,189,0.08);
-            padding: 56px 40px 40px 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            min-height: 320px;
-            border: 1.5px solid #e3eaf6;
+          background: #f6faff;
+          border-radius: 16px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+          padding: 20px 18px 18px 18px;
+          font-size: 18px;
+          min-height: 120px;
+          border: 1.5px solid #e3eaf6;
         }
-
+        .info-card-title {
+          font-size: 16px;
+          margin-bottom: 8px;
+        }
         .info-icon {
             width: 54px;
             height: 54px;
@@ -461,14 +486,14 @@
         }
 
         .info-title {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: #222;
             margin-bottom: 6px;
         }
 
         .info-text {
-            font-size: 15px;
+            font-size: 16px;
             color: #333;
             line-height: 1.5;
         }
@@ -564,7 +589,7 @@
 
         .swc-section {
         width: 100%;
-        margin: 115px 0 0 0;
+        margin: 0px 0 0 0;
         padding: 0;
         position: relative;
         z-index: 1;
@@ -580,7 +605,7 @@
             font-size: 24px;
             font-weight: 700;
             color: #222;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
             text-align: left;
             padding-left: 0;
         }
@@ -726,27 +751,29 @@
                 box-sizing: border-box;
             }
         }
+        .info-cards {
+          margin-bottom: 80px;
+        }
     </style>
 </head>
 <body>
   <header class="header">
-    <div style="display:flex;align-items:center;">
-      <span class="logo" onclick="window.location.href='/'" style="cursor:pointer;">Playtopia</span>
-      <button class="catalog-btn" style="margin-left:650px;">
-        <span class="burger">
-          <span class="burger-line"></span>
-          <span class="burger-line"></span>
-          <span class="burger-line"></span>
-        </span>
-        Каталог
-      </button>
-    </div>
+    <span class="logo" style="cursor:pointer;">Playtopia</span>
+    <button class="catalog-btn">
+      <span class="burger">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </span>
+      Каталог
+    </button>
+    <div class="search-bar"></div>
     <div class="header-right">
       <a class="header-link" href="#">Профиль</a>
       <a class="header-link" href="#">Корзина</a>
     </div>
   </header>
-  <nav class="nav" style="margin-top:65px;margin-bottom:32px;">
+  <nav class="nav" style="margin-top:50px;margin-bottom:32px;">
     <ul class="nav-list">
       <li>
         <a id="nav-steam" href="/steamtopup/steamtopup.html">
@@ -755,7 +782,7 @@
         </a>
       </li>
       <li>
-        <a href="/catalog/playstation-games">
+        <a id="nav-playstation" href="/playstation/playstation.html">
           <span><!-- PlayStation SVG --><svg width="32" height="32" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" rx="206" fill="black"></rect><g clip-path="url(#clip0_1536_15202)"><path d="M93.6311 370.209C77.5847 380.957 83.0344 401.394 117.398 411.082C153.373 423.057 191.747 425.969 229.118 419.56C230.903 419.312 232.672 418.958 234.416 418.5V382.623L197.933 394.43C184.387 398.825 169.92 399.556 156 396.55C145.252 393.371 147.372 386.861 160.239 381.412L234.416 355.677V316.015L131.325 351.438C117.907 355.812 105.207 362.137 93.6311 370.209ZM342.351 209.594V313.895C386.403 335.392 420.766 313.895 420.766 258.036C420.766 202.176 400.935 175.23 342.351 154.794C310.935 143.75 278.822 134.799 246.224 127.999V438.482L321.914 461.038V199.905C321.914 188.097 321.914 179.62 330.543 182.799C342.351 185.978 342.351 197.786 342.351 209.594ZM482.076 345.837C451.066 334.947 418.062 330.918 385.343 334.029C368.765 335.276 352.451 338.896 336.901 344.777L333.722 345.837V387.618L403.509 361.883C417.056 357.496 431.521 356.765 445.442 359.764C456.19 362.943 454.07 369.452 441.203 374.902L334.328 415.624V456.497L482.681 400.486C493.461 396.402 503.298 390.17 511.595 382.168C519.164 371.874 515.985 356.888 482.681 346.14L482.076 345.837Z" fill="white"></path></g><defs><clipPath id="clip0_1536_15202"><rect width="430" height="430" fill="white" transform="translate(85 85)"></rect></clipPath></defs></svg></span>
           PlayStation
         </a>
@@ -781,9 +808,9 @@
     </ul>
   </nav>
   <script>
-    document.querySelector('.logo').addEventListener('click', function() {
-      window.location.href = '/';
-    });
+  document.querySelector('.logo').addEventListener('click', function() {
+    window.location.href = '/';
+  });
   </script>
     <div class="main-layout-grid">
         <div class="container-and-info">
@@ -883,18 +910,18 @@
                 </div>
             </div>
         </div>
-        <section class="swc-section">
-            <h2 class="swc-title">Steam Wallet Codes</h2>
-            <div class="swc-cards">
-                <div class="swc-card"><img src="/static/SWC5.png" alt="$5 Steam Wallet Code"></div>
-                <div class="swc-card"><img src="/static/SWC10.png" alt="$10 Steam Wallet Code"></div>
-                <div class="swc-card"><img src="/static/SWC20.png" alt="$20 Steam Wallet Code"></div>
-                <div class="swc-card"><img src="/static/SWC25.png" alt="$25 Steam Wallet Code"></div>
-                <div class="swc-card"><img src="/static/SWC50.png" alt="$50 Steam Wallet Code"></div>
-                <div class="swc-card"><img src="/static/SWC100.png" alt="$100 Steam Wallet Code"></div>
-            </div>
-        </section>
     </div>
+    <section class="swc-section">
+        <h2 class="swc-title">Steam Wallet Codes</h2>
+        <div class="swc-cards">
+            <div class="swc-card"><img src="/static/SWC5.png" alt="$5 Steam Wallet Code"></div>
+            <div class="swc-card"><img src="/static/SWC10.png" alt="$10 Steam Wallet Code"></div>
+            <div class="swc-card"><img src="/static/SWC20.png" alt="$20 Steam Wallet Code"></div>
+            <div class="swc-card"><img src="/static/SWC25.png" alt="$25 Steam Wallet Code"></div>
+            <div class="swc-card"><img src="/static/SWC50.png" alt="$50 Steam Wallet Code"></div>
+            <div class="swc-card"><img src="/static/SWC100.png" alt="$100 Steam Wallet Code"></div>
+        </div>
+    </section>
 
     <div id="login-faq-modal" style="display:none;position:fixed;z-index:2000;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
         <div style="background:#23232b;color:#fff;border-radius:16px;max-width:420px;width:90vw;padding:32px 24px 24px 24px;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.25);">
@@ -1151,11 +1178,11 @@
         // Навигация "Главная"
         document.addEventListener('DOMContentLoaded', function() {
           // Переход на "Главная"
-          const navMain = document.getElementById('nav-main');
+          const navMain = document.getElementById('nav-steam');
           if (navMain) {
             navMain.addEventListener('click', function(e) {
               e.preventDefault();
-              window.location.href = '/main/main.html';
+              window.location.href = '/steamtopup/steamtopup.html';
             });
           }
           // Навигация "Игры"

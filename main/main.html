@@ -461,7 +461,7 @@
         </a>
       </li>
       <li>
-        <a href="/catalog/playstation-games">
+        <a id="nav-playstation" href="/playstation/playstation.html">
           <span><!-- PlayStation SVG --><svg width="32" height="32" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" rx="206" fill="black"></rect><g clip-path="url(#clip0_1536_15202)"><path d="M93.6311 370.209C77.5847 380.957 83.0344 401.394 117.398 411.082C153.373 423.057 191.747 425.969 229.118 419.56C230.903 419.312 232.672 418.958 234.416 418.5V382.623L197.933 394.43C184.387 398.825 169.92 399.556 156 396.55C145.252 393.371 147.372 386.861 160.239 381.412L234.416 355.677V316.015L131.325 351.438C117.907 355.812 105.207 362.137 93.6311 370.209ZM342.351 209.594V313.895C386.403 335.392 420.766 313.895 420.766 258.036C420.766 202.176 400.935 175.23 342.351 154.794C310.935 143.75 278.822 134.799 246.224 127.999V438.482L321.914 461.038V199.905C321.914 188.097 321.914 179.62 330.543 182.799C342.351 185.978 342.351 197.786 342.351 209.594ZM482.076 345.837C451.066 334.947 418.062 330.918 385.343 334.029C368.765 335.276 352.451 338.896 336.901 344.777L333.722 345.837V387.618L403.509 361.883C417.056 357.496 431.521 356.765 445.442 359.764C456.19 362.943 454.07 369.452 441.203 374.902L334.328 415.624V456.497L482.681 400.486C493.461 396.402 503.298 390.17 511.595 382.168C519.164 371.874 515.985 356.888 482.681 346.14L482.076 345.837Z" fill="white"></path></g><defs><clipPath id="clip0_1536_15202"><rect width="430" height="430" fill="white" transform="translate(85 85)"></rect></clipPath></defs></svg></span>
           PlayStation
         </a>
@@ -500,7 +500,7 @@
       </a>
       <div class="banner xbox">
         <div style="display:flex;align-items:center;gap:24px;">
-          <svg width="64" height="64" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" rx="206" fill="black"></rect><path d="M500 300C500 410.462 410.456 500 300 500C189.544 500 100 410.462 100 300C100 189.55 189.544 100 300 100C410.456 100 500 189.538 500 300Z" fill="#666666"></path></svg>
+          <svg width="64" height="64" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" rx="206" fill="black"></rect><path d="M500 300C500 410.462 410.456 500 300 500C189.544 500 100 410.462 100 300C100 189.55 189.544 100 300 100C410.456 100 500 189.538 500 300Z" fill="#666664"></path></svg>
           <div>
             <div class="banner-title" style="color:#fff;">Подписки<br>Xbox Game Pass</div>
           </div>
@@ -518,6 +518,12 @@
         <div class="section-title">Новинки</div>
         <div class="psw-l-w-1/1">
           <ul id="new-games-list" class="psw-grid-list psw-l-grid"></ul>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Предзаказы</div>
+        <div class="psw-l-w-1/1">
+          <ul id="preorder-games-list" class="psw-grid-list psw-l-grid"></ul>
         </div>
       </div>
     </div>
@@ -701,6 +707,28 @@ function renderCard(game) {
     </li>
   `;
 }
+let subscriptions = [];
+fetch('/parser/subscriptions.json')
+  .then(res => res.json())
+  .then(subs => { subscriptions = subs; });
+function renderSubscriptionSearchCard(sub, plan) {
+  let img = sub.image;
+  if (sub.service.toLowerCase().includes('ea play')) img = 'eaplaysub.png';
+  let tier = sub.tier ? sub.tier : '';
+  let tierClass = '';
+  if (tier.toLowerCase() === 'deluxe') tierClass = 'DELUXE';
+  else if (tier.toLowerCase() === 'extra') tierClass = 'EXTRA';
+  else if (tier.toLowerCase() === 'essential') tierClass = 'ESSENTIAL';
+  return {
+    title: sub.service,
+    period: plan.period,
+    price: plan.price,
+    region: sub.region,
+    img: '/static/' + img,
+    tier: tier,
+    tierClass: tierClass
+  };
+}
 fetch('/parser/games.json')
   .then(res => res.json())
   .then(games => {
@@ -713,9 +741,19 @@ fetch('/parser/games.json')
       const now = new Date();
       const days = Math.floor((now - date) / (1000 * 60 * 60 * 24));
       return days >= 0 && days <= 21;
-    });
+    }).sort((a, b) => a.title.localeCompare(b.title));
     // Скидки: old_price не пустой и не только пробелы
-    const discountGames = games.filter(g => g.old_price && g.old_price.replace(/\s/g, '').length > 0);
+    const discountGames = games.filter(g => g.old_price && g.old_price.replace(/\s/g, '').length > 0)
+      .sort((a, b) => a.title.localeCompare(b.title));
+    // Предзаказы: дата выхода в будущем
+    const preorderGames = games.filter(g => {
+      if (!g.release_date) return false;
+      const [d, m, y] = g.release_date.split(/[./-]/).map(Number);
+      if (!d || !m || !y) return false;
+      const date = new Date(y, m - 1, d);
+      const now = new Date();
+      return date > now;
+    }).sort((a, b) => a.title.localeCompare(b.title));
     // Рендерим секции
     const newGamesList = document.getElementById('new-games-list');
     if (newGamesList) {
@@ -733,6 +771,179 @@ fetch('/parser/games.json')
         discountGamesList.innerHTML = '<div style="padding:32px 0;color:#888;font-size:1.2rem;">Нет игр</div>';
       }
     }
+    const preorderGamesList = document.getElementById('preorder-games-list');
+    if (preorderGamesList) {
+      if (preorderGames.length > 0) {
+        preorderGamesList.innerHTML = preorderGames.map(renderCard).join('');
+      } else {
+        preorderGamesList.innerHTML = '<div style="padding:32px 0;color:#888;font-size:1.2rem;">Нет предзаказов</div>';
+      }
+    }
+
+    // --- Поисковик ---
+    const searchBar = document.querySelector('.search-bar');
+    const searchInput = document.querySelector('.search-bar input');
+    let searchDropdown = document.getElementById('search-dropdown');
+    if (!searchDropdown) {
+      searchDropdown = document.createElement('div');
+      searchDropdown.id = 'search-dropdown';
+      searchDropdown.style.position = 'absolute';
+      searchDropdown.style.background = '#fff';
+      searchDropdown.style.boxShadow = '0 2px 12px rgba(0,0,0,0.12)';
+      searchDropdown.style.borderRadius = '12px';
+      searchDropdown.style.zIndex = '1000';
+      searchDropdown.style.maxHeight = '420px';
+      searchDropdown.style.overflowY = 'auto';
+      searchDropdown.style.display = 'none';
+      searchDropdown.style.left = '0';
+      searchDropdown.style.top = '48px';
+      // Ограничиваем ширину input'ом
+      searchDropdown.style.width = searchInput.offsetWidth + 'px';
+      document.querySelector('.search-bar').style.position = 'relative';
+      document.querySelector('.search-bar').appendChild(searchDropdown);
+    }
+    // Категории и услуги
+    const staticServices = [
+      {
+        type: 'category',
+        title: 'Пополнить Steam',
+        img: 'static/steam.png',
+        link: '/steamtopup/steamtopup.html',
+        children: [
+          { title: 'Steam Wallet Code 5$', img: 'static/SWC5.png', link: '/steamtopup/steamtopup.html' },
+          { title: 'Steam Wallet Code 10$', img: 'static/SWC10.png', link: '/steamtopup/steamtopup.html' },
+          { title: 'Steam Wallet Code 20$', img: 'static/SWC20.png', link: '/steamtopup/steamtopup.html' },
+          { title: 'Steam Wallet Code 25$', img: 'static/SWC25.png', link: '/steamtopup/steamtopup.html' },
+          { title: 'Steam Wallet Code 50$', img: 'static/SWC50.png', link: '/steamtopup/steamtopup.html' },
+          { title: 'Steam Wallet Code 100$', img: 'static/SWC100.png', link: '/steamtopup/steamtopup.html' },
+          { title: 'Услуга "Пополнить Steam"', img: 'static/steam.png', link: '/steamtopup/steamtopup.html' },
+        ]
+      },
+      // Можно добавить PlayStation, Xbox и т.д.
+    ];
+    function renderSearchResults(results) {
+      if (!results.games.length && !results.services.length && !results.subs.length) {
+        searchDropdown.innerHTML = '<div style="padding:16px;color:#888;">Ничего не найдено</div>';
+        searchDropdown.style.display = 'block';
+        return;
+      }
+      let html = '';
+      if (results.games.length) {
+        html += '<div style="padding:12px 16px 4px 16px;font-weight:700;font-size:1.1rem;">Игры</div>';
+        html += results.games.map(item => `
+          <div class="search-result-game" tabindex="0" style="display:flex;align-items:center;gap:12px;padding:8px 16px;cursor:pointer;transition:background 0.15s;border-radius:8px;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+            <img src="${item.img}" style="width:54px;height:54px;object-fit:cover;border-radius:8px;">
+            <div style="display:flex;flex-direction:column;">
+              <span style="font-size:1.05rem;font-weight:700;">${item.title}</span>
+              <span style="font-size:0.98rem;color:#888;">
+                ${item.price ? item.price : ''}
+                ${item.region ? '· ' + item.region.toUpperCase() : ''}
+                ${item.discount_percent ? '· <span class=\'psw-badge\' style=\'background:#181818;color:#fff;padding:2px 8px;border-radius:6px;font-size:0.98em;font-weight:700;display:inline-block;\'>' + item.discount_percent + '</span>' : ''}
+                ${item.old_price ? ' <s style="color:#888;">' + item.old_price + '</s>' : ''}
+                ${item.subscription_icon ? '<img src="static/' + item.subscription_icon + '.png" style="height:18px;vertical-align:middle;margin-left:4px;">' : ''}
+                ${item.subscription ? '· ' + item.subscription : ''}
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+      if (results.services.length) {
+        html += results.services.map(item => {
+          if (item.type === 'category') {
+            return `<div style="padding:12px 16px 4px 16px;font-weight:700;font-size:1.1rem;">${item.title}</div>` +
+              (item.children ? item.children.map(child => `
+                <a href="${child.link}" style="display:flex;align-items:center;gap:12px;padding:8px 16px;text-decoration:none;color:#181818;transition:background 0.15s;border-radius:8px;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+                  <img src="${child.img}" style="width:54px;height:54px;object-fit:cover;border-radius:8px;">
+                  <span style="font-size:1.05rem;">${child.title}</span>
+                </a>`).join('') : '');
+          }
+          return '';
+        }).join('');
+      }
+      if (results.subs && results.subs.length) {
+  html += '<div style="padding:12px 16px 4px 16px;font-weight:700;font-size:1.1rem;">Подписки</div>';
+  html += results.subs.map(item => {
+    let badgeStyle = '';
+    if (item.tierClass === 'DELUXE') badgeStyle = 'background:#181818;color:#fff;';
+    else if (item.tierClass === 'EXTRA') badgeStyle = 'background:#7c4dff;color:#fff;';
+    else if (item.tierClass === 'ESSENTIAL') badgeStyle = 'background:#fff;color:#181818;border:1.5px solid #181818;';
+    return `
+      <div class="search-result-sub" tabindex="0" style="display:flex;align-items:center;gap:12px;padding:8px 16px;cursor:pointer;transition:background 0.15s;border-radius:8px;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+        <img src="${item.img}" style="width:54px;height:54px;object-fit:cover;border-radius:8px;">
+        <div style="display:flex;flex-direction:column;">
+          <span style="font-size:1.05rem;font-weight:700;">${item.title}${item.tier ? ` <span class='psw-badge sub-card-tier ${item.tierClass}' style='${badgeStyle}'>${item.tier}</span>` : ''}</span>
+          <span style="font-size:0.98rem;color:#888;">${item.period} · ${item.price} · ${item.region}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+      searchDropdown.innerHTML = html;
+      searchDropdown.style.display = 'block';
+      // Навешиваем обработчик на игры (закрывать дропдаун)
+      searchDropdown.querySelectorAll('.search-result-game').forEach(el => {
+        el.addEventListener('mousedown', function(e) {
+          searchDropdown.style.display = 'none';
+        });
+      });
+      searchDropdown.querySelectorAll('.search-result-sub').forEach(el => {
+        el.addEventListener('mousedown', function(e) {
+          searchDropdown.style.display = 'none';
+        });
+      });
+    }
+    searchInput.addEventListener('input', function() {
+      const q = this.value.trim().toLowerCase();
+      if (!q) {
+        searchDropdown.style.display = 'none';
+        return;
+      }
+      // Игры по алфавиту
+      const foundGames = games.filter(g => g.title && g.title.toLowerCase().includes(q))
+        .sort((a, b) => a.title.localeCompare(b.title));
+      // Категории/услуги по алфавиту
+      let foundServices = [];
+      staticServices.forEach(cat => {
+        if (cat.title.toLowerCase().includes(q)) {
+          foundServices.push(cat);
+        } else if (cat.children) {
+          const found = cat.children.filter(child => child.title.toLowerCase().includes(q));
+          if (found.length) {
+            foundServices.push({ ...cat, children: found });
+          }
+        }
+      });
+      foundServices = foundServices.sort((a, b) => a.title.localeCompare(b.title));
+      // Подписки
+      let foundSubs = [];
+      subscriptions.forEach(sub => {
+        sub.plans.forEach(plan => {
+          if (
+            sub.service.toLowerCase().includes(q) ||
+            (sub.tier && sub.tier.toLowerCase().includes(q)) ||
+            plan.period.toLowerCase().includes(q) ||
+            plan.price.toLowerCase().includes(q)
+          ) {
+            foundSubs.push(renderSubscriptionSearchCard(sub, plan));
+          }
+        });
+      });
+      renderSearchResults({ games: foundGames, services: foundServices, subs: foundSubs });
+      // Синхронизирую ширину dropdown с .search-bar
+      searchDropdown.style.width = searchBar.offsetWidth + 'px';
+    });
+    searchInput.addEventListener('focus', function() {
+      if (searchDropdown.innerHTML && searchDropdown.innerHTML.trim() !== '') {
+        searchDropdown.style.display = 'block';
+      }
+      // Синхронизирую ширину dropdown с .search-bar
+      searchDropdown.style.width = searchBar.offsetWidth + 'px';
+    });
+    document.addEventListener('click', function(e) {
+      if (!searchDropdown.contains(e.target) && e.target !== searchInput) {
+        searchDropdown.style.display = 'none';
+      }
+    });
   });
 // Исправляю переход на steamtopup.html
 // Для баннера:
@@ -769,6 +980,14 @@ document.addEventListener('DOMContentLoaded', function() {
     navSteam.addEventListener('click', function(e) {
       e.preventDefault();
       window.location.href = '/steamtopup/steamtopup.html';
+    });
+  }
+  // Навигация "PlayStation"
+  const navPlaystation = document.getElementById('nav-playstation');
+  if (navPlaystation) {
+    navPlaystation.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '/playstation/playstation.html';
     });
   }
   // Баннер Steam
