@@ -1,0 +1,196 @@
+[
+  {
+    "service": "PlayStation Plus",
+    "tier": "Deluxe",
+    "region": "TR",
+    "image": "deluxe.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "474,00 TL"
+      },
+      {
+        "period": "3 месяца",
+        "price": "1.354,00 TL"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "4.266,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "PlayStation Plus",
+    "tier": "Extra",
+    "region": "TR",
+    "image": "extra.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "405,00 TL"
+      },
+      {
+        "period": "3 месяца",
+        "price": "1.148,00 TL"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "3.645,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "PlayStation Plus",
+    "tier": "Essential",
+    "region": "TR",
+    "image": "essential.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "270,00 TL"
+      },
+      {
+        "period": "3 месяца",
+        "price": "710,00 TL"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "2.160,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "PlayStation Plus",
+    "tier": "Deluxe",
+    "region": "IN",
+    "image": "deluxe.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "Rs 849"
+      },
+      {
+        "period": "3 месяца",
+        "price": "Rs 2,299"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "Rs 7,599"
+      }
+    ]
+  },
+  {
+    "service": "PlayStation Plus",
+    "tier": "Extra",
+    "region": "IN",
+    "image": "extra.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "Rs 749"
+      },
+      {
+        "period": "3 месяца",
+        "price": "Rs 1,999"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "Rs 6,699"
+      }
+    ]
+  },
+  {
+    "service": "PlayStation Plus",
+    "tier": "Essential",
+    "region": "IN",
+    "image": "essential.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "Rs 499"
+      },
+      {
+        "period": "3 месяца",
+        "price": "Rs 1,199"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "Rs 3,949"
+      }
+    ]
+  },
+  {
+    "service": "Ubisoft+ Classics",
+    "region": "TR",
+    "image": "ubisoft.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "139,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "Ubisoft+ Classics",
+    "region": "IN",
+    "image": "ubisoft.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "Rs 399"
+      }
+    ]
+  },
+  {
+    "service": "GTA+",
+    "region": "TR",
+    "image": "gtaplus.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "199,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "GTA+",
+    "region": "IN",
+    "image": "gtaplus.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "Rs 624"
+      }
+    ]
+  },
+  {
+    "service": "EA Play",
+    "region": "TR",
+    "image": "eaplay.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "219,99 TL"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "1.499,99 TL"
+      }
+    ]
+  },
+  {
+    "service": "EA Play",
+    "region": "IN",
+    "image": "eaplay.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "Rs 399"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "Rs 2,499"
+      }
+    ]
+  }
+]

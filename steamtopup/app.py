@@ -115,5 +115,17 @@ def serve_games_json():
     parser_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'parser')
     return send_from_directory(parser_dir, 'games.json')
 
+@app.route('/parser/<path:filename>')
+def parser_static(filename):
+    import os
+    parser_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'parser')
+    return send_from_directory(parser_dir, filename)
+
+@app.route('/playstation/<path:filename>')
+def playstation_static(filename):
+    import os
+    playstation_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'playstation')
+    return send_from_directory(playstation_dir, filename)
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
