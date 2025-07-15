@@ -444,7 +444,7 @@
       Каталог
     </button>
     <form class="search-bar" action="#">
-      <input type="text" placeholder="Поиск по товарам, категориям и продавцам">
+      <input type="text" placeholder="Поиск по играм">
       <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg>
     </form>
     <div class="header-right">
@@ -491,8 +491,9 @@
       <label style="font-weight:600;font-size:1.08rem;">Платформа:
         <select id="filter-platform" class="filter-select">
           <option value="">Все</option>
-          <option value="ps4">PS4 (совместимо с PS5)</option>
-          <option value="ps5">PS5</option>
+          <option value="ps4">Только PS4 (совместимо с PS5)</option>
+          <option value="ps5">Только PS5</option>
+          <option value="ps4ps5">PS4 + PS5 (отдельные версии)</option>
         </select>
       </label>
       <div id="region-buttons" style="display:flex;gap:16px;">
@@ -507,8 +508,9 @@
           <option value="en-full">Полностью на английском</option>
         </select>
       </label>
-      <label id="sort-label" style="font-weight:600;font-size:1.08rem;display:none;">Сортировка по цене:
+      <label style="font-weight:600;font-size:1.08rem;">Сортировка по цене:
         <select id="sort-price" class="filter-select">
+          <option value="">Без сортировки</option>
           <option value="price-asc">Цена (возрастание)</option>
           <option value="price-desc">Цена (убывание)</option>
         </select>
@@ -731,75 +733,178 @@ function subscriptionIcon(type) {
     }
 function parseDate(dateStr) {
   if (!dateStr) return -Infinity;
-  const [d, m, y] = dateStr.split(/[./-]/).map(Number);
-  if (!d || !m || !y) return -Infinity;
-  return new Date(y, m - 1, d).getTime();
+  // Поддержка d/m/yyyy, d.m.yyyy, yyyy-mm-dd
+  let d, m, y;
+  if (/\d{1,2}[./-]\d{1,2}[./-]\d{4}/.test(dateStr)) {
+    [d, m, y] = dateStr.split(/[./-]/).map(Number);
+    if (!d || !m || !y) return -Infinity;
+    return new Date(y, m - 1, d).getTime();
+  }
+  if (/\d{4}-\d{2}-\d{2}/.test(dateStr)) {
+    [y, m, d] = dateStr.split('-').map(Number);
+    if (!d || !m || !y) return -Infinity;
+    return new Date(y, m - 1, d).getTime();
+  }
+  return -Infinity;
 }
+
 function parsePrice(priceStr) {
   if (!priceStr) return Infinity;
-  const price = parseFloat(priceStr.replace(/[^0-9.,]/g, '').replace(',', '.'));
-  return isNaN(price) ? Infinity : price;
+  // Турция: 2.799,00 TL → 2799.00
+  // Индия: Rs 1,319 → 1319
+  let price = priceStr.replace(/[^0-9.,]/g, '');
+  if (price.includes(',')) {
+    // Турция: 2.799,00 → 2799.00
+    price = price.replace(/\./g, '').replace(',', '.');
+  } else {
+    // Индия: 1,319 → 1319
+    price = price.replace(/,/g, '');
+  }
+  const num = parseFloat(price);
+  return isNaN(num) ? Infinity : num;
 }
-// --- РЕГИОНЫ ---
-window.selectedRegion = '';
-document.addEventListener('DOMContentLoaded', function() {
-  const regionBtns = document.querySelectorAll('.region-btn');
-  regionBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      if (window.selectedRegion === btn.dataset.region) {
-        window.selectedRegion = '';
-        regionBtns.forEach(b => b.style.background = '#e6e6e6');
-      } else {
-        window.selectedRegion = btn.dataset.region;
-        regionBtns.forEach(b => b.style.background = '#e6e6e6');
-        btn.style.background = '#47D651';
-      }
-      document.getElementById('filters').dispatchEvent(new Event('input'));
-    });
-  });
-});
-// --- ФИЛЬТРАЦИЯ ---
+function hasRuSubOnly(voice, subs) {
+  // Есть русские субтитры, но нет русской озвучки
+  return subs.includes('Русский') && (!voice || !voice.includes('Русский'));
+}
+function hasRuFull(voice, subs) {
+  // Есть и русская озвучка, и субтитры
+  return voice.includes('Русский') && subs.includes('Русский');
+}
+function hasAnyRu(voice, subs) {
+  return (voice && voice.includes('Русский')) || (subs && subs.includes('Русский'));
+}
+function isAllLocEmpty(g) {
+  return !g.voice_ps4 && !g.voice_ps5 && !g.subtitles_ps4 && !g.subtitles_ps5;
+}
+function isAllEnglish(g) {
+  // true если во всех полях нет 'Русский' и хотя бы одно поле не пустое
+  const all = [g.voice_ps4, g.voice_ps5, g.subtitles_ps4, g.subtitles_ps5];
+  if (all.every(x => !x || x === '')) return false;
+  return all.every(x => !x || !x.includes('Русский'));
+}
 function applyFilters(games) {
   const platform = document.getElementById('filter-platform').value;
   const localization = document.getElementById('filter-localization').value;
   const region = window.selectedRegion || '';
   let filtered = games.filter(g => {
-    if (platform === 'ps4' && JSON.stringify(g.platforms) !== '["PS4"]') return false;
-    if (platform === 'ps5' && JSON.stringify(g.platforms) !== '["PS5"]') return false;
+    // Фильтрация по платформе
+    if (platform === 'ps4' && Array.isArray(g.platforms) && (g.platforms.length !== 1 || g.platforms[0] !== 'PS4')) return false;
+    if (platform === 'ps5' && Array.isArray(g.platforms) && (g.platforms.length !== 1 || g.platforms[0] !== 'PS5')) return false;
+    if (platform === 'ps4ps5' && Array.isArray(g.platforms) && !(g.platforms.includes('PS4') && g.platforms.includes('PS5') && g.platforms.length === 2)) return false;
     if (region && g.region !== region) return false;
-    if (localization === 'full') {
-      if (!g.voice || !g.voice.includes('Русский')) return false;
-      if (!g.subtitles || !g.subtitles.includes('Русский')) return false;
+    // Локализация
+    if (isAllLocEmpty(g)) {
+      // Показываем только если фильтр 'Любая'
+      return localization === '';
     }
-    if (localization === 'ru-subs') {
-      if (!g.subtitles || !g.subtitles.includes('Русский')) return false;
-      if (g.voice && g.voice.includes('Русский')) return false;
-    }
+    // Проверяем по платформам
+    let locMatch = false;
+    const check = (voice, subs) => {
+      if (localization === 'full') return hasRuFull(voice, subs);
+      if (localization === 'ru-subs') return hasRuSubOnly(voice, subs);
+      if (localization === 'en-full') return false; // обработаем ниже
+      return true;
+    };
     if (localization === 'en-full') {
-      if ((g.voice && g.voice.includes('Русский')) || (g.subtitles && g.subtitles.includes('Русский'))) return false;
+      return isAllEnglish(g);
     }
-    return true;
+    if (!platform || platform === '') {
+      // Любая платформа: если хотя бы для одной подходит
+      if (check(g.voice_ps4 || '', g.subtitles_ps4 || '')) locMatch = true;
+      if (check(g.voice_ps5 || '', g.subtitles_ps5 || '')) locMatch = true;
+    } else if (platform === 'ps4') {
+      locMatch = check(g.voice_ps4 || '', g.subtitles_ps4 || '');
+    } else if (platform === 'ps5') {
+      locMatch = check(g.voice_ps5 || '', g.subtitles_ps5 || '');
+    } else if (platform === 'ps4ps5') {
+      locMatch = (check(g.voice_ps4 || '', g.subtitles_ps4 || '') || check(g.voice_ps5 || '', g.subtitles_ps5 || ''));
+    }
+    return locMatch;
   });
   // Сортировка
   const sortBy = document.getElementById('sort-by').value;
-  filtered = filtered.slice();
-  if (sortBy === 'title-asc') filtered.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
-  if (sortBy === 'title-desc') filtered.sort((a, b) => b.title.localeCompare(a.title, 'ru'));
-  if (sortBy === 'date-desc') filtered.sort((a, b) => parseDate(b.release_date) - parseDate(a.release_date));
-  if (sortBy === 'date-asc') filtered.sort((a, b) => parseDate(a.release_date) - parseDate(b.release_date));
-  // Сортировка по цене (если выбрана)
+  let sorted = filtered.slice();
+  if (sortBy === 'title-asc') sorted.sort((a, b) => {
+    if (!a.title && !b.title) return 0;
+    if (!a.title) return 1;
+    if (!b.title) return -1;
+    return a.title.localeCompare(b.title);
+  });
+  if (sortBy === 'title-desc') sorted.sort((a, b) => {
+    if (!a.title && !b.title) return 0;
+    if (!a.title) return 1;
+    if (!b.title) return -1;
+    return b.title.localeCompare(a.title);
+  });
+  if (sortBy === 'date-desc') sorted.sort((a, b) => {
+    const ad = parseDate(a.release_date);
+    const bd = parseDate(b.release_date);
+    if (ad === bd) return 0;
+    if (ad === -Infinity) return 1;
+    if (bd === -Infinity) return -1;
+    return bd - ad;
+  });
+  if (sortBy === 'date-asc') sorted.sort((a, b) => {
+    const ad = parseDate(a.release_date);
+    const bd = parseDate(b.release_date);
+    if (ad === bd) return 0;
+    if (ad === -Infinity) return 1;
+    if (bd === -Infinity) return -1;
+    return ad - bd;
+  });
+  // Сортировка по цене
   const sortPrice = document.getElementById('sort-price');
-  if (sortPrice && sortPrice.style.display !== 'none' && sortPrice.value) {
-    if (sortPrice.value === 'price-asc') filtered.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
-    if (sortPrice.value === 'price-desc') filtered.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+  if (sortPrice && sortPrice.value) {
+    if (sortPrice.value === 'price-asc') sorted.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+    if (sortPrice.value === 'price-desc') sorted.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
   }
-  return filtered;
+  return sorted;
 }
+// --- РЕГИОНЫ ---
+window.selectedRegion = 'in';
+function setRegionButtonActive(region) {
+  const regionBtns = document.querySelectorAll('.region-btn');
+  regionBtns.forEach(b => b.style.background = '#e6e6e6');
+  const btn = Array.from(regionBtns).find(b => b.dataset.region === region);
+  if (btn) btn.style.background = '#47D651';
+}
+document.addEventListener('DOMContentLoaded', function() {
+  // По умолчанию Индия
+  window.selectedRegion = 'in';
+  setRegionButtonActive('in');
+  const regionBtns = document.querySelectorAll('.region-btn');
+  regionBtns.forEach(btn => {
+    btn.onclick = null;
+    btn.addEventListener('click', function() {
+      if (window.selectedRegion === btn.dataset.region) {
+        window.selectedRegion = '';
+        setRegionButtonActive('in'); // всегда возвращаем к Индии
+      } else {
+        window.selectedRegion = btn.dataset.region;
+        setRegionButtonActive(btn.dataset.region);
+      }
+      document.getElementById('filters').dispatchEvent(new Event('input'));
+    });
+  });
+  // Сброс фильтров
+  document.getElementById('reset-filters').addEventListener('click', function() {
+    document.getElementById('filter-platform').value = '';
+    document.getElementById('filter-localization').value = '';
+    document.getElementById('sort-by').value = 'title-asc';
+    document.getElementById('sort-price').value = '';
+    window.selectedRegion = 'in';
+    setRegionButtonActive('in');
+    document.getElementById('filters').dispatchEvent(new Event('input'));
+  });
+});
 fetch('/parser/games.json')
       .then(res => res.json())
       .then(games => {
       function renderAllGames() {
         const filtered = applyFilters(games);
+        // Для отладки сортировки:
+        console.log('Сортировка:', document.getElementById('sort-by').value, filtered.map(g => g.title + ' | ' + g.release_date));
         const list = document.getElementById('all-games-list');
         list.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
       }
@@ -807,10 +912,15 @@ fetch('/parser/games.json')
       document.getElementById('sort-by').addEventListener('change', renderAllGames);
       document.getElementById('reset-filters').addEventListener('click', function() {
         document.getElementById('filter-platform').value = '';
-        document.getElementById('filter-region').value = '';
-        document.getElementById('filter-voice').value = '';
-        document.getElementById('filter-subtitles').value = '';
+        // document.getElementById('filter-region').value = ''; // Нет такого select, регион через кнопки
+        // document.getElementById('filter-voice').value = '';
+        // document.getElementById('filter-subtitles').value = '';
+        document.getElementById('filter-localization').value = '';
         document.getElementById('sort-by').value = 'title-asc';
+        document.getElementById('sort-price').value = '';
+        // Сброс региона
+        window.selectedRegion = 'in';
+        setRegionButtonActive('in');
         document.getElementById('filters').dispatchEvent(new Event('input'));
       });
       renderAllGames();

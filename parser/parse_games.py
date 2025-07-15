@@ -15,6 +15,15 @@ async def fetch(session, url):
     async with session.get(url, headers=HEADERS, timeout=20) as resp:
         return await resp.text()
 
+def map_langs(langs):
+    result = []
+    for lang in langs:
+        if lang.lower().startswith('english'):
+            result.append('Английский')
+        elif lang.lower().startswith('russian'):
+            result.append('Русский')
+    return ', '.join(result)
+
 async def get_game_details(session, game_url):
     try:
         html = await fetch(session, game_url)
@@ -24,36 +33,54 @@ async def get_game_details(session, game_url):
         date_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#releaseDate-value'})
         if date_dd:
             release_date = date_dd.text.strip()
-        # Озвучка
-        voice = ''
-        voice_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#voice-value'})
-        if voice_dd:
-            langs = [x.strip() for x in voice_dd.text.split(',')]
-            voice = []
-            if 'English' in langs:
-                voice.append('Английский')
-            if 'Russian' in langs:
-                voice.append('Русский')
-            voice = ', '.join(voice) if voice else ''
-        # Субтитры
-        subtitles = ''
-        subs_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#subtitles-value'})
-        if subs_dd:
-            langs = [x.strip() for x in subs_dd.text.split(',')]
-            subtitles = []
-            if 'English' in langs:
-                subtitles.append('Английский')
-            if 'Russian' in langs:
-                subtitles.append('Русский')
-            subtitles = ', '.join(subtitles) if subtitles else ''
+        # Озвучка и субтитры для PS4/PS5
+        voice_ps4 = ''
+        voice_ps5 = ''
+        subtitles_ps4 = ''
+        subtitles_ps5 = ''
+        # PS5 Voice
+        voice_ps5_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#ps5Voice-value'})
+        if voice_ps5_dd:
+            langs = [x.strip() for x in voice_ps5_dd.text.split(',') if x.strip()]
+            voice_ps5 = map_langs(langs)
+        # PS5 Subtitles
+        subtitles_ps5_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#ps5Subtitles-value'})
+        if subtitles_ps5_dd:
+            langs = [x.strip() for x in subtitles_ps5_dd.text.split(',') if x.strip()]
+            subtitles_ps5 = map_langs(langs)
+        # PS4 Voice
+        voice_ps4_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#ps4Voice-value'})
+        if voice_ps4_dd:
+            langs = [x.strip() for x in voice_ps4_dd.text.split(',') if x.strip()]
+            voice_ps4 = map_langs(langs)
+        # PS4 Subtitles
+        subtitles_ps4_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#ps4Subtitles-value'})
+        if subtitles_ps4_dd:
+            langs = [x.strip() for x in subtitles_ps4_dd.text.split(',') if x.strip()]
+            subtitles_ps4 = map_langs(langs)
+        # Если нет отдельных, ищем общее поле (старый вариант)
+        if not (voice_ps4 or voice_ps5):
+            voice_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#voice-value'})
+            if voice_dd:
+                langs = [x.strip() for x in voice_dd.text.split(',') if x.strip()]
+                mapped = map_langs(langs)
+                voice_ps4 = mapped
+                voice_ps5 = mapped
+        if not (subtitles_ps4 or subtitles_ps5):
+            subs_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#subtitles-value'})
+            if subs_dd:
+                langs = [x.strip() for x in subs_dd.text.split(',') if x.strip()]
+                mapped = map_langs(langs)
+                subtitles_ps4 = mapped
+                subtitles_ps5 = mapped
         # Платформы
         platforms = []
         platform_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#platform-value'})
         if platform_dd:
             platforms = [x.strip() for x in platform_dd.text.split(',')]
-        return release_date, voice, subtitles, platforms
+        return release_date, voice_ps4, subtitles_ps4, voice_ps5, subtitles_ps5, platforms
     except Exception:
-        return '', '', '', []
+        return '', '', '', '', '', []
 
 async def parse_playstation_async(url, region):
     import requests
@@ -128,8 +155,8 @@ async def parse_playstation_async(url, region):
     async with aiohttp.ClientSession() as session:
         tasks = [get_game_details(session, link) for link, *_ in game_links]
         details_list = await asyncio.gather(*tasks)
-    for (full_link, title, img_url, price, old_price, discount, subscription, subscription_icon, region), (release_date, voice, subtitles, platforms) in zip(game_links, details_list):
-        games.append({
+    for (full_link, title, img_url, price, old_price, discount, subscription, subscription_icon, region), (release_date, voice_ps4, subtitles_ps4, voice_ps5, subtitles_ps5, platforms) in zip(game_links, details_list):
+        game = {
             'title': title,
             'img': img_url,
             'price': price,
@@ -141,10 +168,16 @@ async def parse_playstation_async(url, region):
             'link': full_link,
             'platforms': platforms,
             'region': region,
-            'release_date': release_date,
-            'voice': voice,
-            'subtitles': subtitles
-        })
+            'release_date': release_date
+        }
+        if 'PS4' in platforms:
+            game['voice_ps4'] = voice_ps4
+            game['subtitles_ps4'] = subtitles_ps4
+        if 'PS5' in platforms:
+            game['voice_ps5'] = voice_ps5
+            game['subtitles_ps5'] = subtitles_ps5
+        # Если только одна платформа, не добавляем вторую
+        games.append(game)
     return games
 
 async def main_async():

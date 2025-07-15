@@ -15,8 +15,10 @@
     ],
     "region": "tr",
     "release_date": "19/9/2024",
-    "voice": "",
-    "subtitles": ""
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский, Русский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Forza Horizon 5",
@@ -33,8 +35,8 @@
     ],
     "region": "tr",
     "release_date": "28/4/2025",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Grand Theft Auto V (PlayStation®5)",
@@ -51,8 +53,8 @@
     ],
     "region": "tr",
     "release_date": "14/3/2022",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Minecraft",
@@ -69,26 +71,8 @@
     ],
     "region": "tr",
     "release_date": "22/10/2024",
-    "voice": "",
-    "subtitles": "Английский, Русский"
-  },
-  {
-    "title": "DEATH STRANDING 2: ON THE BEACH",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2513/edfe6715333de858548e594e2a545b024fbe4b93c894124a.png",
-    "price": "3.449,00 TL",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "",
-    "subscription_icon": "",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/10001538",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "tr",
-    "release_date": "25/6/2025",
-    "voice": "Английский, Русский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "NBA 2K25",
@@ -106,8 +90,46 @@
     ],
     "region": "tr",
     "release_date": "4/9/2024",
-    "voice": "Английский",
-    "subtitles": "Английский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
+  },
+  {
+    "title": "DEATH STRANDING 2: ON THE BEACH",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2513/edfe6715333de858548e594e2a545b024fbe4b93c894124a.png",
+    "price": "3.449,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10001538",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "25/6/2025",
+    "voice_ps5": "Английский, Русский",
+    "subtitles_ps5": "Английский, Русский"
+  },
+  {
+    "title": "ASTRO BOT",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png",
+    "price": "2.999,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10002684",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "5/9/2024",
+    "voice_ps5": "",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Diablo® IV",
@@ -125,26 +147,10 @@
     ],
     "region": "tr",
     "release_date": "9/6/2024",
-    "voice": "Английский, Русский",
-    "subtitles": "Английский, Русский"
-  },
-  {
-    "title": "ASTRO BOT",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png",
-    "price": "2.999,00 TL",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "",
-    "subscription_icon": "",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/10002684",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "tr",
-    "release_date": "5/9/2024",
-    "voice": "",
-    "subtitles": "Английский, Русский"
+    "voice_ps4": "Английский, Русский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский, Русский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Call of Duty®",
@@ -162,26 +168,10 @@
     ],
     "region": "tr",
     "release_date": "24/10/2024",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
-  },
-  {
-    "title": "Marvel's Spider-Man",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202011/0402/C784xeOFo2wViCf4m5bxgoeH.png",
-    "price": "270,73 TL",
-    "old_price": "466,78 TL",
-    "discount_percent": "-42%",
-    "subscription": "",
-    "subscription_icon": "",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/10000762",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "tr",
-    "release_date": "3/5/2023",
-    "voice": "Английский",
-    "subtitles": "Английский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "ELDEN RING",
@@ -199,26 +189,28 @@
     ],
     "region": "tr",
     "release_date": "24/2/2022",
-    "voice": "",
-    "subtitles": ""
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
-    "title": "UNCHARTED: Legacy of Thieves Collection",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202111/2000/gTUWTlvPHzxFJ2JAxtDyI2eS.png",
-    "price": "499,60 TL",
-    "old_price": "1.249,00 TL",
-    "discount_percent": "-60%",
-    "subscription": "Extra",
-    "subscription_icon": "psplus",
+    "title": "Marvel's Spider-Man",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202011/0402/C784xeOFo2wViCf4m5bxgoeH.png",
+    "price": "270,73 TL",
+    "old_price": "466,78 TL",
+    "discount_percent": "-42%",
+    "subscription": "",
+    "subscription_icon": "",
     "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/205354",
+    "link": "https://store.playstation.com/en-tr/concept/10000762",
     "platforms": [
       "PS5"
     ],
     "region": "tr",
-    "release_date": "27/1/2022",
-    "voice": "Английский, Русский",
-    "subtitles": "Английский, Русский"
+    "release_date": "3/5/2023",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
   },
   {
     "title": "Assassin’s Creed Shadows",
@@ -235,44 +227,26 @@
     ],
     "region": "tr",
     "release_date": "19/3/2025",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
-    "title": "NBA 2K26",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202506/2509/ec1eec85d9130210701491db769cb9874cc09f6512ebca20.png",
-    "price": "2.900,00 TL",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "",
-    "subscription_icon": "",
+    "title": "UNCHARTED: Legacy of Thieves Collection",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202111/2000/gTUWTlvPHzxFJ2JAxtDyI2eS.png",
+    "price": "499,60 TL",
+    "old_price": "1.249,00 TL",
+    "discount_percent": "-60%",
+    "subscription": "Extra",
+    "subscription_icon": "psplus",
     "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/10014149",
+    "link": "https://store.playstation.com/en-tr/concept/205354",
     "platforms": [
       "PS5"
     ],
     "region": "tr",
-    "release_date": "4/9/2025",
-    "voice": "",
-    "subtitles": ""
-  },
-  {
-    "title": "Split Fiction",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2918/90ad70c1ef581f93454184750cba9e0ca37bc7e30a4d1f55.png",
-    "price": "1.800,00 TL",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "Save 10%",
-    "subscription_icon": "eaplay",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/10005449",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "tr",
-    "release_date": "6/3/2025",
-    "voice": "Английский",
-    "subtitles": "Английский"
+    "release_date": "27/1/2022",
+    "voice_ps5": "Английский, Русский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Red Dead Redemption 2",
@@ -289,26 +263,26 @@
     ],
     "region": "tr",
     "release_date": "25/10/2018",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский"
   },
   {
-    "title": "F1® 25",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202505/1521/44c15449fbe9485987e27e2fa2c86008a7b4a89d9ab7e0a8.png",
-    "price": "2.900,00 TL",
+    "title": "Split Fiction",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202411/2918/90ad70c1ef581f93454184750cba9e0ca37bc7e30a4d1f55.png",
+    "price": "1.800,00 TL",
     "old_price": "",
     "discount_percent": "",
-    "subscription": "Game Trial",
+    "subscription": "Save 10%",
     "subscription_icon": "eaplay",
     "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/10011830",
+    "link": "https://store.playstation.com/en-tr/concept/10005449",
     "platforms": [
       "PS5"
     ],
     "region": "tr",
-    "release_date": "30/5/2025",
-    "voice": "Английский",
-    "subtitles": "Английский"
+    "release_date": "6/3/2025",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
   },
   {
     "title": "It Takes Two  PS4™ & PS5™",
@@ -326,8 +300,46 @@
     ],
     "region": "tr",
     "release_date": "25/3/2021",
-    "voice": "",
-    "subtitles": ""
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
+  },
+  {
+    "title": "NBA 2K26",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202506/2509/ec1eec85d9130210701491db769cb9874cc09f6512ebca20.png",
+    "price": "2.900,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10014149",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "4/9/2025",
+    "voice_ps5": "",
+    "subtitles_ps5": ""
+  },
+  {
+    "title": "F1® 25",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202505/1521/44c15449fbe9485987e27e2fa2c86008a7b4a89d9ab7e0a8.png",
+    "price": "2.900,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Game Trial",
+    "subscription_icon": "eaplay",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10011830",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "30/5/2025",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
   },
   {
     "title": "UFC® 5",
@@ -344,8 +356,26 @@
     ],
     "region": "tr",
     "release_date": "26/10/2023",
-    "voice": "Английский",
-    "subtitles": "Английский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
+  },
+  {
+    "title": "Mortal Kombat 1",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202305/1515/1cc63f4f4b2c9a9852fabefba4ca7eea936b1ef7867811a5.png",
+    "price": "1.749,00 TL",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Deluxe",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-tr/concept/10004911",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "tr",
+    "release_date": "18/9/2023",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Mortal Kombat 11",
@@ -363,26 +393,10 @@
     ],
     "region": "tr",
     "release_date": "17/11/2020",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
-  },
-  {
-    "title": "Mortal Kombat 1",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202305/1515/1cc63f4f4b2c9a9852fabefba4ca7eea936b1ef7867811a5.png",
-    "price": "1.749,00 TL",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "Deluxe",
-    "subscription_icon": "psplus",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-tr/concept/10004911",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "tr",
-    "release_date": "18/9/2023",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "EA SPORTS FC™ 25",
@@ -400,8 +414,10 @@
     ],
     "region": "in",
     "release_date": "19/9/2024",
-    "voice": "",
-    "subtitles": ""
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский, Русский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Forza Horizon 5",
@@ -418,8 +434,8 @@
     ],
     "region": "in",
     "release_date": "28/4/2025",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "DEATH STRANDING 2: ON THE BEACH",
@@ -436,8 +452,8 @@
     ],
     "region": "in",
     "release_date": "25/6/2025",
-    "voice": "Английский, Русский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский, Русский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "F1® 25",
@@ -454,8 +470,8 @@
     ],
     "region": "in",
     "release_date": "30/5/2025",
-    "voice": "Английский",
-    "subtitles": "Английский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
   },
   {
     "title": "Grand Theft Auto V (PlayStation®5)",
@@ -472,8 +488,8 @@
     ],
     "region": "in",
     "release_date": "14/3/2022",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "WWE 2K25",
@@ -491,8 +507,28 @@
     ],
     "region": "in",
     "release_date": "13/3/2025",
-    "voice": "Английский",
-    "subtitles": "Английский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
+  },
+  {
+    "title": "TEKKEN 8",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202212/2009/04S9doVJzhHa0OE8o8wax88S.png",
+    "price": "Rs 3,499",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Save 50%",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10006270",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "25/1/2024",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Cricket 24",
@@ -510,26 +546,10 @@
     ],
     "region": "in",
     "release_date": "4/10/2023",
-    "voice": "Английский",
-    "subtitles": "Английский"
-  },
-  {
-    "title": "TEKKEN 8",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202212/2009/04S9doVJzhHa0OE8o8wax88S.png",
-    "price": "Rs 3,499",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "Save 50%",
-    "subscription_icon": "psplus",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-in/concept/10006270",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "in",
-    "release_date": "25/1/2024",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
   },
   {
     "title": "Assassin’s Creed Shadows",
@@ -546,8 +566,26 @@
     ],
     "region": "in",
     "release_date": "19/3/2025",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
+  },
+  {
+    "title": "Ghost of Yōtei",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202504/2116/050bb77f895515e0b0e906b0b9d75b6174b37eece097b462.png",
+    "price": "Rs 4,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10003923",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "1/10/2025",
+    "voice_ps5": "",
+    "subtitles_ps5": ""
   },
   {
     "title": "Call of Duty®",
@@ -565,44 +603,10 @@
     ],
     "region": "in",
     "release_date": "24/10/2024",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
-  },
-  {
-    "title": "Ghost of Yōtei",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202504/2116/050bb77f895515e0b0e906b0b9d75b6174b37eece097b462.png",
-    "price": "Rs 4,999",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "",
-    "subscription_icon": "",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-in/concept/10003923",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "in",
-    "release_date": "1/10/2025",
-    "voice": "",
-    "subtitles": ""
-  },
-  {
-    "title": "Clair Obscur: Expedition 33",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202501/2217/e5833a53529ff9879e87689f1e8b04d45ba7e6c97fa791e2.png",
-    "price": "Rs 2,999",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "",
-    "subscription_icon": "",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-in/concept/10008503",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "in",
-    "release_date": "24/4/2025",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Red Dead Redemption 2",
@@ -619,8 +623,26 @@
     ],
     "region": "in",
     "release_date": "25/10/2018",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский"
+  },
+  {
+    "title": "Clair Obscur: Expedition 33",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202501/2217/e5833a53529ff9879e87689f1e8b04d45ba7e6c97fa791e2.png",
+    "price": "Rs 2,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "",
+    "subscription_icon": "",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10008503",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "24/4/2025",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Marvel's Spider-Man",
@@ -637,26 +659,8 @@
     ],
     "region": "in",
     "release_date": "3/5/2023",
-    "voice": "Английский",
-    "subtitles": "Английский"
-  },
-  {
-    "title": "Black Myth: Wukong",
-    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2117/bd406f42e9352fdb398efcf21a4ffe575b2306ac40089d21.png",
-    "price": "Rs 3,999",
-    "old_price": "",
-    "discount_percent": "",
-    "subscription": "Deluxe",
-    "subscription_icon": "psplus",
-    "product_type": "",
-    "link": "https://store.playstation.com/en-in/concept/10007144",
-    "platforms": [
-      "PS5"
-    ],
-    "region": "in",
-    "release_date": "20/8/2024",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский"
   },
   {
     "title": "ELDEN RING",
@@ -674,8 +678,28 @@
     ],
     "region": "in",
     "release_date": "24/2/2022",
-    "voice": "",
-    "subtitles": ""
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
+  },
+  {
+    "title": "Black Myth: Wukong",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202405/2117/bd406f42e9352fdb398efcf21a4ffe575b2306ac40089d21.png",
+    "price": "Rs 3,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Deluxe",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10007144",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "20/8/2024",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "Mortal Kombat 11",
@@ -693,8 +717,10 @@
     ],
     "region": "in",
     "release_date": "17/11/2020",
-    "voice": "Английский",
-    "subtitles": "Английский, Русский"
+    "voice_ps4": "Английский",
+    "subtitles_ps4": "Английский, Русский",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   },
   {
     "title": "UNCHARTED: Legacy of Thieves Collection",
@@ -711,7 +737,25 @@
     ],
     "region": "in",
     "release_date": "27/1/2022",
-    "voice": "Английский, Русский",
-    "subtitles": "Английский, Русский"
+    "voice_ps5": "Английский, Русский",
+    "subtitles_ps5": "Английский, Русский"
+  },
+  {
+    "title": "Mortal Kombat 1",
+    "img": "https://image.api.playstation.com/vulcan/ap/rnd/202305/1515/1cc63f4f4b2c9a9852fabefba4ca7eea936b1ef7867811a5.png",
+    "price": "Rs 2,999",
+    "old_price": "",
+    "discount_percent": "",
+    "subscription": "Deluxe",
+    "subscription_icon": "psplus",
+    "product_type": "",
+    "link": "https://store.playstation.com/en-in/concept/10004911",
+    "platforms": [
+      "PS5"
+    ],
+    "region": "in",
+    "release_date": "18/9/2023",
+    "voice_ps5": "Английский",
+    "subtitles_ps5": "Английский, Русский"
   }
 ]
