@@ -86,7 +86,7 @@ async def parse_playstation_async(url, region):
     import requests
     games = []
     page = 1
-    while page <= 50:
+    while page <= 1:
         page_url = re.sub(r'/browse/\d+', f'/browse/{page}', url)
         resp = requests.get(page_url, headers=HEADERS)
         soup = BeautifulSoup(resp.text, 'html.parser')
@@ -160,6 +160,7 @@ async def parse_playstation_async(url, region):
         async with aiohttp.ClientSession() as session:
             tasks = [get_game_details(session, link) for link, *_ in game_links]
             details_list = await asyncio.gather(*tasks)
+        new_games = []
         for (full_link, title, img_url, price, old_price, discount, subscription, subscription_icon, region), (release_date, voice_ps4, subtitles_ps4, voice_ps5, subtitles_ps5, platforms) in zip(game_links, details_list):
             game = {
                 'title': title,
@@ -181,23 +182,26 @@ async def parse_playstation_async(url, region):
             if 'PS5' in platforms:
                 game['voice_ps5'] = voice_ps5
                 game['subtitles_ps5'] = subtitles_ps5
-            games.append(game)
-        # После каждой страницы сразу обновляем файл
+            new_games.append(game)
+        # После каждой страницы сразу обновляем файл, не затирая уже спарсанные игры
         try:
             if os.path.exists(GAMES_JSON):
                 with open(GAMES_JSON, 'r', encoding='utf-8') as f:
                     current = json.load(f)
             else:
                 current = []
-            current += games
+            # Добавляем только новые игры, которых ещё нет (по ссылке)
+            current_links = set(g['link'] for g in current)
+            unique_new = [g for g in new_games if g['link'] not in current_links]
+            current += unique_new
             with open(GAMES_JSON, 'w', encoding='utf-8') as f:
                 json.dump(current, f, ensure_ascii=False, indent=2)
-            games = []  # очищаем, чтобы не дублировать
+            games += unique_new
         except Exception as e:
             print(f'Ошибка при записи в games.json: {e}')
-        print(f'Parsed page {page} ({len(game_links)} игр) для региона {region}')
+        print(f'Parsed page {page} ({len(new_games)} игр) для региона {region}')
         page += 1
-    return []
+    return games
 
 async def main_async():
     all_games = []
