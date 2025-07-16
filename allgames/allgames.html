@@ -345,7 +345,8 @@
       align-items: stretch;
       width: 100%;
       min-width: 0;
-      height: 340px;
+      min-height: 380px;
+      height: 380px;
       transition: box-shadow 0.2s;
       font-family: 'Segoe UI', Arial, sans-serif;
     }
@@ -471,11 +472,21 @@
       outline: none !important;
       box-shadow: none !important;
     }
+    .psw-grid-list.psw-l-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 32px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      min-height: 380px;
+    }
   </style>
 </head>
 <body>
   <header class="header">
-    <span class="logo" onclick="window.location.href='/'" style="cursor:pointer;">Playtopia</span>
+    <span class="logo" onclick="window.location.href='/'" style="cursor:pointer;">PLAYTOPIA</span>
     <button class="catalog-btn">
       <span class="burger">
         <span class="burger-line"></span>
@@ -590,6 +601,7 @@
   padding: 0;
   margin: 0;
   width: 100%;
+  min-height: 380px;
 }
 .psw-grid-list.psw-l-grid > li {
   /* НЕ квадрат! */
@@ -769,6 +781,10 @@
 }
 </style>
   <script>
+function normalizeTitle(title) {
+  // Убираем не-буквы в начале и приводим к нижнему регистру
+  return (title || '').replace(/^[^a-zA-Zа-яА-ЯёЁ]+/, '').toLowerCase();
+}
 function daysBetween(dateStr) {
   // dateStr: '25/6/2025' → Date
   const [d, m, y] = dateStr.split(/[./-]/).map(Number);
@@ -821,17 +837,22 @@ function parseDate(dateStr) {
   return -Infinity;
 }
 
-function parsePrice(priceStr) {
+function parsePrice(priceStr, region) {
   if (!priceStr) return Infinity;
-  // Турция: 2.799,00 TL → 2799.00
-  // Индия: Rs 1,319 → 1319
   let price = priceStr.replace(/[^0-9.,]/g, '');
-  if (price.includes(',')) {
-    // Турция: 2.799,00 → 2799.00
+  if (region === 'tr') {
+    // Турция: 2.899,99 → 2899.99
     price = price.replace(/\./g, '').replace(',', '.');
-  } else {
-    // Индия: 1,319 → 1319
+  } else if (region === 'in') {
+    // Индия: 4,999 → 4999
     price = price.replace(/,/g, '');
+  } else {
+    // fallback
+    if (price.includes(',')) {
+      price = price.replace(/\./g, '').replace(',', '.');
+    } else {
+      price = price.replace(/,/g, '');
+    }
   }
   const num = parseFloat(price);
   return isNaN(num) ? Infinity : num;
@@ -904,13 +925,13 @@ function applyFilters(games) {
     if (!a.title && !b.title) return 0;
     if (!a.title) return 1;
     if (!b.title) return -1;
-    return a.title.localeCompare(b.title);
+    return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
   });
   if (sortBy === 'title-desc') sorted.sort((a, b) => {
     if (!a.title && !b.title) return 0;
     if (!a.title) return 1;
     if (!b.title) return -1;
-    return b.title.localeCompare(a.title);
+    return normalizeTitle(b.title).localeCompare(normalizeTitle(a.title));
   });
   if (sortBy === 'date-desc') sorted.sort((a, b) => {
     const ad = parseDate(a.release_date);
@@ -931,8 +952,8 @@ function applyFilters(games) {
   // Сортировка по цене
   const sortPrice = document.getElementById('sort-price');
   if (sortPrice && sortPrice.value) {
-    if (sortPrice.value === 'price-asc') sorted.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
-    if (sortPrice.value === 'price-desc') sorted.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+    if (sortPrice.value === 'price-asc') sorted.sort((a, b) => parsePrice(a.price, a.region) - parsePrice(b.price, b.region));
+    if (sortPrice.value === 'price-desc') sorted.sort((a, b) => parsePrice(b.price, b.region) - parsePrice(a.price, a.region));
   }
   return sorted;
 }
@@ -1126,22 +1147,35 @@ document.addEventListener('DOMContentLoaded', function() {
       fetch('/parser/games.json')
         .then(res => res.json())
         .then(games => {
-          const filtered = games.filter(g => g.title && g.title.toLowerCase().includes(q) && (!window.selectedRegion || g.region === window.selectedRegion));
-          filtered.sort((a, b) => {
-            if (!a.title && !b.title) return 0;
-            if (!a.title) return 1;
-            if (!b.title) return -1;
-            return a.title.localeCompare(b.title);
+          // --- Сначала применяем applyFilters (регион, локализация, платформа, скидки, новинки, предзаказы и т.д.) ---
+          let filteredGames = applyFilters(games);
+          // --- Поиск по названию только среди отфильтрованных игр ---
+          const foundGamesStarts = filteredGames.filter(g => {
+            if (!g.title) return false;
+            const words = g.title.toLowerCase().split(/\s+/);
+            return words.some(word => word.startsWith(q));
+          }).sort((a, b) => {
+            const aWords = a.title.toLowerCase().split(/\s+/);
+            const bWords = b.title.toLowerCase().split(/\s+/);
+            const aPos = Math.min(...aWords.map(word => word.startsWith(q) ? a.title.toLowerCase().indexOf(word) : 9999));
+            const bPos = Math.min(...bWords.map(word => word.startsWith(q) ? b.title.toLowerCase().indexOf(word) : 9999));
+            if (aPos !== bPos) return aPos - bPos;
+            return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
           });
-          // Пагинация для поиска
-          const perPage = 12;
-          const page = window.currentPage || 1;
-          const total = filtered.length;
-          const start = (page - 1) * perPage;
-          const end = start + perPage;
-          const pageGames = filtered.slice(start, end);
-          list.innerHTML = pageGames.length ? pageGames.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
-          renderPagination(total, page, perPage);
+          const foundGamesIncludes = filteredGames.filter(g => {
+            if (!g.title) return false;
+            const title = g.title.toLowerCase();
+            if (foundGamesStarts.includes(g)) return false;
+            return title.includes(q);
+          }).sort((a, b) => {
+            const aPos = a.title.toLowerCase().indexOf(q);
+            const bPos = b.title.toLowerCase().indexOf(q);
+            if (aPos !== bPos) return aPos - bPos;
+            return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
+          });
+          const filtered = [...foundGamesStarts, ...foundGamesIncludes];
+          list.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
+          renderPagination(filtered.length, 1, 12);
           setTimeout(() => {
             list.querySelectorAll('li').forEach(li => {
               li.classList.add('animated');

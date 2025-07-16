@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import json
 import re
 import os
+import time
+import requests
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
@@ -82,13 +84,24 @@ async def get_game_details(session, game_url):
     except Exception:
         return '', '', '', '', '', []
 
+def safe_get(url, headers, retries=3, delay=3):
+    for i in range(retries):
+        try:
+            return requests.get(url, headers=headers, timeout=10)
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка запроса: {e}. Попытка {i+1}/{retries}")
+            time.sleep(delay)
+    return None
+
 async def parse_playstation_async(url, region):
-    import requests
     games = []
     page = 1
-    while page <= 1:
+    while page <= 15:
         page_url = re.sub(r'/browse/\d+', f'/browse/{page}', url)
-        resp = requests.get(page_url, headers=HEADERS)
+        resp = safe_get(page_url, HEADERS)
+        if resp is None:
+            print(f"Не удалось получить страницу {page_url} после нескольких попыток")
+            continue
         soup = BeautifulSoup(resp.text, 'html.parser')
         cards = soup.find_all('li', class_=re.compile('^psw-l-w-'))
         if not cards:
@@ -98,12 +111,10 @@ async def parse_playstation_async(url, region):
             a = li.find('a', class_='psw-link')
             if not a:
                 continue
-            # Название только из <span class='psw-t-body'>
             title_tag = a.find('span', class_='psw-t-body')
             title = title_tag.text.strip() if title_tag else 'No title'
             # Картинка
             img_url = ''
-            # Ищем img с data-qa, содержащим 'game-art#image#image'
             img_tag = a.find('img', {'data-qa': re.compile('game-art#image#image')})
             if img_tag:
                 srcset = img_tag.get('srcset', '')
@@ -119,21 +130,17 @@ async def parse_playstation_async(url, region):
                         img_url = img_tag.get('src', '')
                 else:
                     img_url = img_tag.get('src', '')
-            # Цена
             price = ''
             old_price = ''
             discount = ''
-            # Парсим discount_percent из discount-badge
             discount_badge = li.find('div', {'data-qa': re.compile('discount-badge')})
             if discount_badge:
                 span = discount_badge.find('span')
                 if span and span.text.strip().startswith('-'):
                     discount = span.text.strip()
-            # Цена
             price_span = a.find('span', {'data-qa': re.compile('price#display-price')})
             if price_span:
                 price = price_span.text.strip()
-            # old_price только из <span data-qa='price#original-price'> или <s>
             old_price_tag = a.find('span', {'data-qa': re.compile('price#original-price')})
             if not old_price_tag:
                 old_price_tag = a.find('s')
@@ -199,8 +206,8 @@ async def parse_playstation_async(url, region):
             games += unique_new
         except Exception as e:
             print(f'Ошибка при записи в games.json: {e}')
-        print(f'Parsed page {page} ({len(new_games)} игр) для региона {region}')
         page += 1
+        time.sleep(1)
     return games
 
 async def main_async():

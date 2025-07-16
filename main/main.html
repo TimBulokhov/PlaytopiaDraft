@@ -380,8 +380,9 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      width: 100%;
-      min-width: 0;
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
       height: 340px;
       transition: box-shadow 0.2s;
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -471,11 +472,29 @@
     a.banner * {
       text-decoration: none !important;
     }
+    /* Добавляем стили для горизонтального скролла */
+    .horizontal-scroll {
+      display: flex !important;
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 32px;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: #e6e6e6 #fff;
+    }
+    .horizontal-scroll::-webkit-scrollbar {
+      height: 10px;
+      background: #fff;
+    }
+    .horizontal-scroll::-webkit-scrollbar-thumb {
+      background: #e6e6e6;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
   <header class="header">
-    <span class="logo">Playtopia</span>
+    <span class="logo">PLAYTOPIA</span>
     <button class="catalog-btn">
       <span class="burger">
         <span class="burger-line"></span>
@@ -834,6 +853,10 @@ function renderCombinedCard(gameIn, gameTr) {
     </li>
   `;
 }
+function normalizeTitle(title) {
+  // Убираем не-буквы в начале и приводим к нижнему регистру
+  return (title || '').replace(/^[^a-zA-Zа-яА-ЯёЁ]+/, '').toLowerCase();
+}
 fetch('/parser/games.json')
   .then(res => res.json())
   .then(games => {
@@ -849,8 +872,8 @@ fetch('/parser/games.json')
       const days = Math.floor((now - date) / (1000 * 60 * 60 * 24));
       return days >= 0 && days <= 21;
     }).sort((a, b) => {
-      const tA = (a.in || a.tr).title;
-      const tB = (b.in || b.tr).title;
+      const tA = normalizeTitle((a.in || a.tr).title);
+      const tB = normalizeTitle((b.in || b.tr).title);
       return tA.localeCompare(tB);
     });
     // Скидки: old_price не пустой и не только пробелы хотя бы в одном регионе
@@ -858,8 +881,8 @@ fetch('/parser/games.json')
       return (g.in && g.in.old_price && g.in.old_price.replace(/\s/g, '').length > 0) ||
              (g.tr && g.tr.old_price && g.tr.old_price.replace(/\s/g, '').length > 0);
     }).sort((a, b) => {
-      const tA = (a.in || a.tr).title;
-      const tB = (b.in || b.tr).title;
+      const tA = normalizeTitle((a.in || a.tr).title);
+      const tB = normalizeTitle((b.in || b.tr).title);
       return tA.localeCompare(tB);
     });
     // Предзаказы: дата выхода в будущем
@@ -872,31 +895,34 @@ fetch('/parser/games.json')
       const now = new Date();
       return date > now;
     }).sort((a, b) => {
-      const tA = (a.in || a.tr).title;
-      const tB = (b.in || b.tr).title;
+      const tA = normalizeTitle((a.in || a.tr).title);
+      const tB = normalizeTitle((b.in || b.tr).title);
       return tA.localeCompare(tB);
     });
-    // Рендерим секции
+    // Рендерим секции (ТОЛЬКО ПЕРВЫЕ 12)
     const newGamesList = document.getElementById('new-games-list');
     if (newGamesList) {
+      newGamesList.classList.add('horizontal-scroll');
       if (newGames.length > 0) {
-        newGamesList.innerHTML = newGames.map(g => renderCombinedCard(g.in, g.tr)).join('');
+        newGamesList.innerHTML = newGames.slice(0, 12).map(g => renderCombinedCard(g.in, g.tr)).join('');
       } else {
         newGamesList.innerHTML = '<div style="padding:32px 0;color:#888;font-size:1.2rem;">Нет игр</div>';
       }
     }
     const discountGamesList = document.getElementById('discount-games-list');
     if (discountGamesList) {
+      discountGamesList.classList.add('horizontal-scroll');
       if (discountGames.length > 0) {
-        discountGamesList.innerHTML = discountGames.map(g => renderCombinedCard(g.in, g.tr)).join('');
+        discountGamesList.innerHTML = discountGames.slice(0, 12).map(g => renderCombinedCard(g.in, g.tr)).join('');
       } else {
         discountGamesList.innerHTML = '<div style=\"padding:32px 0;color:#888;font-size:1.2rem;\">Нет игр</div>';
       }
     }
     const preorderGamesList = document.getElementById('preorder-games-list');
     if (preorderGamesList) {
+      preorderGamesList.classList.add('horizontal-scroll');
       if (preorderGames.length > 0) {
-        preorderGamesList.innerHTML = preorderGames.map(g => renderCombinedCard(g.in, g.tr)).join('');
+        preorderGamesList.innerHTML = preorderGames.slice(0, 12).map(g => renderCombinedCard(g.in, g.tr)).join('');
       } else {
         preorderGamesList.innerHTML = '<div style=\"padding:32px 0;color:#888;font-size:1.2rem;\">Нет предзаказов</div>';
       }
@@ -938,10 +964,32 @@ fetch('/parser/games.json')
           { title: 'Steam Wallet Code 25$', img: 'static/SWC25.png', link: '/steamtopup/steamtopup.html' },
           { title: 'Steam Wallet Code 50$', img: 'static/SWC50.png', link: '/steamtopup/steamtopup.html' },
           { title: 'Steam Wallet Code 100$', img: 'static/SWC100.png', link: '/steamtopup/steamtopup.html' },
-          { title: 'Услуга "Пополнить Steam"', img: 'static/steam.png', link: '/steamtopup/steamtopup.html' },
+          { title: 'Пополнение Steam', img: 'static/steam.png', link: '/steamtopup/steamtopup.html' },
         ]
       },
-      // Можно добавить PlayStation, Xbox и т.д.
+      {
+        type: 'category',
+        title: 'Пополнить PSN',
+        img: 'static/psplus.png',
+        link: '/playstation/playstation.html',
+        children: [
+          { title: 'PSN Wallet 1000 INR', img: 'static/PSNIN1000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 2000 INR', img: 'static/PSNIN2000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 3000 INR', img: 'static/PSNIN3000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 4000 INR', img: 'static/PSNIN4000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 5000 INR', img: 'static/PSNIN5000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 250 TRY', img: 'static/PSNTR250.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 500 TRY', img: 'static/PSNTR500.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 750 TRY', img: 'static/PSNTR750.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 1000 TRY', img: 'static/PSNTR1000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 1500 TRY', img: 'static/PSNTR1500.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 2000 TRY', img: 'static/PSNTR2000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 2500 TRY', img: 'static/PSNTR2500.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 3000 TRY', img: 'static/PSNTR3000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 4000 TRY', img: 'static/PSNTR4000.png', link: '/playstation/playstation.html' },
+          { title: 'PSN Wallet 5000 TRY', img: 'static/PSNTR5000.png', link: '/playstation/playstation.html' },
+        ]
+      },
     ];
     function renderSearchResults(results) {
       if (!results.games.length && !results.services.length && !results.subs.length) {
@@ -983,23 +1031,23 @@ fetch('/parser/games.json')
         }).join('');
       }
       if (results.subs && results.subs.length) {
-  html += '<div style="padding:12px 16px 4px 16px;font-weight:700;font-size:1.1rem;">Подписки</div>';
-  html += results.subs.map(item => {
-    let badgeStyle = '';
-    if (item.tierClass === 'DELUXE') badgeStyle = 'background:#181818;color:#fff;';
-    else if (item.tierClass === 'EXTRA') badgeStyle = 'background:#7c4dff;color:#fff;';
-    else if (item.tierClass === 'ESSENTIAL') badgeStyle = 'background:#fff;color:#181818;border:1.5px solid #181818;';
-    return `
-      <div class="search-result-sub" tabindex="0" style="display:flex;align-items:center;gap:12px;padding:8px 16px;cursor:pointer;transition:background 0.15s;border-radius:8px;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
-        <img src="${item.img}" style="width:54px;height:54px;object-fit:cover;border-radius:8px;">
-        <div style="display:flex;flex-direction:column;">
-          <span style="font-size:1.05rem;font-weight:700;">${item.title}${item.tier ? ` <span class='psw-badge sub-card-tier ${item.tierClass}' style='${badgeStyle}'>${item.tier}</span>` : ''}</span>
-          <span style="font-size:0.98rem;color:#888;">${item.period} · ${item.price} · ${item.region}</span>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
+        html += '<div style="padding:12px 16px 4px 16px;font-weight:700;font-size:1.1rem;">Подписки</div>';
+        html += results.subs.map(item => {
+          let badgeStyle = '';
+          if (item.tierClass === 'DELUXE') badgeStyle = 'background:#181818;color:#fff;';
+          else if (item.tierClass === 'EXTRA') badgeStyle = 'background:#7c4dff;color:#fff;';
+          else if (item.tierClass === 'ESSENTIAL') badgeStyle = 'background:#fff;color:#181818;border:1.5px solid #181818;';
+          return `
+            <div class="search-result-sub" tabindex="0" style="display:flex;align-items:center;gap:12px;padding:8px 16px;cursor:pointer;transition:background 0.15s;border-radius:8px;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='transparent'">
+              <img src="${item.img}" style="width:54px;height:54px;object-fit:cover;border-radius:8px;">
+              <div style="display:flex;flex-direction:column;">
+                <span style="font-size:1.05rem;font-weight:700;">${item.title}${item.tier ? ` <span class='psw-badge sub-card-tier ${item.tierClass}' style='${badgeStyle}'>${item.tier}</span>` : ''}</span>
+                <span style="font-size:0.98rem;color:#888;">${item.period} · ${item.price} · ${item.region}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
       searchDropdown.innerHTML = html;
       searchDropdown.style.display = 'block';
       // Навешиваем обработчик на игры (закрывать дропдаун)
@@ -1020,31 +1068,55 @@ fetch('/parser/games.json')
         searchDropdown.style.display = 'none';
         return;
       }
-      // Игры по алфавиту
-      const foundGames = games.filter(g => g.title && g.title.toLowerCase().includes(q))
-        .sort((a, b) => a.title.localeCompare(b.title));
-      // Категории/услуги по алфавиту
+      // Игры: сначала совпадение с началом слова, потом просто вхождение
+      const foundGamesStarts = games.filter(g => {
+        if (!g.title) return false;
+        const words = g.title.toLowerCase().split(/\s+/);
+        return words.some(word => word.startsWith(q));
+      }).sort((a, b) => {
+        const aWords = a.title.toLowerCase().split(/\s+/);
+        const bWords = b.title.toLowerCase().split(/\s+/);
+        const aPos = Math.min(...aWords.map(word => word.startsWith(q) ? a.title.toLowerCase().indexOf(word) : 9999));
+        const bPos = Math.min(...bWords.map(word => word.startsWith(q) ? b.title.toLowerCase().indexOf(word) : 9999));
+        if (aPos !== bPos) return aPos - bPos;
+        return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
+      });
+      const foundGamesIncludes = games.filter(g => {
+        if (!g.title) return false;
+        const title = g.title.toLowerCase();
+        if (foundGamesStarts.includes(g)) return false; // уже добавили
+        return title.includes(q);
+      }).sort((a, b) => {
+        const aPos = a.title.toLowerCase().indexOf(q);
+        const bPos = b.title.toLowerCase().indexOf(q);
+        if (aPos !== bPos) return aPos - bPos;
+        return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
+      });
+      const foundGames = [...foundGamesStarts, ...foundGamesIncludes];
+      // Фильтрация услуг/категорий
       let foundServices = [];
       staticServices.forEach(cat => {
-        if (cat.title.toLowerCase().includes(q)) {
-          foundServices.push(cat);
-        } else if (cat.children) {
-          const found = cat.children.filter(child => child.title.toLowerCase().includes(q));
-          if (found.length) {
-            foundServices.push({ ...cat, children: found });
-          }
+        let matched = false;
+        if (cat.title.toLowerCase().includes(q)) matched = true;
+        let children = [];
+        if (cat.children) {
+          children = cat.children.filter(child => child.title.toLowerCase().includes(q));
+          if (children.length) matched = true;
+        }
+        if (matched) {
+          foundServices.push(children.length ? { ...cat, children } : cat);
         }
       });
       foundServices = foundServices.sort((a, b) => a.title.localeCompare(b.title));
-      // Подписки
+      // Фильтрация подписок
       let foundSubs = [];
       subscriptions.forEach(sub => {
         sub.plans.forEach(plan => {
           if (
-            sub.service.toLowerCase().includes(q) ||
+            (sub.service && sub.service.toLowerCase().includes(q)) ||
             (sub.tier && sub.tier.toLowerCase().includes(q)) ||
-            plan.period.toLowerCase().includes(q) ||
-            plan.price.toLowerCase().includes(q)
+            (plan.period && plan.period.toLowerCase().includes(q)) ||
+            (plan.price && plan.price.toLowerCase().includes(q))
           ) {
             foundSubs.push(renderSubscriptionSearchCard(sub, plan));
           }

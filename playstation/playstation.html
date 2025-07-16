@@ -531,7 +531,7 @@
 </head>
 <body>
   <header class="header">
-    <span class="logo">Playtopia</span>
+    <span class="logo">PLAYTOPIA</span>
     <button class="catalog-btn">
       <span class="burger">
         <span class="burger-line"></span>
@@ -809,6 +809,62 @@ function setRegionButtonActive(region) {
   const btn = Array.from(regionBtns).find(b => b.dataset.region === region);
   if (btn) btn.style.background = '#47D651';
       }
+// --- PSN Wallet Индия ---
+const psnWalletIN = [
+  { img: '/static/PSNIN1000.png', title: 'PSN Wallet 1000 INR' },
+  { img: '/static/PSNIN2000.png', title: 'PSN Wallet 2000 INR' },
+  { img: '/static/PSNIN3000.png', title: 'PSN Wallet 3000 INR' },
+  { img: '/static/PSNIN4000.png', title: 'PSN Wallet 4000 INR' },
+  { img: '/static/PSNIN5000.png', title: 'PSN Wallet 5000 INR' },
+];
+const psnWalletTR = [
+  { img: '/static/PSNTR250.png', title: 'PSN Wallet 250 TRY' },
+  { img: '/static/PSNTR500.png', title: 'PSN Wallet 500 TRY' },
+  { img: '/static/PSNTR750.png', title: 'PSN Wallet 750 TRY' },
+  { img: '/static/PSNTR1000.png', title: 'PSN Wallet 1000 TRY' },
+  { img: '/static/PSNTR1500.png', title: 'PSN Wallet 1500 TRY' },
+  { img: '/static/PSNTR2000.png', title: 'PSN Wallet 2000 TRY' },
+  { img: '/static/PSNTR2500.png', title: 'PSN Wallet 2500 TRY' },
+  { img: '/static/PSNTR3000.png', title: 'PSN Wallet 3000 TRY' },
+  { img: '/static/PSNTR4000.png', title: 'PSN Wallet 4000 TRY' },
+  { img: '/static/PSNTR5000.png', title: 'PSN Wallet 5000 TRY' },
+];
+function renderPSNWallet(region) {
+  const list = document.getElementById('psn-wallet-list');
+  if (!list) return;
+  if (region === 'in') {
+    list.innerHTML = psnWalletIN.map(card => `
+      <li>
+        <div class='psw-product-tile'>
+          <div class='psw-game-art__container'>
+            <img src='${card.img}' alt='${card.title}' class='psw-game-art psw-l-fit-cover' loading='lazy'>
+            </div>
+          <div class='psw-product-tile__details'>
+            <span class='psw-t-body psw-c-t-1 psw-t-truncate-2'>${card.title}</span>
+          </div>
+        </div>
+      </li>
+        `).join('');
+  } else if (region === 'tr') {
+    list.innerHTML = psnWalletTR.map(card => `
+      <li>
+        <div class='psw-product-tile'>
+          <div class='psw-game-art__container'>
+            <img src='${card.img}' alt='${card.title}' class='psw-game-art psw-l-fit-cover' loading='lazy'>
+          </div>
+          <div class='psw-product-tile__details'>
+            <span class='psw-t-body psw-c-t-1 psw-t-truncate-2'>${card.title}</span>
+          </div>
+        </div>
+      </li>
+    `).join('');
+  } else {
+    list.innerHTML = '';
+  }
+  setTimeout(() => {
+    list.querySelectorAll('li').forEach(li => li.classList.add('visible'));
+  }, 10);
+}
 document.addEventListener('DOMContentLoaded', function() {
   // По умолчанию Индия
   window.selectedRegion = 'in';
@@ -831,6 +887,7 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         renderSubscriptionsListFlat(allSubs, window.selectedRegion.toUpperCase());
       }
+      renderPSNWallet(window.selectedRegion);
     });
   });
   updateRegionActive();
@@ -849,6 +906,8 @@ document.addEventListener('DOMContentLoaded', function() {
       window.location.href = '/';
     });
   }
+  // Рендерим PSN Wallet при загрузке и смене региона
+  renderPSNWallet(window.selectedRegion);
 });
 fetch('/parser/subscriptions.json')
   .then(res => res.json())
