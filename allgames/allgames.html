@@ -246,7 +246,7 @@
       margin-bottom: 0;
     }
     .section-title {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: #181818;
       margin-bottom: 12px;
@@ -445,6 +445,32 @@
       opacity: 1;
       transform: translateY(0);
     }
+    .filter-toggle-bar {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .filter-toggle-btn {
+      background: #e6e6e6;
+      color: #181818;
+      font-weight: 700;
+      font-size: 1.08rem;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 32px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .filter-toggle-btn.active, .filter-toggle-btn:active {
+      background: #47D651;
+      color: #181818;
+    }
+    .filter-toggle-btn:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
   </style>
 </head>
 <body>
@@ -541,13 +567,19 @@
       <button id="reset-filters" style="background:#ff4d4f;color:#fff;font-weight:700;font-size:1.08rem;border:none;border-radius:10px;padding:10px 24px;box-shadow:0 2px 8px rgba(255,77,79,0.08);cursor:pointer;transition:background 0.2s;">Сбросить фильтры</button>
     </div>
     <div class="sections">
+      <div class="filter-toggle-bar" id="filter-toggle-bar">
+        <button type="button" class="filter-toggle-btn" id="filter-discount">Скидки</button>
+        <button type="button" class="filter-toggle-btn" id="filter-new">Новинки</button>
+        <button type="button" class="filter-toggle-btn" id="filter-preorder">Предзаказы</button>
+      </div>
       <div class="section">
         <div class="section-title">Все игры</div>
         <div class="psw-l-w-1/1">
           <ul id="all-games-list" class="psw-grid-list psw-l-grid"></ul>
+          <div id="pagination" style="display:flex;justify-content:center;align-items:center;margin-top:32px;gap:8px;"></div>
         </div>
       </div>
-  </div>
+    </div>
   </main>
 <style>
 .psw-grid-list.psw-l-grid {
@@ -709,6 +741,32 @@
 #reset-filters:hover {
   background: #d9363e;
 }
+.filter-toggle-bar {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.filter-toggle-btn {
+  background: #e6e6e6;
+  color: #181818;
+  font-weight: 700;
+  font-size: 1.08rem;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 32px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+.filter-toggle-btn.active, .filter-toggle-btn:active {
+  background: #47D651;
+  color: #181818;
+}
+.filter-toggle-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
 </style>
   <script>
 function daysBetween(dateStr) {
@@ -837,6 +895,8 @@ function applyFilters(games) {
     }
     return locMatch;
   });
+  // Применяем фильтрацию по кнопкам до сортировки
+  filtered = applyExtraToggles(filtered);
   // Сортировка
   const sortBy = document.getElementById('sort-by').value;
   let sorted = filtered.slice();
@@ -918,37 +978,90 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('filter-localization').value = '';
     document.getElementById('sort-by').value = 'title-asc';
     document.getElementById('sort-price').value = '';
-    window.selectedRegion = 'in';
-    setRegionButtonActive('in');
+    // window.selectedRegion = 'in'; // УБРАНО: не сбрасываем регион
+    // setRegionButtonActive('in'); // УБРАНО: не сбрасываем регион
     document.getElementById('filters').dispatchEvent(new Event('input'));
   });
 });
+function renderPagination(total, page, perPage) {
+  const pag = document.getElementById('pagination');
+  if (!pag) return;
+  pag.innerHTML = '';
+  const totalPages = Math.ceil(total / perPage);
+  if (totalPages <= 1) return;
+  // Prev
+  const prev = document.createElement('button');
+  prev.textContent = '←';
+  prev.disabled = page === 1;
+  prev.style = 'padding:8px 16px;border-radius:8px;border:none;background:#e6e6e6;cursor:pointer;font-weight:700;';
+  prev.onclick = () => {
+    window.currentPage = Math.max(1, page - 1);
+    window.renderAllGames();
+  };
+  pag.appendChild(prev);
+  // Page numbers (max 7)
+  let start = Math.max(1, page - 3);
+  let end = Math.min(totalPages, page + 3);
+  if (page <= 4) { start = 1; end = Math.min(7, totalPages); }
+  if (page >= totalPages - 3) { end = totalPages; start = Math.max(1, totalPages - 6); }
+  for (let i = start; i <= end; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    btn.disabled = i === page;
+    btn.style = 'padding:8px 14px;border-radius:8px;border:none;background:' + (i === page ? '#47D651;color:#fff;' : '#e6e6e6;') + 'cursor:pointer;font-weight:700;';
+    btn.onclick = () => {
+      window.currentPage = i;
+      window.renderAllGames();
+    };
+    pag.appendChild(btn);
+  }
+  // Next
+  const next = document.createElement('button');
+  next.textContent = '→';
+  next.disabled = page === totalPages;
+  next.style = 'padding:8px 16px;border-radius:8px;border:none;background:#e6e6e6;cursor:pointer;font-weight:700;';
+  next.onclick = () => {
+    window.currentPage = Math.min(totalPages, page + 1);
+    window.renderAllGames();
+  };
+  pag.appendChild(next);
+}
 fetch('/parser/games.json')
       .then(res => res.json())
       .then(games => {
-      function renderAllGames() {
+      window.currentPage = 1;
+      window.renderAllGames = function() {
         const filtered = applyFilters(games);
-        // Для отладки сортировки:
-        console.log('Сортировка:', document.getElementById('sort-by').value, filtered.map(g => g.title + ' | ' + g.release_date));
+        const perPage = 12;
+        const page = window.currentPage || 1;
+        const total = filtered.length;
+        const start = (page - 1) * perPage;
+        const end = start + perPage;
+        const pageGames = filtered.slice(start, end);
         const list = document.getElementById('all-games-list');
-        list.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
-      }
-      document.getElementById('filters').addEventListener('input', renderAllGames);
-      document.getElementById('sort-by').addEventListener('change', renderAllGames);
-      document.getElementById('reset-filters').addEventListener('click', function() {
-        document.getElementById('filter-platform').value = '';
-        // document.getElementById('filter-region').value = ''; // Нет такого select, регион через кнопки
-        // document.getElementById('filter-voice').value = '';
-        // document.getElementById('filter-subtitles').value = '';
-        document.getElementById('filter-localization').value = '';
-        document.getElementById('sort-by').value = 'title-asc';
-        document.getElementById('sort-price').value = '';
-        // Сброс региона
-        window.selectedRegion = 'in';
-        setRegionButtonActive('in');
-        document.getElementById('filters').dispatchEvent(new Event('input'));
+        list.innerHTML = pageGames.length ? pageGames.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
+        renderPagination(total, page, perPage);
+        // Плавная анимация
+        setTimeout(() => {
+          list.querySelectorAll('li').forEach(li => {
+            li.classList.add('animated');
+            setTimeout(() => li.classList.add('visible'), 10);
+          });
+        }, 10);
+      };
+      document.getElementById('filters').addEventListener('input', function() {
+        window.currentPage = 1;
+        window.renderAllGames();
       });
-      renderAllGames();
+      document.getElementById('sort-by').addEventListener('change', function() {
+        window.currentPage = 1;
+        window.renderAllGames();
+      });
+      document.getElementById('reset-filters').addEventListener('click', function() {
+        window.currentPage = 1;
+        window.renderAllGames();
+      });
+      window.renderAllGames();
     });
 // Исправляю переход на steamtopup.html
 // Для баннера:
@@ -1006,6 +1119,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const q = this.value.trim().toLowerCase();
       const list = document.getElementById('all-games-list');
       if (!q) {
+        window.currentPage = 1;
         document.getElementById('filters').dispatchEvent(new Event('input'));
         return;
       }
@@ -1019,7 +1133,21 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!b.title) return -1;
             return a.title.localeCompare(b.title);
           });
-          list.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
+          // Пагинация для поиска
+          const perPage = 12;
+          const page = window.currentPage || 1;
+          const total = filtered.length;
+          const start = (page - 1) * perPage;
+          const end = start + perPage;
+          const pageGames = filtered.slice(start, end);
+          list.innerHTML = pageGames.length ? pageGames.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
+          renderPagination(total, page, perPage);
+          setTimeout(() => {
+            list.querySelectorAll('li').forEach(li => {
+              li.classList.add('animated');
+              setTimeout(() => li.classList.add('visible'), 10);
+            });
+          }, 10);
         });
     });
   }
@@ -1027,11 +1155,93 @@ document.addEventListener('DOMContentLoaded', function() {
   const regionBtns = document.querySelectorAll('.region-btn');
   regionBtns.forEach(btn => {
     btn.addEventListener('click', function() {
+      window.currentPage = 1;
       if (searchInput && searchInput.value.trim()) {
         searchInput.dispatchEvent(new Event('input'));
       }
     });
   });
+});
+function isDiscountGame(g) {
+  return g.discount_percent && g.discount_percent.trim() !== '';
+}
+function isNewGame(g) {
+  if (!g.release_date) return false;
+  const [d, m, y] = g.release_date.split(/[./-]/).map(Number);
+  if (!d || !m || !y) return false;
+  const date = new Date(y, m - 1, d);
+  const now = new Date();
+  const days = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+  return days >= 0 && days <= 21;
+}
+function isPreorderGame(g) {
+  if (!g.release_date) return false;
+  const [d, m, y] = g.release_date.split(/[./-]/).map(Number);
+  if (!d || !m || !y) return false;
+  const date = new Date(y, m - 1, d);
+  const now = new Date();
+  return date > now;
+}
+function applyExtraToggles(games) {
+  // region filter
+  const region = window.selectedRegion || '';
+  let filtered = games.filter(g => !region || g.region === region);
+  const discountActive = document.getElementById('filter-discount').classList.contains('active');
+  const newActive = document.getElementById('filter-new').classList.contains('active');
+  const preorderActive = document.getElementById('filter-preorder').classList.contains('active');
+  // Логика пересечений
+  if (discountActive && !newActive && !preorderActive) {
+    filtered = filtered.filter(isDiscountGame);
+  } else if (!discountActive && newActive && !preorderActive) {
+    filtered = filtered.filter(isNewGame);
+  } else if (discountActive && newActive && !preorderActive) {
+    filtered = filtered.filter(g => isNewGame(g) && isDiscountGame(g));
+  } else if (!discountActive && !newActive && preorderActive) {
+    filtered = filtered.filter(isPreorderGame);
+  } else if (discountActive && !newActive && preorderActive) {
+    filtered = filtered.filter(g => isPreorderGame(g) && isDiscountGame(g));
+  } else if ((!discountActive && newActive && preorderActive) || (discountActive && newActive && preorderActive)) {
+    // невозможные комбинации
+    filtered = [];
+  }
+  // если все выключены — не фильтруем (возвращаем исходный массив по региону)
+  return filtered;
+}
+document.addEventListener('DOMContentLoaded', function() {
+  // ... существующий код ...
+  // --- КНОПКИ-ФИЛЬТРЫ ---
+  const btnDiscount = document.getElementById('filter-discount');
+  const btnNew = document.getElementById('filter-new');
+  const btnPreorder = document.getElementById('filter-preorder');
+  [btnDiscount, btnNew, btnPreorder].forEach(btn => {
+    btn.addEventListener('click', function() {
+      btn.classList.toggle('active');
+      window.currentPage = 1;
+      window.renderAllGames();
+    });
+  });
+  // Сброс фильтров — снимаем все кнопки
+  document.getElementById('reset-filters').addEventListener('click', function() {
+    [btnDiscount, btnNew, btnPreorder].forEach(btn => btn.classList.remove('active'));
+  });
+});
+document.addEventListener('DOMContentLoaded', function() {
+  // ... существующий код ...
+  // --- АВТОАКТИВАЦИЯ ФИЛЬТРА ПО ПАРАМЕТРУ ---
+  const params = new URLSearchParams(window.location.search);
+  const filter = params.get('filter');
+  if (filter) {
+    const btnMap = {
+      discount: document.getElementById('filter-discount'),
+      new: document.getElementById('filter-new'),
+      preorder: document.getElementById('filter-preorder')
+    };
+    if (btnMap[filter]) {
+      btnMap[filter].classList.add('active');
+      window.currentPage = 1;
+      window.renderAllGames();
+    }
+  }
 });
   </script>
 </body>

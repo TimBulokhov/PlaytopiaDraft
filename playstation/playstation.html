@@ -790,14 +790,14 @@ function renderSubscriptionsListFlat(subs, region, search = '') {
   }
   if (!filtered.length) {
     list.innerHTML = '<div style="padding:32px 0;color:#888;font-size:1.2rem;">Нет подписок</div>';
-    return;
-  }
+        return;
+      }
   let cards = [];
   filtered.forEach(sub => {
     sub.plans.forEach(plan => {
       cards.push(renderSubscriptionCardFlat(sub, plan));
-    });
-  });
+        });
+      });
   list.innerHTML = cards.join('');
   setTimeout(() => {
     list.querySelectorAll('li').forEach(li => li.classList.add('visible'));
@@ -808,7 +808,7 @@ function setRegionButtonActive(region) {
   regionBtns.forEach(b => b.style.background = '#e6e6e6');
   const btn = Array.from(regionBtns).find(b => b.dataset.region === region);
   if (btn) btn.style.background = '#47D651';
-}
+      }
 document.addEventListener('DOMContentLoaded', function() {
   // По умолчанию Индия
   window.selectedRegion = 'in';
@@ -858,7 +858,7 @@ fetch('/parser/subscriptions.json')
   })
   .catch(e => {
     document.getElementById('subscriptions-list').innerHTML = '<div style="padding:32px 0;color:#e44;font-size:1.2rem;">Ошибка загрузки подписок</div>';
-  });
+});
 </script>
 </body>
 </html> 

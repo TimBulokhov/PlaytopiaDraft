@@ -1,4 +1,7 @@
 .filters { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
 .filters label { font-weight: 700; margin-right: 8px; }
 .filters input, .filters select { padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; }
-.psw-grid-list.psw-l-grid { margin-top: 0; } 
+.psw-grid-list.psw-l-grid { margin-top: 0; }
+.banner, .banner * {
+  text-decoration: none !important;
+}
