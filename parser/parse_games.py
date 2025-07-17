@@ -14,7 +14,7 @@ HEADERS = {
 GAMES_JSON = os.path.join(os.path.dirname(__file__), 'games.json')
 
 async def fetch(session, url):
-    async with session.get(url, headers=HEADERS, timeout=20) as resp:
+    async with session.get(url, headers=HEADERS, timeout=35) as resp:
         return await resp.text()
 
 def map_langs(langs):
@@ -96,7 +96,7 @@ def safe_get(url, headers, retries=3, delay=3):
 async def parse_playstation_async(url, region):
     games = []
     page = 1
-    while page <= 15:
+    while page <= 50:
         page_url = re.sub(r'/browse/\d+', f'/browse/{page}', url)
         resp = safe_get(page_url, HEADERS)
         if resp is None:
