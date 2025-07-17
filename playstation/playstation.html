@@ -591,7 +591,10 @@
     </div>
     <div class="sections">
       <div class="section">
-        <div class="section-title">PSN Wallet</div>
+        <div class="section-title" style="display:flex;align-items:center;gap:16px;">
+          PSN Wallet
+          <button id="how-it-works-btn" class="how-it-works-btn">Как это работает?</button>
+        </div>
         <div class="psw-l-w-1/1">
           <ul id="psn-wallet-list" class="psw-grid-list psw-l-grid"></ul>
         </div>
@@ -604,6 +607,21 @@
       </div>
     </div>
   </main>
+  <!-- Modal for How it Works -->
+  <div id="how-it-works-modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:18px;max-width:480px;width:95vw;padding:32px 24px 24px 24px;box-shadow:0 8px 32px rgba(0,0,0,0.18);position:relative;display:flex;flex-direction:column;align-items:center;">
+      <button id="close-how-it-works" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:2rem;line-height:1;color:#888;cursor:pointer;">&times;</button>
+      <h2 style="margin-top:0;margin-bottom:18px;font-size:1.3rem;font-weight:800;color:#181818;text-align:center;">Как это работает?</h2>
+      <ol class="how-steps-clean">
+        <li>Войдите в учетную запись PlayStation Network.</li>
+        <li>Откройте "Настройки" → "Пользователи и учетные записи" → "Оплата и подписки" → "Redeem Codes".</li>
+        <li>Введите полученный после оплаты 12-значный код PSN Wallet для выбранного региона.</li>
+        <li>Нажмите "Redeem".</li>
+      </ol>
+      <div class="how-desc">После активации средства поступят на баланс.<br> Используйте их для любых покупок.<br>Непотраченные средства остаются в кошельке навсегда — они копятся, и со временем Вы сможете приобрести игры, DLC и подписки без пополнения.</div>
+      <video id="guide-video" src="/static/Guide.mp4" style="width:100%;border-radius:12px;outline:none;display:block;" autoplay loop playsinline></video>
+    </div>
+  </div>
 <style>
 .psw-grid-list.psw-l-grid {
   display: grid;
@@ -752,6 +770,43 @@
   font-size: 0.95em;
   color: #000000;
   font-weight: 500;
+}
+.how-it-works-btn {
+  margin-left: 16px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  background: #ededed;
+  color: #181818;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  box-shadow: none;
+}
+.how-it-works-btn:hover, .how-it-works-btn:focus {
+  background: #47D651;
+  color: #fff;
+}
+.how-steps-clean {
+  font-size: 1.08rem;
+  color: #222;
+  text-align: left;
+  padding-left: 22px;
+  margin-bottom: 18px;
+  list-style: decimal inside;
+}
+.how-steps-clean li {
+  margin-bottom: 7px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.how-desc {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 18px;
+  text-align: left;
+  line-height: 1.5;
 }
 </style>
 <script>
@@ -908,6 +963,38 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   // Рендерим PSN Wallet при загрузке и смене региона
   renderPSNWallet(window.selectedRegion);
+  // Modal logic
+  var howBtn = document.getElementById('how-it-works-btn');
+  var modal = document.getElementById('how-it-works-modal');
+  var closeBtn = document.getElementById('close-how-it-works');
+  var guideVideo = document.getElementById('guide-video');
+  if (howBtn && modal && closeBtn) {
+    howBtn.addEventListener('click', function() {
+      modal.style.display = 'flex';
+      if (guideVideo) {
+        guideVideo.currentTime = 0;
+        guideVideo.play();
+        guideVideo.muted = false;
+        guideVideo.volume = 1.0;
+      }
+    });
+    closeBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+      if (guideVideo) {
+        guideVideo.pause();
+        guideVideo.currentTime = 0;
+      }
+    });
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        if (guideVideo) {
+          guideVideo.pause();
+          guideVideo.currentTime = 0;
+        }
+      }
+    });
+  }
 });
 fetch('/parser/subscriptions.json')
   .then(res => res.json())
