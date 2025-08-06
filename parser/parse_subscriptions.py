@@ -40,6 +40,31 @@ def period_ru(months):
     else:
         return f"{months} месяцев"
 
+def translate_discount(discount_text):
+    """Переводит текст скидки с английского на русский"""
+    if not discount_text:
+        return discount_text
+    
+    # Заменяем "Save n%" на "Скидка n%"
+    if discount_text.startswith('Save '):
+        # Извлекаем процент
+        import re
+        
+        # Сначала проверяем "Save n% more" (более специфичный паттерн)
+        match = re.search(r'Save (\d+)% more', discount_text)
+        if match:
+            percent = match.group(1)
+            return f"Скидка +{percent}%"
+        
+        # Затем проверяем обычный "Save n%"
+        match = re.search(r'Save (\d+)%', discount_text)
+        if match:
+            percent = match.group(1)
+            return f"Скидка {percent}%"
+    
+    # Оставляем "-n%" формат как есть
+    return discount_text
+
 # PlayStation Plus
 def parse_psplus():
     results = []
@@ -78,14 +103,34 @@ def parse_psplus():
                 if not months:
                     continue
                 period = period_ru(months)
-                price_html = offer.get('price', {}).get('discountedPrice') or offer.get('price', {}).get('basePrice')
+                base_price = offer.get('price', {}).get('basePrice')
+                discounted_price = offer.get('price', {}).get('discountedPrice')
+                price_html = discounted_price or base_price
                 if not price_html:
                     continue
                 price = format_price(price_html, region["name"])
-                plans.append({
+                
+                # Only add old_price and discount_percent if they exist
+                plan_data = {
                     "period": period,
                     "price": price
-                })
+                }
+                
+                if base_price and discounted_price and base_price != discounted_price:
+                    old_price = format_price(base_price, region["name"])
+                    plan_data["old_price"] = old_price
+                    
+                    try:
+                        # Extract numeric values from price strings
+                        base_num = float(re.sub(r'[^\d.,]', '', base_price).replace(',', '.'))
+                        disc_num = float(re.sub(r'[^\d.,]', '', discounted_price).replace(',', '.'))
+                        if base_num > 0:
+                            discount_percent = f"-{int((1 - disc_num / base_num) * 100)}%"
+                            plan_data["discount_percent"] = discount_percent
+                    except:
+                        pass
+                
+                plans.append(plan_data)
             results.append({
                 "service": "PlayStation Plus",
                 "tier": tier_name,
@@ -97,9 +142,10 @@ def parse_psplus():
 
 # Ubisoft+ Classics
 UBISOFT_URLS = [
-    {"name": "TR", "url": "https://www.playstation.com/en-tr/games/ubisoft-plus-classics/"},
-    {"name": "IN", "url": "https://www.playstation.com/en-in/games/ubisoft-plus-classics/"},
+    {"name": "TR", "url": "https://store.playstation.com/en-tr/product/EP0001-PPSA15773_00-UBISOFTPLUS1T01M"},
+    {"name": "IN", "url": "https://store.playstation.com/en-in/product/EP0001-PPSA15773_00-UBISOFTPLUS1T01M"},
 ]
+
 def parse_ubisoft_classics():
     results = []
     for region in UBISOFT_URLS:
@@ -109,90 +155,112 @@ def parse_ubisoft_classics():
         except Exception as e:
             print(f"Ошибка загрузки {region['url']}: {e}")
             continue
+        
         soup = BeautifulSoup(resp.text, "html.parser")
-        title = soup.find("h3", string=re.compile("1-month subscription", re.I))
+        
+        # Ищем цену и скидку
         price = None
-        if title and title.parent:
-            siblings = getattr(title.parent, 'find_next_siblings', lambda: [])()
-            for sibling in siblings:
-                if hasattr(sibling, 'find'):
-                    price_tag = sibling.find(string=re.compile(r"(TL|Rs)"))
-                    if price_tag and isinstance(price_tag, str):
-                        price = price_tag.strip()
-                        break
-        if not price:
-            # Альтернативный способ: ищем по всему документу только строки
-            for string in soup.strings:
-                if re.search(r'(TL|Rs)', string):
-                    price = string.strip()
-                    break
+        old_price = None
+        discount_percent = None
+        
+        # Ищем текущую цену
+        price_elem = soup.find('span', {'data-qa': 'mfeCtaMain#offer0#finalPrice'})
+        if price_elem:
+            price = price_elem.get_text(strip=True)
+        
+        # Ищем старую цену
+        old_price_elem = soup.find('span', {'data-qa': 'mfeCtaMain#offer0#originalPrice'})
+        if old_price_elem:
+            old_price = old_price_elem.get_text(strip=True)
+        
+        # Ищем процент скидки
+        discount_elem = soup.find('span', {'data-qa': 'mfeCtaMain#offer0#discountInfo'})
+        if discount_elem:
+            discount_text = discount_elem.get_text(strip=True)
+            # Применяем перевод скидки
+            discount_percent = translate_discount(discount_text)
+        
         price = format_price(price, region["name"])
+        old_price = format_price(old_price, region["name"]) if old_price else None
+        
+        plan_data = {
+            "period": "1 месяц", 
+            "price": price
+        }
+        
+        if old_price and old_price != price:
+            plan_data["old_price"] = old_price
+        
+        if discount_percent:
+            plan_data["discount_percent"] = discount_percent
+        
         results.append({
             "service": "Ubisoft+ Classics",
             "region": region["name"],
             "image": "ubisoft.png",
-            "plans": [{"period": "1 месяц", "price": price}]
+            "plans": [plan_data]
         })
     return results
 
 # GTA+
+GTA_URLS = [
+    {"name": "TR", "url": "https://store.playstation.com/en-tr/product/UP1004-PPSA16755_00-GTAPLUS00001T01M"},
+    {"name": "IN", "url": "https://store.playstation.com/en-in/product/UP1004-PPSA16755_00-GTAPLUS00001T01M"},
+]
+
 def parse_gtaplus():
     results = []
-    urls = [
-        ("TR", "https://store.playstation.com/en-tr/pages/subscriptions/", "TL"),
-        ("IN", "https://store.playstation.com/en-in/pages/subscriptions/", "Rs")
-    ]
-    for region, url, currency in urls:
+    for region in GTA_URLS:
         try:
-            resp = requests.get(url, timeout=20)
+            resp = requests.get(region["url"], timeout=20)
             resp.raise_for_status()
         except Exception as e:
-            print(f"Ошибка загрузки {url}: {e}")
+            print(f"Ошибка загрузки {region['url']}: {e}")
             continue
+        
         soup = BeautifulSoup(resp.text, "html.parser")
-        gta_block = None
+        
+        # Ищем цену
         price = None
-        # Ищем GTA+ по названию
-        for a in soup.find_all("a", href=True):
-            if a.text and "GTA+" in a.text:
-                gta_block = a
-                break
-        if gta_block:
-            # Ищем цену в дочерних элементах
-            price_tag = gta_block.find(string=re.compile(rf'{currency}'))
-            if price_tag:
-                price = price_tag.strip()
-            else:
-                # Альтернативно ищем в details
-                details = gta_block.find_next("section", class_="psw-product-tile__details")
-                if details:
-                    price_tag = details.find(string=re.compile(rf'{currency}'))
-                    if price_tag:
-                        price = price_tag.strip()
+        price_elem = soup.find('span', {'data-qa': 'mfeCtaMain#offer0#finalPrice'})
+        if price_elem:
+            price = price_elem.get_text(strip=True)
+        
+        # Если не нашли через data-qa, ищем по тексту
         if not price:
-            # Альтернативный способ: ищем по всему документу только строки
             for string in soup.strings:
-                if re.search(r'GTA\+.*?(\d+[.,\d]*\s*' + currency + ")", string, re.I):
-                    m = re.search(r'(\d+[.,\d]*\s*' + currency + ")", string)
-                    if m:
-                        price = m.group(1)
-                        break
-        price = format_price(price, region)
+                if re.search(r'\d+[.,\d]*\s*(TL|Rs)', string):
+                    price = string.strip()
+                    break
+        
+        price = format_price(price, region["name"])
+        
         results.append({
             "service": "GTA+",
-            "region": region,
+            "region": region["name"],
             "image": "gtaplus.png",
-            "plans": [{"period": "1 месяц", "price": price}]
+            "plans": [{
+                "period": "1 месяц", 
+                "price": price
+            }]
         })
     return results
 
 # EA Play
 EAPLAY_URLS = [
-    {"name": "TR", "url": "https://www.playstation.com/en-tr/games/ea-play/"},
-    {"name": "IN", "url": "https://www.playstation.com/en-in/games/ea-play/"},
+    {"name": "TR", "url": "https://store.playstation.com/en-tr/product/EP5679-CUSA15082_00-PSEAA1M000000000"},
+    {"name": "IN", "url": "https://store.playstation.com/en-in/product/EP5679-CUSA15082_00-PSEAA1M000000000"},
 ]
+
+EAPLAY_12M_URLS = [
+    {"name": "TR", "url": "https://store.playstation.com/en-tr/product/EP5679-CUSA15082_00-PSEAA12M00000000"},
+    {"name": "IN", "url": "https://store.playstation.com/en-in/product/EP5679-CUSA15082_00-PSEAA12M00000000"},
+]
+
 def parse_eaplay():
     results = []
+    
+    # Парсим 1 месяц
     for region in EAPLAY_URLS:
         try:
             resp = requests.get(region["url"], timeout=20)
@@ -200,52 +268,78 @@ def parse_eaplay():
         except Exception as e:
             print(f"Ошибка загрузки {region['url']}: {e}")
             continue
+        
         soup = BeautifulSoup(resp.text, "html.parser")
-        # Find all subscription blocks
-        blocks = soup.find_all("div", class_="box--lightAlt")
-        plans = []
-        for block in blocks:
-            # Period from h3
-            h3 = block.find("h3")
-            if not h3:
-                continue
-            period_text = h3.get_text(strip=True)
-            # Normalize period
-            if "1-month" in period_text:
-                period = "1 месяц"
-            elif "12-month" in period_text:
-                period = "12 месяцев"
-            else:
-                continue
-            # Find embedded JSON with price
-            script = block.find("script", {"type": "application/json"})
-            price = None
-            if script:
-                try:
-                    data = json.loads(script.text)
-                    # Try to get price from cache
-                    cache = data.get("cache", {})
-                    # Find GameCTA in cache
-                    for v in cache.values():
-                        if isinstance(v, dict) and v.get("__typename") == "GameCTA":
-                            price = v.get("price", {}).get("basePrice") or v.get("price", {}).get("discountedPrice")
-                            if price:
-                                break
-                except Exception as e:
-                    print(f"Ошибка парсинга JSON в блоке EA Play: {e}")
-            # Fallback: try to find price in visible text
-            if not price:
-                price_tag = block.find(string=re.compile(r'(TL|Rs)'))
-                if price_tag:
-                    price = price_tag.strip()
-            price = format_price(price, region["name"])
-            plans.append({"period": period, "price": price})
+        
+        # Ищем цену
+        price = None
+        price_elem = soup.find('span', {'data-qa': 'mfeCtaMain#offer0#finalPrice'})
+        if price_elem:
+            price = price_elem.get_text(strip=True)
+        
+        # Если не нашли через data-qa, ищем по тексту
+        if not price:
+            for string in soup.strings:
+                if re.search(r'\d+[.,\d]*\s*(TL|Rs)', string):
+                    price = string.strip()
+                    break
+        
+        price = format_price(price, region["name"])
+        
         results.append({
             "service": "EA Play",
             "region": region["name"],
             "image": "eaplay.png",
-            "plans": plans
+            "plans": [{
+                "period": "1 месяц", 
+                "price": price
+            }]
         })
+    
+    # Парсим 12 месяцев
+    for region in EAPLAY_12M_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        
+        # Ищем цену
+        price = None
+        price_elem = soup.find('span', {'data-qa': 'mfeCtaMain#offer0#finalPrice'})
+        if price_elem:
+            price = price_elem.get_text(strip=True)
+        
+        # Если не нашли через data-qa, ищем по тексту
+        if not price:
+            for string in soup.strings:
+                if re.search(r'\d+[.,\d]*\s*(TL|Rs)', string):
+                    price = string.strip()
+                    break
+        
+        price = format_price(price, region["name"])
+        
+        # Добавляем к существующему результату или создаем новый
+        existing_result = next((r for r in results if r["region"] == region["name"]), None)
+        if existing_result:
+            existing_result["plans"].append({
+                "period": "12 месяцев", 
+                "price": price
+            })
+        else:
+            results.append({
+                "service": "EA Play",
+                "region": region["name"],
+                "image": "eaplay.png",
+                "plans": [{
+                    "period": "12 месяцев", 
+                    "price": price
+                }]
+            })
+    
     return results
 
 if __name__ == "__main__":

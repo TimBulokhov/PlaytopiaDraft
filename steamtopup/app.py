@@ -127,5 +127,11 @@ def playstation_static(filename):
     playstation_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'playstation')
     return send_from_directory(playstation_dir, filename)
 
+@app.route('/xbox/<path:filename>')
+def xbox_static(filename):
+    import os
+    xbox_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'xbox')
+    return send_from_directory(xbox_dir, filename)
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

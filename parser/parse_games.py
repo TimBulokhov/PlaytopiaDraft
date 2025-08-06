@@ -26,6 +26,31 @@ def map_langs(langs):
             result.append('Русский')
     return ', '.join(result)
 
+def translate_discount(discount_text):
+    """Переводит текст скидки с английского на русский"""
+    if not discount_text:
+        return discount_text
+    
+    # Заменяем "Save n%" на "Скидка n%"
+    if discount_text.startswith('Save '):
+        # Извлекаем процент
+        import re
+        
+        # Сначала проверяем "Save n% more" (более специфичный паттерн)
+        match = re.search(r'Save (\d+)% more', discount_text)
+        if match:
+            percent = match.group(1)
+            return f"Скидка +{percent}%"
+        
+        # Затем проверяем обычный "Save n%"
+        match = re.search(r'Save (\d+)%', discount_text)
+        if match:
+            percent = match.group(1)
+            return f"Скидка {percent}%"
+    
+    # Оставляем "-n%" формат как есть
+    return discount_text
+
 async def get_game_details(session, game_url):
     try:
         html = await fetch(session, game_url)
@@ -80,9 +105,28 @@ async def get_game_details(session, game_url):
         platform_dd = soup.find('dd', {'data-qa': 'gameInfo#releaseInformation#platform-value'})
         if platform_dd:
             platforms = [x.strip() for x in platform_dd.text.split(',')]
-        return release_date, voice_ps4, subtitles_ps4, voice_ps5, subtitles_ps5, platforms
+        # --- Новый блок: ищем дополнительные подписки на детальной странице ---
+        additional_subscription = ''
+        offer_blocks = soup.find_all('div', class_=re.compile('psw-l-anchor'))
+        for offer in offer_blocks:
+            included_span = offer.find('span', string=re.compile('Included', re.I))
+            if included_span:
+                # Ищем иконку подписки
+                icon_span = offer.find('span', class_=re.compile('psw-icon'))
+                if icon_span:
+                    icon_classes = icon_span.get('class', [])
+                    if any('psw-icon--3rd-party-ubisoft-plus' in c for c in icon_classes):
+                        additional_subscription = 'ubisoft'
+                    elif any('psw-icon--3rd-party-gta-plus' in c for c in icon_classes):
+                        additional_subscription = 'gtaplus'
+                    elif any('psw-icon--3rd-party-ea' in c for c in icon_classes):
+                        additional_subscription = 'eaplay'
+                    elif any('psw-icon--ps-plus' in c for c in icon_classes):
+                        additional_subscription = 'psplus'
+        # --- Конец нового блока ---
+        return release_date, voice_ps4, subtitles_ps4, voice_ps5, subtitles_ps5, platforms, additional_subscription
     except Exception:
-        return '', '', '', '', '', []
+        return '', '', '', '', '', [], ''
 
 def safe_get(url, headers, retries=3, delay=3):
     for i in range(retries):
@@ -96,7 +140,7 @@ def safe_get(url, headers, retries=3, delay=3):
 async def parse_playstation_async(url, region):
     games = []
     page = 1
-    while page <= 50:
+    while page <= 3:
         page_url = re.sub(r'/browse/\d+', f'/browse/{page}', url)
         resp = safe_get(page_url, HEADERS)
         if resp is None:
@@ -136,8 +180,10 @@ async def parse_playstation_async(url, region):
             discount_badge = li.find('div', {'data-qa': re.compile('discount-badge')})
             if discount_badge:
                 span = discount_badge.find('span')
-                if span and span.text.strip().startswith('-'):
-                    discount = span.text.strip()
+                if span:
+                    discount_text = span.text.strip()
+                    # Применяем перевод скидки
+                    discount = translate_discount(discount_text)
             price_span = a.find('span', {'data-qa': re.compile('price#display-price')})
             if price_span:
                 price = price_span.text.strip()
@@ -154,8 +200,12 @@ async def parse_playstation_async(url, region):
                     subscription_icon = 'eaplay'
                 elif upsell_block.find('span', class_='psw-icon--ps-plus'):
                     subscription_icon = 'psplus'
+                elif upsell_block.find('span', class_='psw-icon--3rd-party-gta-plus'):
+                    subscription_icon = 'gtaplus'
             if upsell_save:
-                subscription = upsell_save.get_text(strip=True)
+                subscription_text = upsell_save.get_text(strip=True)
+                # Применяем перевод скидки к тексту подписки
+                subscription = translate_discount(subscription_text)
             link = a.get('href')
             if not link:
                 continue
@@ -168,7 +218,39 @@ async def parse_playstation_async(url, region):
             tasks = [get_game_details(session, link) for link, *_ in game_links]
             details_list = await asyncio.gather(*tasks)
         new_games = []
-        for (full_link, title, img_url, price, old_price, discount, subscription, subscription_icon, region), (release_date, voice_ps4, subtitles_ps4, voice_ps5, subtitles_ps5, platforms) in zip(game_links, details_list):
+        for (full_link, title, img_url, price, old_price, discount, subscription, subscription_icon, region), (release_date, voice_ps4, subtitles_ps4, voice_ps5, subtitles_ps5, platforms, additional_subscription) in zip(game_links, details_list):
+            # Если на детальной странице найдена дополнительная подписка, добавляем её
+            if additional_subscription and not subscription_icon:
+                subscription_icon = additional_subscription
+            elif additional_subscription and subscription_icon and additional_subscription != subscription_icon:
+                # Если уже есть подписка, но найдена другая, объединяем
+                subscription_icon = f"{subscription_icon},{additional_subscription}"
+            
+            # Заменяем "Included" на правильные названия подписок
+            if subscription == "Included" and subscription_icon:
+                if subscription_icon == "gtaplus":
+                    subscription = "GTA+"
+                elif subscription_icon == "ubisoft":
+                    subscription = "Ubisoft+"
+                elif subscription_icon == "eaplay":
+                    subscription = "EA Play"
+                elif subscription_icon == "psplus":
+                    subscription = "Extra"  # или "Essential", "Deluxe" в зависимости от типа
+                elif "," in subscription_icon:
+                    # Для игр с несколькими подписками
+                    icons = subscription_icon.split(",")
+                    if "psplus" in icons:
+                        subscription = "Extra"  # PS Plus всегда первый
+                    else:
+                        # Если нет PS Plus, берем первую подписку
+                        first_icon = icons[0]
+                        if first_icon == "gtaplus":
+                            subscription = "GTA+"
+                        elif first_icon == "ubisoft":
+                            subscription = "Ubisoft+"
+                        elif first_icon == "eaplay":
+                            subscription = "EA Play"
+            
             game = {
                 'title': title,
                 'img': img_url,
