@@ -337,17 +337,15 @@
     }
     .psw-product-tile {
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.2s ease;
+      cursor: pointer;
       overflow: hidden;
+      position: relative;
+      height: 280px;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
-      width: 100%;
-      min-width: 0;
-      height: 340px;
-      transition: box-shadow 0.2s;
-      font-family: 'Segoe UI', Arial, sans-serif;
     }
     .psw-product-tile:hover {
       box-shadow: 0 4px 24px rgba(0,0,0,0.16);
@@ -447,6 +445,9 @@
       color: #181818;
       text-align: left;
       letter-spacing: 0.01em;
+      min-height: 1.4em;
+      display: flex;
+      align-items: center;
     }
     .sub-card-tier {
       display: inline-block;
@@ -477,6 +478,9 @@
       color: #333;
       margin-bottom: 4px;
       margin-left: 16px;
+      min-height: 1.3em;
+      display: flex;
+      align-items: center;
     }
     .sub-card-price {
       font-size: 1.15rem;
@@ -484,6 +488,9 @@
       color: #181818;
       margin-bottom: 8px;
       margin-left: 16px;
+      min-height: 1.4em;
+      display: flex;
+      align-items: center;
     }
     .region-filter-btns {
       display: flex;
@@ -835,11 +842,14 @@ function renderSubscriptionCardFlat(sub, plan) {
     oldPrice = `<s style="color:#888;margin-left:8px;font-weight:normal;">${plan.old_price}</s>`;
   }
   
+  // Используем правильные изображения
+  const imgSrc = img.startsWith('http') ? img : '/static/' + img;
+  
   return `
     <li>
       <div class='psw-product-tile psw-interactive-root'>
         <div class='psw-game-art__container psw-l-anchor-top-left psw-l-top-left psw-fill psw-r-2 psw-clip'>
-          <img class='psw-media-frame psw-fill-x psw-image psw-media psw-media-interactive psw-aspect-1-1' src='/static/${img}' alt='${sub.service}'>
+          <img class='psw-media-frame psw-fill-x psw-image psw-media psw-media-interactive psw-aspect-1-1' src='${imgSrc}' alt='${sub.service}'>
         </div>
         <div class='sub-card-title'>${sub.service} ${tier}</div>
         ${discountBadge ? `<div style="margin-left:8px;margin-bottom:4px;!">${discountBadge}</div>` : ''}
@@ -852,21 +862,28 @@ function renderSubscriptionCardFlat(sub, plan) {
 function renderSubscriptionsListFlat(subs, region, search = '') {
   const list = document.getElementById('subscriptions-list');
   if (!list) return;
-  let filtered = subs.filter(s => s.region === region);
+  // Фильтруем только PlayStation подписки, исключаем Xbox
+  let filtered = subs.filter(s => s.region === region && (
+    s.service.toLowerCase().includes('playstation') || 
+    s.service.toLowerCase().includes('ps plus') ||
+    (s.service.toLowerCase().includes('ubisoft+ classics') && !s.service.toLowerCase().includes('xbox')) ||
+    (s.service.toLowerCase().includes('gta+') && !s.service.toLowerCase().includes('xbox')) ||
+    (s.service.toLowerCase().includes('ea play') && !s.service.toLowerCase().includes('xbox'))
+  ));
   if (search) {
     const q = search.trim().toLowerCase();
     filtered = filtered.filter(s => s.service.toLowerCase().includes(q) || (s.plans && s.plans.some(p => p.period.toLowerCase().includes(q))));
   }
   if (!filtered.length) {
     list.innerHTML = '<div style="padding:32px 0;color:#888;font-size:1.2rem;">Нет подписок</div>';
-        return;
-      }
+    return;
+  }
   let cards = [];
   filtered.forEach(sub => {
     sub.plans.forEach(plan => {
       cards.push(renderSubscriptionCardFlat(sub, plan));
-        });
-      });
+    });
+  });
   list.innerHTML = cards.join('');
   setTimeout(() => {
     list.querySelectorAll('li').forEach(li => li.classList.add('visible'));

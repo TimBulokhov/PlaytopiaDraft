@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+import time
 
 TIERS = [
     {"name": "Essential", "tierId": "TIER_10", "image": "essential.png"},
@@ -22,12 +23,24 @@ def format_price(price, region):
         return price
     price = price.replace("\xa0", " ").replace("&nbsp;", " ")
     price = re.sub(r'\s+', ' ', price)
+    
     if region == "TR":
+        # Заменяем ₺/ay на TL
+        price = price.replace("₺/ay", " TL").replace("₺/üç ay", " TL")
         price = price.replace("TL", " TL").replace(" TL", " TL")
         price = re.sub(r'\s+TL', ' TL', price)
-    if region == "IN":
+        # Заменяем TRY на TL
+        price = price.replace("TRY", "TL")
+        
+    elif region == "IN":
+        # Заменяем ₹ на Rs и обрезаем /month
+        price = price.replace("₹", "Rs")
+        price = re.sub(r'/month.*$', '', price)  # Убираем /month и все после
         price = price.replace("Rs ", "Rs ").replace("Rs", "Rs ")
         price = re.sub(r'Rs\s*([0-9])', r'Rs \1', price)
+        # Убираем дробную часть
+        price = re.sub(r'Rs\s*(\d+)\.\d+', r'Rs \1', price)
+    
     return price.strip()
 
 def period_ru(months):
@@ -45,11 +58,12 @@ def translate_discount(discount_text):
     if not discount_text:
         return discount_text
     
+    # Оставляем "-n%" формат как есть
+    if discount_text.startswith('-') and '%' in discount_text:
+        return discount_text
+    
     # Заменяем "Save n%" на "Скидка n%"
     if discount_text.startswith('Save '):
-        # Извлекаем процент
-        import re
-        
         # Сначала проверяем "Save n% more" (более специфичный паттерн)
         match = re.search(r'Save (\d+)% more', discount_text)
         if match:
@@ -62,8 +76,38 @@ def translate_discount(discount_text):
             percent = match.group(1)
             return f"Скидка {percent}%"
     
-    # Оставляем "-n%" формат как есть
+    # Возвращаем как есть для всех остальных случаев
     return discount_text
+
+def format_xbox_price(price_raw, region_name):
+    """Форматирует цену для Xbox подписок с правильным добавлением ,00 и точками для тысяч"""
+    if not price_raw:
+        return None
+    
+    # Форматируем базовую цену
+    price = format_price(f"{price_raw} TRY", region_name)
+    
+    # Если это целое число - добавляем ,00 и форматируем тысячи
+    if price_raw.isdigit():
+        # Добавляем точки для тысяч
+        num = int(price_raw)
+        if num >= 1000:
+            formatted_num = f"{num:,}".replace(",", ".")
+        else:
+            formatted_num = str(num)
+        price = f"{formatted_num},00 TL"
+    # Если это дробное число - форматируем правильно
+    elif '.' in price_raw:
+        num = float(price_raw)
+        if num >= 1000:
+            # Форматируем тысячи с точками и дробную часть с запятой
+            formatted_num = f"{num:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        else:
+            # Просто заменяем точку на запятую
+            formatted_num = price_raw.replace(".", ",")
+        price = f"{formatted_num} TL"
+    
+    return price
 
 # PlayStation Plus
 def parse_psplus():
@@ -177,8 +221,17 @@ def parse_ubisoft_classics():
         discount_elem = soup.find('span', {'data-qa': 'mfeCtaMain#offer0#discountInfo'})
         if discount_elem:
             discount_text = discount_elem.get_text(strip=True)
-            # Применяем перевод скидки
-            discount_percent = translate_discount(discount_text)
+            # Если это Save n%, то конвертируем в -n%
+            if discount_text.startswith('Save '):
+                match = re.search(r'Save (\d+)%', discount_text)
+                if match:
+                    percent = match.group(1)
+                    discount_percent = f"-{percent}%"
+                else:
+                    discount_percent = discount_text
+            else:
+                # Применяем перевод скидки для других случаев
+                discount_percent = translate_discount(discount_text)
         
         price = format_price(price, region["name"])
         old_price = format_price(old_price, region["name"]) if old_price else None
@@ -342,12 +395,404 @@ def parse_eaplay():
     
     return results
 
+# Xbox Game Pass Ultimate
+XBOX_ULTIMATE_URLS = [
+    {"name": "TR", "url": "https://www.xbox.com/tr-tr/games/store/xbox-game-pass-ultimate/CFQ7TTC0KHS0/0007"},
+]
+
+def parse_xbox_ultimate():
+    results = []
+    for region in XBOX_ULTIMATE_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        
+        # Ищем цену в кнопке JOIN
+        price = None
+        join_button = soup.find('button', {'aria-label': re.compile(r'Join Xbox Game Pass Ultimate.*per month')})
+        if join_button:
+            price_elem = join_button.find('span', class_='Price-module__boldText___1i2Li')
+            if price_elem:
+                price = price_elem.get_text(strip=True)
+        
+        # Если не нашли через aria-label, ищем по классам
+        if not price:
+            price_elem = soup.find('span', class_='Price-module__boldText___1i2Li')
+            if price_elem:
+                price = price_elem.get_text(strip=True)
+        
+        price = format_price(price, region["name"])
+        
+        # Получаем изображение
+        image_url = get_xbox_image(soup)
+        image = image_url
+        
+        results.append({
+            "service": "Xbox Game Pass Ultimate",
+            "region": region["name"],
+            "image": image,
+            "plans": [{
+                "period": "1 месяц", 
+                "price": price
+            }]
+        })
+    return results
+
+# Xbox Game Pass Core
+XBOX_CORE_URLS = [
+    {"name": "TR", "url": "https://www.xbox.com/tr-tr/games/store/xbox-game-pass-core/CFQ7TTC0K5DJ/000C"},
+]
+
+def parse_xbox_core():
+    results = []
+    for region in XBOX_CORE_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        plans = []
+        
+        # Сохраняем HTML для анализа
+        with open("debug_core.html", "w", encoding="utf-8") as f:
+            f.write(resp.text)
+        print("DEBUG: HTML saved to debug_core.html")
+        
+        # Извлекаем цены по конкретным SKU ID
+        one_month_price_raw = get_price_by_sku_id(resp.text, "000C")
+        three_month_price_raw = get_price_by_sku_id(resp.text, "000D")
+        
+        print(f"DEBUG: Core 1 month price (SKU 000C): {one_month_price_raw}")
+        print(f"DEBUG: Core 3 month price (SKU 000D): {three_month_price_raw}")
+        
+        # Создаем тарифы на основе найденных данных
+        plans = []
+        
+        # Добавляем 1 месяц
+        if one_month_price_raw:
+            one_month_price = format_xbox_price(one_month_price_raw, region["name"])
+            plans.append({
+                "period": "1 месяц",
+                "price": one_month_price
+            })
+        
+        # Добавляем 3 месяца
+        if three_month_price_raw:
+            three_month_price = format_xbox_price(three_month_price_raw, region["name"])
+            plans.append({
+                "period": "3 месяца", 
+                "price": three_month_price
+            })
+        
+        if plans:
+            # Получаем изображение
+            image_url = get_xbox_image(soup)
+            image = image_url
+            
+            results.append({
+                "service": "Xbox Game Pass Core",
+                "region": region["name"],
+                "image": image,
+                "plans": plans
+            })
+    
+    return results
+
+# Xbox Game Pass Standard
+XBOX_STANDARD_URLS = [
+    {"name": "TR", "url": "https://www.xbox.com/tr-tr/games/store/xbox-game-pass-standard/CFQ7TTC0P85B/0004"},
+]
+
+def parse_xbox_standard():
+    results = []
+    for region in XBOX_STANDARD_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        
+        # Ищем цену
+        price = None
+        price_elem = soup.find('span', class_='Price-module__boldText___1i2Li')
+        if price_elem:
+            price = price_elem.get_text(strip=True)
+        
+        price = format_price(price, region["name"])
+        
+        # Получаем изображение
+        image_url = get_xbox_image(soup)
+        image = image_url
+        
+        results.append({
+            "service": "Xbox Game Pass Standard",
+            "region": region["name"],
+            "image": image,
+            "plans": [{
+                "period": "1 месяц", 
+                "price": price
+            }]
+        })
+    return results
+
+# Xbox Game Pass PC
+XBOX_PC_URLS = [
+    {"name": "TR", "url": "https://www.xbox.com/tr-tr/games/store/pc-game-pass/CFQ7TTC0KGQ8/0002"},
+]
+
+def parse_xbox_pc():
+    results = []
+    for region in XBOX_PC_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        
+        # Ищем цену
+        price = None
+        price_elem = soup.find('span', class_='Price-module__boldText___1i2Li')
+        if price_elem:
+            price = price_elem.get_text(strip=True)
+        
+        price = format_price(price, region["name"])
+        
+        # Получаем изображение
+        image_url = get_xbox_image(soup)
+        image = image_url
+        
+        results.append({
+            "service": "Xbox Game Pass PC",
+            "region": region["name"],
+            "image": image,
+            "plans": [{
+                "period": "1 месяц", 
+                "price": price
+            }]
+        })
+    return results
+
+# Xbox Ubisoft+
+XBOX_UBISOFT_URLS = [
+    {"name": "TR", "url": "https://www.xbox.com/tr-tr/games/store/ubisoft-premium/CFQ7TTC0QH5H/0002"},
+]
+
+def parse_xbox_ubisoft():
+    results = []
+    for region in XBOX_UBISOFT_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        plans = []
+        
+        # Сохраняем HTML для анализа
+        with open("debug_ubisoft.html", "w", encoding="utf-8") as f:
+            f.write(resp.text)
+        print("DEBUG: HTML saved to debug_ubisoft.html")
+        
+        # Извлекаем цены по конкретным SKU ID
+        one_month_price_raw = get_price_by_sku_id(resp.text, "0002")
+        twelve_month_price_raw = get_price_by_sku_id(resp.text, "0006")
+        
+        print(f"DEBUG: Ubisoft 1 month price (SKU 0002): {one_month_price_raw}")
+        print(f"DEBUG: Ubisoft 12 month price (SKU 0006): {twelve_month_price_raw}")
+        
+        # Создаем тарифы на основе найденных данных
+        plans = []
+        
+        # Добавляем 1 месяц
+        if one_month_price_raw:
+            one_month_price = format_xbox_price(one_month_price_raw, region["name"])
+            plans.append({
+                "period": "1 месяц",
+                "price": one_month_price
+            })
+        
+        # Добавляем 12 месяцев
+        if twelve_month_price_raw:
+            twelve_month_price = format_xbox_price(twelve_month_price_raw, region["name"])
+            plans.append({
+                "period": "12 месяцев", 
+                "price": twelve_month_price
+            })
+        
+        if plans:
+            # Используем локальную картинку
+            image = "ubisoft.png"
+            
+            results.append({
+                "service": "Xbox Ubisoft+ Classics",
+                "region": region["name"],
+                "image": image,
+                "plans": plans
+            })
+    
+    return results
+
+
+# Xbox GTA+
+XBOX_GTA_URLS = [
+    {"name": "TR", "url": "https://www.xbox.com/tr-tr/games/store/gta-xbox-series-xs/CFQ7TTC0HX8W/0002"},
+]
+
+def parse_xbox_gta():
+    results = []
+    for region in XBOX_GTA_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        
+        # Ищем цену
+        price = None
+        price_elem = soup.find('span', class_='Price-module__boldText___1i2Li')
+        if price_elem:
+            price = price_elem.get_text(strip=True)
+        
+        price = format_price(price, region["name"])
+        
+        results.append({
+            "service": "Xbox GTA+",
+            "region": region["name"],
+            "image": "gtaplus.png",  # Используем локальную картинку
+            "plans": [{
+                "period": "1 месяц",
+                "price": price
+            }]
+        })
+    return results
+
+# Xbox EA Play
+XBOX_EAPLAY_URLS = [
+    {"name": "TR", "url": "https://www.xbox.com/tr-tr/games/store/ea-play/CFQ7TTC0K5DH/0003"},
+]
+
+def parse_xbox_eaplay():
+    results = []
+    for region in XBOX_EAPLAY_URLS:
+        try:
+            resp = requests.get(region["url"], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        soup = BeautifulSoup(resp.text, "html.parser")
+        plans = []
+        
+        # Сохраняем HTML для анализа
+        with open("debug_eaplay.html", "w", encoding="utf-8") as f:
+            f.write(resp.text)
+        print("DEBUG: HTML saved to debug_eaplay.html")
+        
+        # Извлекаем цены по конкретным SKU ID
+        one_month_price_raw = get_price_by_sku_id(resp.text, "0003")
+        twelve_month_price_raw = get_price_by_sku_id(resp.text, "0004")
+        
+        print(f"DEBUG: EA Play 1 month price (SKU 0003): {one_month_price_raw}")
+        print(f"DEBUG: EA Play 12 month price (SKU 0004): {twelve_month_price_raw}")
+        
+        # Создаем тарифы на основе найденных данных
+        plans = []
+        
+        # Добавляем 1 месяц
+        if one_month_price_raw:
+            one_month_price = format_xbox_price(one_month_price_raw, region["name"])
+            plans.append({
+                "period": "1 месяц",
+                "price": one_month_price
+            })
+        
+        # Добавляем 12 месяцев
+        if twelve_month_price_raw:
+            twelve_month_price = format_xbox_price(twelve_month_price_raw, region["name"])
+            plans.append({
+                "period": "12 месяцев", 
+                "price": twelve_month_price
+            })
+        
+        if plans:
+            # Используем локальную картинку
+            image = "eaplay.png"
+            
+            results.append({
+                "service": "Xbox EA Play",
+                "region": region["name"],
+                "image": image,
+                "plans": plans
+            })
+    
+    return results
+
+def get_price_by_sku_id(page_text, target_sku_id):
+    """Извлекает цену для конкретного SKU ID из JSON данных"""
+    # Ищем JSON объекты с skuId и recurrencePrice
+    pattern = rf'"skuId":"{target_sku_id}"[^}}]*"recurrencePrice":(\d+\.?\d*)'
+    matches = re.findall(pattern, page_text)
+    if matches:
+        return matches[0]
+    return None
+
+def get_xbox_image(soup):
+    """Извлекает изображение из Xbox страницы"""
+    try:
+        # Ищем изображение в ProductDetailsHeader
+        img_container = soup.find('div', class_='ProductDetailsHeader-module__productImageContainer___gOb9c')
+        if img_container:
+            img = img_container.find('img', class_='WrappedResponsiveImage-module__image___QvkuN')
+            if img and img.get('src'):
+                return img['src']
+        
+        # Если не нашли, ищем в других местах
+        img = soup.find('img', {'data-testid': 'ProductDetailsHeaderBoxArt'})
+        if img and img.get('src'):
+            return img['src']
+        
+        # Ищем любое изображение с классом WrappedResponsiveImage
+        img = soup.find('img', class_='WrappedResponsiveImage-module__image___QvkuN')
+        if img and img.get('src'):
+            return img['src']
+        
+        return None
+    except:
+        return None
+
 if __name__ == "__main__":
     all_results = []
     all_results.extend(parse_psplus())
     all_results.extend(parse_ubisoft_classics())
     all_results.extend(parse_gtaplus())
     all_results.extend(parse_eaplay())
+    all_results.extend(parse_xbox_ultimate())
+    all_results.extend(parse_xbox_core())
+    all_results.extend(parse_xbox_standard())
+    all_results.extend(parse_xbox_pc())
+    all_results.extend(parse_xbox_gta())
+    all_results.extend(parse_xbox_eaplay())
+    all_results.extend(parse_xbox_ubisoft())
     with open("subscriptions.json", "w", encoding="utf-8") as f:
         json.dump(all_results, f, ensure_ascii=False, indent=2)
     print("Готово! Данные сохранены в subscriptions.json")

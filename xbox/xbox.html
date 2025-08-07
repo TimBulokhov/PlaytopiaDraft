@@ -337,17 +337,15 @@
     }
     .psw-product-tile {
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.2s ease;
+      cursor: pointer;
       overflow: hidden;
+      position: relative;
+      height: 280px;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
-      width: 100%;
-      min-width: 0;
-      height: 340px;
-      transition: box-shadow 0.2s;
-      font-family: 'Segoe UI', Arial, sans-serif;
     }
     .psw-product-tile:hover {
       box-shadow: 0 4px 24px rgba(0,0,0,0.16);
@@ -447,6 +445,9 @@
       color: #181818;
       text-align: left;
       letter-spacing: 0.01em;
+      min-height: 1.4em;
+      display: flex;
+      align-items: center;
     }
     .sub-card-tier {
       display: inline-block;
@@ -477,6 +478,9 @@
       color: #333;
       margin-bottom: 4px;
       margin-left: 16px;
+      min-height: 1.3em;
+      display: flex;
+      align-items: center;
     }
     .sub-card-price {
       font-size: 1.15rem;
@@ -484,6 +488,9 @@
       color: #181818;
       margin-bottom: 8px;
       margin-left: 16px;
+      min-height: 1.4em;
+      display: flex;
+      align-items: center;
     }
     .region-filter-btns {
       display: flex;
@@ -813,9 +820,8 @@
 document.getElementById('psn-wallet-list').innerHTML = '';
 let allSubs = [];
 window.selectedRegion = 'tr';
-function subscriptionIcon(type) {
+function getIcon(type) {
   if (type === "eaplay") return '<img src="/static/eaplay.png" class="psw-icon-psplus" alt="EA Play">';
-  if (type === "xbox") return '<img src="/static/xbox.png" class="psw-icon-psplus" alt="Xbox">';
   return '';
 }
 
@@ -830,14 +836,14 @@ function renderSubscriptionCardFlat(sub, plan) {
   
   let subscriptionIconHtml = '';
   if (sub.service.includes('Xbox Game Pass') || sub.service.includes('Xbox PC Game Pass')) {
-    subscriptionIconHtml = '<div class="psw-service-upsell">' + subscriptionIcon('xbox') + '</div>';
+    subscriptionIconHtml = '<div class="psw-service-upsell">' + getIcon('xbox') + '</div>';
   }
   
   return `
     <li>
       <div class='psw-product-tile psw-interactive-root'>
         <div class='psw-game-art__container psw-l-anchor-top-left psw-l-top-left psw-fill psw-r-2 psw-clip'>
-          <img class='psw-media-frame psw-fill-x psw-image psw-media psw-media-interactive psw-aspect-1-1' src='/static/${img}' alt='${sub.service}'>
+          <img class='psw-media-frame psw-fill-x psw-image psw-media psw-media-interactive psw-aspect-1-1' src='${img.startsWith('http') ? img : '/static/' + img}' alt='${sub.service}'>
         </div>
         <div class='sub-card-title'>${sub.service} ${tier}</div>
         ${subscriptionIconHtml}
@@ -852,11 +858,10 @@ function renderSubscriptionsListFlat(subs, region, search = '') {
   if (!list) return;
   // Фильтруем только Xbox подписки
   let filtered = subs.filter(s => s.region === region && (
-    s.service.includes('Xbox Game Pass') || 
-    s.service.includes('Xbox PC Game Pass') || 
-    s.service.includes('Ubisoft+ Premium') ||
-    s.service.includes('EA Play Xbox') ||
-    s.service.includes('GTA+ Xbox')
+    s.service.toLowerCase().includes('xbox game pass') || 
+    s.service.toLowerCase().includes('xbox ea play') ||
+    s.service.toLowerCase().includes('xbox gta+') ||
+    s.service.toLowerCase().includes('xbox ubisoft+')
   ));
   if (search) {
     const q = search.trim().toLowerCase();
@@ -864,14 +869,14 @@ function renderSubscriptionsListFlat(subs, region, search = '') {
   }
   if (!filtered.length) {
     list.innerHTML = '<div style="padding:32px 0;color:#888;font-size:1.2rem;">Нет подписок</div>';
-        return;
-      }
+    return;
+  }
   let cards = [];
   filtered.forEach(sub => {
     sub.plans.forEach(plan => {
       cards.push(renderSubscriptionCardFlat(sub, plan));
-        });
-      });
+    });
+  });
   list.innerHTML = cards.join('');
   setTimeout(() => {
     list.querySelectorAll('li').forEach(li => li.classList.add('visible'));

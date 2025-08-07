@@ -7,21 +7,15 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "474,00 TL",
-        "old_price": "474,00 TL",
-        "discount_percent": "-0%"
+        "price": "474,00 TL"
       },
       {
         "period": "3 месяца",
-        "price": "1.354,00 TL",
-        "old_price": "1.354,00 TL",
-        "discount_percent": null
+        "price": "1.354,00 TL"
       },
       {
         "period": "12 месяцев",
-        "price": "4.266,00 TL",
-        "old_price": "4.266,00 TL",
-        "discount_percent": null
+        "price": "4.266,00 TL"
       }
     ]
   },
@@ -33,21 +27,15 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "405,00 TL",
-        "old_price": "405,00 TL",
-        "discount_percent": "-0%"
+        "price": "405,00 TL"
       },
       {
         "period": "3 месяца",
-        "price": "1.148,00 TL",
-        "old_price": "1.148,00 TL",
-        "discount_percent": null
+        "price": "1.148,00 TL"
       },
       {
         "period": "12 месяцев",
-        "price": "3.645,00 TL",
-        "old_price": "3.645,00 TL",
-        "discount_percent": null
+        "price": "3.645,00 TL"
       }
     ]
   },
@@ -59,21 +47,15 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "270,00 TL",
-        "old_price": "270,00 TL",
-        "discount_percent": "-0%"
+        "price": "270,00 TL"
       },
       {
         "period": "3 месяца",
-        "price": "710,00 TL",
-        "old_price": "710,00 TL",
-        "discount_percent": "-0%"
+        "price": "710,00 TL"
       },
       {
         "period": "12 месяцев",
-        "price": "2.160,00 TL",
-        "old_price": "2.160,00 TL",
-        "discount_percent": null
+        "price": "2.160,00 TL"
       }
     ]
   },
@@ -85,21 +67,15 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "Rs 849",
-        "old_price": "Rs 849",
-        "discount_percent": "-0%"
+        "price": "Rs 849"
       },
       {
         "period": "3 месяца",
-        "price": "Rs 2,299",
-        "old_price": "Rs 2,299",
-        "discount_percent": "-0%"
+        "price": "Rs 2,299"
       },
       {
         "period": "12 месяцев",
-        "price": "Rs 7,599",
-        "old_price": "Rs 7,599",
-        "discount_percent": "-0%"
+        "price": "Rs 7,599"
       }
     ]
   },
@@ -111,21 +87,15 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "Rs 749",
-        "old_price": "Rs 749",
-        "discount_percent": "-0%"
+        "price": "Rs 749"
       },
       {
         "period": "3 месяца",
-        "price": "Rs 1,999",
-        "old_price": "Rs 1,999",
-        "discount_percent": "-0%"
+        "price": "Rs 1,999"
       },
       {
         "period": "12 месяцев",
-        "price": "Rs 6,699",
-        "old_price": "Rs 6,699",
-        "discount_percent": "-0%"
+        "price": "Rs 6,699"
       }
     ]
   },
@@ -137,21 +107,15 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "Rs 499",
-        "old_price": "Rs 499",
-        "discount_percent": "-0%"
+        "price": "Rs 499"
       },
       {
         "period": "3 месяца",
-        "price": "Rs 1,199",
-        "old_price": "Rs 1,199",
-        "discount_percent": "-0%"
+        "price": "Rs 1,199"
       },
       {
         "period": "12 месяцев",
-        "price": "Rs 3,949",
-        "old_price": "Rs 3,949",
-        "discount_percent": "-0%"
+        "price": "Rs 3,949"
       }
     ]
   },
@@ -188,9 +152,7 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "199,00 TL",
-        "old_price": null,
-        "discount_percent": null
+        "price": "199,00 TL"
       }
     ]
   },
@@ -201,9 +163,7 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "Rs 624",
-        "old_price": null,
-        "discount_percent": null
+        "price": "Rs 624"
       }
     ]
   },
@@ -214,15 +174,11 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "219,99 TL",
-        "old_price": null,
-        "discount_percent": null
+        "price": "219,99 TL"
       },
       {
         "period": "12 месяцев",
-        "price": "1.499,99 TL",
-        "old_price": null,
-        "discount_percent": null
+        "price": "1.499,99 TL"
       }
     ]
   },
@@ -233,15 +189,100 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "Rs 399",
-        "old_price": null,
-        "discount_percent": null
+        "price": "Rs 399"
       },
       {
         "period": "12 месяцев",
-        "price": "Rs 2,499",
-        "old_price": null,
-        "discount_percent": null
+        "price": "Rs 2,499"
+      }
+    ]
+  },
+  {
+    "service": "Xbox Game Pass Ultimate",
+    "region": "TR",
+    "image": "https://cms-assets.xboxservices.com/assets/35/4b/354b3ddf-1b39-48c2-92d7-44e5fda75dc4.jpg?n=RE2TAjc.jpg&q=90&o=f&w=177&h=265",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "309,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "Xbox Game Pass Core",
+    "region": "TR",
+    "image": "https://cms-assets.xboxservices.com/assets/4c/cd/4ccd701d-f228-452d-bfff-7555ea8d1706.jpg?n=RWKojC.jpg&q=90&o=f&w=177&h=265",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "175,00 TL"
+      },
+      {
+        "period": "3 месяца",
+        "price": "439,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "Xbox Game Pass Standard",
+    "region": "TR",
+    "image": "https://cms-assets.xboxservices.com/assets/36/00/3600d90b-a6b4-4e3e-ad32-f8d194cab9a6.jpg?n=RW1nxGr.jpg&q=90&o=f&w=177&h=265",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "249,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "Xbox Game Pass PC",
+    "region": "TR",
+    "image": "https://cms-assets.xboxservices.com/assets/75/65/7565d93e-cc92-4e15-affd-030362ba4d65.jpg?n=RE2TFwa.jpg&q=90&o=f&w=177&h=265",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "209,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "Xbox GTA+",
+    "region": "TR",
+    "image": "gtaplus.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "199,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "Xbox EA Play",
+    "region": "TR",
+    "image": "eaplay.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "219,99 TL"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "1.499,99 TL"
+      }
+    ]
+  },
+  {
+    "service": "Xbox Ubisoft+ Classics",
+    "region": "TR",
+    "image": "ubisoft.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "299,00 TL"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "2.999,00 TL"
       }
     ]
   }

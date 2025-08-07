@@ -846,7 +846,15 @@ fetch('/parser/subscriptions.json')
   .then(subs => { subscriptions = subs; });
 function renderSubscriptionSearchCard(sub, plan) {
   let img = sub.image;
+  // Используем изображения из subscriptions.json
   if (sub.service.toLowerCase().includes('ea play')) img = 'eaplaysub.png';
+  if (sub.service.toLowerCase().includes('xbox game pass ultimate')) img = 'https://cms-assets.xboxservices.com/assets/35/4b/354b3ddf-1b39-48c2-92d7-44e5fda75dc4.jpg?n=RE2TAjc.jpg&q=90&o=f&w=177&h=265';
+  if (sub.service.toLowerCase().includes('xbox game pass core')) img = 'https://cms-assets.xboxservices.com/assets/4c/cd/4ccd701d-f228-452d-bfff-7555ea8d1706.jpg?n=RWKojC.jpg&q=90&o=f&w=177&h=265';
+  if (sub.service.toLowerCase().includes('xbox game pass standard')) img = 'https://cms-assets.xboxservices.com/assets/36/00/3600d90b-a6b4-4e3e-ad32-f8d194cab9a6.jpg?n=RW1nxGr.jpg&q=90&o=f&w=177&h=265';
+  if (sub.service.toLowerCase().includes('xbox game pass pc')) img = 'https://cms-assets.xboxservices.com/assets/75/65/7565d93e-cc92-4e15-affd-030362ba4d65.jpg?n=RE2TFwa.jpg&q=90&o=f&w=177&h=265';
+  if (sub.service.toLowerCase().includes('xbox ea play')) img = 'eaplaysub.png';
+  if (sub.service.toLowerCase().includes('xbox ubisoft+')) img = 'ubisoft.png';
+  if (sub.service.toLowerCase().includes('xbox gta+')) img = 'gtaplus.png';
   let tier = sub.tier ? sub.tier : '';
   let tierClass = '';
   if (tier.toLowerCase() === 'deluxe') tierClass = 'DELUXE';
@@ -859,7 +867,7 @@ function renderSubscriptionSearchCard(sub, plan) {
     old_price: plan.old_price,
     discount_percent: plan.discount_percent,
     region: sub.region,
-    img: '/static/' + img,
+    img: img.startsWith('http') ? img : '/static/' + img,
     tier: tier,
     tierClass: tierClass
   };
@@ -1201,6 +1209,18 @@ fetch('/parser/games.json')
           { title: 'PSN Wallet 3000 TRY', img: 'static/PSNTR3000.png', link: '/playstation/playstation.html' },
           { title: 'PSN Wallet 4000 TRY', img: 'static/PSNTR4000.png', link: '/playstation/playstation.html' },
           { title: 'PSN Wallet 5000 TRY', img: 'static/PSNTR5000.png', link: '/playstation/playstation.html' },
+        ]
+      },
+      {
+        type: 'category',
+        title: 'Пополнить Xbox',
+        img: 'static/xbox.png',
+        link: '/xbox/xbox.html',
+        children: [
+          { title: 'Xbox Gift Card 25 TRY', img: 'static/xbox.png', link: '/xbox/xbox.html' },
+          { title: 'Xbox Gift Card 50 TRY', img: 'static/xbox.png', link: '/xbox/xbox.html' },
+          { title: 'Xbox Gift Card 100 TRY', img: 'static/xbox.png', link: '/xbox/xbox.html' },
+          { title: 'Xbox Gift Card 300 TRY', img: 'static/xbox.png', link: '/xbox/xbox.html' },
         ]
       },
     ];
