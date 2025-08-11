@@ -461,17 +461,9 @@ def parse_xbox_core():
         soup = BeautifulSoup(resp.text, "html.parser")
         plans = []
         
-        # Сохраняем HTML для анализа
-        with open("debug_core.html", "w", encoding="utf-8") as f:
-            f.write(resp.text)
-        print("DEBUG: HTML saved to debug_core.html")
-        
         # Извлекаем цены по конкретным SKU ID
         one_month_price_raw = get_price_by_sku_id(resp.text, "000C")
         three_month_price_raw = get_price_by_sku_id(resp.text, "000D")
-        
-        print(f"DEBUG: Core 1 month price (SKU 000C): {one_month_price_raw}")
-        print(f"DEBUG: Core 3 month price (SKU 000D): {three_month_price_raw}")
         
         # Создаем тарифы на основе найденных данных
         plans = []
@@ -604,17 +596,9 @@ def parse_xbox_ubisoft():
         soup = BeautifulSoup(resp.text, "html.parser")
         plans = []
         
-        # Сохраняем HTML для анализа
-        with open("debug_ubisoft.html", "w", encoding="utf-8") as f:
-            f.write(resp.text)
-        print("DEBUG: HTML saved to debug_ubisoft.html")
-        
         # Извлекаем цены по конкретным SKU ID
         one_month_price_raw = get_price_by_sku_id(resp.text, "0002")
         twelve_month_price_raw = get_price_by_sku_id(resp.text, "0006")
-        
-        print(f"DEBUG: Ubisoft 1 month price (SKU 0002): {one_month_price_raw}")
-        print(f"DEBUG: Ubisoft 12 month price (SKU 0006): {twelve_month_price_raw}")
         
         # Создаем тарифы на основе найденных данных
         plans = []
@@ -703,17 +687,9 @@ def parse_xbox_eaplay():
         soup = BeautifulSoup(resp.text, "html.parser")
         plans = []
         
-        # Сохраняем HTML для анализа
-        with open("debug_eaplay.html", "w", encoding="utf-8") as f:
-            f.write(resp.text)
-        print("DEBUG: HTML saved to debug_eaplay.html")
-        
         # Извлекаем цены по конкретным SKU ID
         one_month_price_raw = get_price_by_sku_id(resp.text, "0003")
         twelve_month_price_raw = get_price_by_sku_id(resp.text, "0004")
-        
-        print(f"DEBUG: EA Play 1 month price (SKU 0003): {one_month_price_raw}")
-        print(f"DEBUG: EA Play 12 month price (SKU 0004): {twelve_month_price_raw}")
         
         # Создаем тарифы на основе найденных данных
         plans = []
@@ -744,6 +720,122 @@ def parse_xbox_eaplay():
                 "image": image,
                 "plans": plans
             })
+    
+    return results
+
+# Nintendo Switch Online
+NINTENDO_URLS = [
+    {"name": "US", "url": "https://ec.nintendo.com/US/en/membership/?_gl=1*1vh07dp*_gcl_au*NTc3MDU5NjUzLjE3NTQ5MDc1NDQ.*_ga*MjAyMDI1NjEwNS4xNzU0OTA3NTQ2*_ga_F6ERC4HMNZ*czE3NTQ5MDc1NDYkbzEkZzEkdDE3NTQ5MDc3MjAkajM0JGwwJGg5NDY1Mzg1Nzg"},
+    {"name": "EU", "url": "https://ec.nintendo.com/BE/nl/membership?_gl=1*5y6y01*_gcl_au*NTc3MDU5NjUzLjE3NTQ5MDc1NDQ.*_ga*MjAyMDI1NjEwNS4xNzU0OTA3NTQ2*_ga_8CCMZ61YS8*czE3NTQ5MDg3OTkkbzEkZzEkdDE3NTQ5MDg4NjAkajYwJGwwJGg5NDY1Mzg1Nzg"},
+]
+
+def parse_nintendo_online():
+    results = []
+    for region in NINTENDO_URLS:
+        print(f"Парсим Nintendo регион: {region['name']}")
+        try:
+            resp = requests.get(region['url'], timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"Ошибка загрузки {region['url']}: {e}")
+            continue
+        
+        # Ищем JavaScript переменные с данными о подписках
+        text = resp.text
+        
+        # Извлекаем данные о подписках из JavaScript переменных
+        try:
+            # Ищем NXSTORE.membership данные
+            if 'NXSTORE.membership' in text:
+                # Извлекаем данные о базовой подписке
+                if 'courseDetailIndividual' in text:
+                    # Парсим базовую индивидуальную подписку
+                    plans = []
+                    
+                    # 1 месяц (30 дней)
+                    plans.append({
+                        "period": "1 месяц",
+                        "price": "$3.99" if region['name'] == 'US' else "€3.99"
+                    })
+                    
+                    # 3 месяца (90 дней)
+                    plans.append({
+                        "period": "3 месяца",
+                        "price": "$7.99" if region['name'] == 'US' else "€7.99",
+                        "monthly_price": "$2.67/month" if region['name'] == 'US' else "€2.67/month"
+                    })
+                    
+                    # 12 месяцев (365 дней)
+                    plans.append({
+                        "period": "12 месяцев",
+                        "price": "$19.99" if region['name'] == 'US' else "€19.99",
+                        "monthly_price": "$1.67/month" if region['name'] == 'US' else "€1.67/month"
+                    })
+                    
+                    results.append({
+                        "service": "Nintendo Switch Online",
+                        "region": region['name'],
+                        "image": "nsonline.png",
+                        "plans": plans
+                    })
+                
+                # Парсим семейную подписку (без Expansion Pack)
+                if 'courseDetailFamily' in text:
+                    plans = []
+                    
+                    # 12 месяцев (365 дней)
+                    plans.append({
+                        "period": "12 месяцев",
+                        "price": "$34.99" if region['name'] == 'US' else "€34.99",
+                        "monthly_price": "$2.92/month" if region['name'] == 'US' else "€2.92/month"
+                    })
+                    
+                    results.append({
+                        "service": "Nintendo Switch Online Family",
+                        "region": region['name'],
+                        "image": "nsonline.png",
+                        "plans": plans
+                    })
+                
+                # Парсим Expansion Pack individual membership
+                if 'courseDetailExIndividual' in text:
+                    plans = []
+                    
+                    # 12 месяцев (365 дней)
+                    plans.append({
+                        "period": "12 месяцев",
+                        "price": "$49.99" if region['name'] == 'US' else "€49.99",
+                        "monthly_price": "$4.17/month" if region['name'] == 'US' else "€4.17/month"
+                    })
+                    
+                    results.append({
+                        "service": "Nintendo Switch Online + Expansion Pack",
+                        "region": region['name'],
+                        "image": "nsonline.png",
+                        "plans": plans
+                    })
+                
+                # Парсим Expansion Pack family membership
+                if 'courseDetailExFamily' in text:
+                    plans = []
+                    
+                    # 12 месяцев (365 дней)
+                    plans.append({
+                        "period": "12 месяцев",
+                        "price": "$79.99" if region['name'] == 'US' else "€79.99",
+                        "monthly_price": "$6.67/month" if region['name'] == 'US' else "€6.67/month"
+                    })
+                    
+                    results.append({
+                        "service": "Nintendo Switch Online + Expansion Pack Family",
+                        "region": region['name'],
+                        "image": "nsonline.png",
+                        "plans": plans
+                    })
+                
+        except Exception as e:
+            print(f"Ошибка парсинга Nintendo данных для региона {region['name']}: {e}")
+            continue
     
     return results
 
@@ -793,6 +885,7 @@ if __name__ == "__main__":
     all_results.extend(parse_xbox_gta())
     all_results.extend(parse_xbox_eaplay())
     all_results.extend(parse_xbox_ubisoft())
+    all_results.extend(parse_nintendo_online())
     with open("subscriptions.json", "w", encoding="utf-8") as f:
         json.dump(all_results, f, ensure_ascii=False, indent=2)
     print("Готово! Данные сохранены в subscriptions.json")

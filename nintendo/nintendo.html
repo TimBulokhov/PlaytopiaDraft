@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Playtopia Store</title>
+  <title>Nintendo Switch Online - Playtopia Store</title>
   <style>
     html, body {
       height: 100%;
@@ -246,7 +246,7 @@
       margin-bottom: 0;
     }
     .section-title {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #181818;
       margin-bottom: 12px;
@@ -337,18 +337,15 @@
     }
     .psw-product-tile {
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.2s ease;
+      cursor: pointer;
       overflow: hidden;
+      position: relative;
+      height: 280px;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
-      width: 100%;
-      min-width: 0;
-      min-height: 380px;
-      height: 380px;
-      transition: box-shadow 0.2s;
-      font-family: 'Segoe UI', Arial, sans-serif;
     }
     .psw-product-tile:hover {
       box-shadow: 0 4px 24px rgba(0,0,0,0.16);
@@ -431,62 +428,117 @@
       font-size: 0.98em;
       margin-left: 4px;
     }
-    /* Плавная анимация карточек */
+    /* Плавная анимация карточек подписок */
     .psw-grid-list.psw-l-grid > li {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
-    .psw-grid-list.psw-l-grid > li.animated {
       opacity: 0;
       transform: translateY(24px);
       transition: opacity 0.35s cubic-bezier(.4,0,.2,1), transform 0.35s cubic-bezier(.4,0,.2,1);
     }
-    .psw-grid-list.psw-l-grid > li.animated.visible {
+    .psw-grid-list.psw-l-grid > li.visible {
       opacity: 1;
       transform: translateY(0);
     }
-    .filter-toggle-bar {
+    .sub-card-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      margin: 12px 0 4px 16px;
+      color: #181818;
+      text-align: left;
+      letter-spacing: 0.01em;
+      min-height: 1.4em;
+      display: flex;
+      align-items: center;
+    }
+    .sub-card-tier {
+      display: inline-block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 2px 12px;
+      margin-bottom: 8px;
+      margin-top: 8px;
+      margin-left: 16px;
+    }
+    .sub-card-tier.DELUXE {
+      background: #181818;
+      color: #fff;
+    }
+    .sub-card-tier.EXTRA {
+      background: #7c4dff;
+      color: #fff;
+    }
+    .sub-card-tier.ESSENTIAL {
+      background: #fff;
+      color: #181818;
+      border: 1.5px solid #181818;
+    }
+    .sub-card-period {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+      margin-left: 16px;
+      min-height: 1.3em;
+      display: flex;
+      align-items: center;
+    }
+    .sub-card-price {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #181818;
+      margin-bottom: 8px;
+      margin-left: 16px;
+      min-height: 1.4em;
+      display: flex;
+      align-items: center;
+    }
+    .region-filter-btns {
       display: flex;
       gap: 16px;
-      justify-content: center;
       margin-bottom: 24px;
+      align-items: center;
     }
-    .filter-toggle-btn {
+    .region-filter-label {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-right: 16px;
+      color: #181818;
+    }
+    .region-btn {
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 40px;
       background: #e6e6e6;
       color: #181818;
-      font-weight: 700;
-      font-size: 1.08rem;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 32px;
       cursor: pointer;
       transition: background 0.2s, color 0.2s;
-      outline: none;
+      height: 48px;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .filter-toggle-btn.active, .filter-toggle-btn:active {
+    .region-btn.active {
+      background: #3d79ff !important;
+      color: #fff !important;
+      font-weight: 700;
+    }
+    .region-btn:not(.active) {
+      background: #e6e6e6 !important;
+      color: #181818 !important;
+      font-weight: 700;
+    }
+    .region-btn:hover {
       background: #3d79ff;
-      color: #181818;
-    }
-    .filter-toggle-btn:focus {
-      outline: none !important;
-      box-shadow: none !important;
-    }
-    .psw-grid-list.psw-l-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 32px;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      width: 100%;
-      min-height: 380px;
+      color: #fff;
     }
   </style>
 </head>
 <body>
   <header class="header">
-    <span class="logo" onclick="window.location.href='/'" style="cursor:pointer;">PLAYTOPIA</span>
+    <span class="logo">PLAYTOPIA</span>
     <button class="catalog-btn">
       <span class="burger">
         <span class="burger-line"></span>
@@ -495,10 +547,10 @@
       </span>
       Каталог
     </button>
-    <form class="search-bar" action="#">
-      <input type="text" placeholder="Поиск по играм">
-      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg>
-    </form>
+    <div class="search-bar" style="visibility:hidden;pointer-events:none;">
+      <input type="text" id="search-bar-input" placeholder="Поиск подписок...">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+    </div>
     <div class="header-right">
       <a class="header-link" href="#">Профиль</a>
       <a class="header-link" href="#">Корзина</a>
@@ -515,7 +567,7 @@
       <li>
         <a id="nav-playstation" href="/playstation/playstation.html">
           <span><!-- PlayStation SVG --><svg width="32" height="32" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" rx="206" fill="black"></rect><g clip-path="url(#clip0_1536_15202)"><path d="M93.6311 370.209C77.5847 380.957 83.0344 401.394 117.398 411.082C153.373 423.057 191.747 425.969 229.118 419.56C230.903 419.312 232.672 418.958 234.416 418.5V382.623L197.933 394.43C184.387 398.825 169.92 399.556 156 396.55C145.252 393.371 147.372 386.861 160.239 381.412L234.416 355.677V316.015L131.325 351.438C117.907 355.812 105.207 362.137 93.6311 370.209ZM342.351 209.594V313.895C386.403 335.392 420.766 313.895 420.766 258.036C420.766 202.176 400.935 175.23 342.351 154.794C310.935 143.75 278.822 134.799 246.224 127.999V438.482L321.914 461.038V199.905C321.914 188.097 321.914 179.62 330.543 182.799C342.351 185.978 342.351 197.786 342.351 209.594ZM482.076 345.837C451.066 334.947 418.062 330.918 385.343 334.029C368.765 335.276 352.451 338.896 336.901 344.777L333.722 345.837V387.618L403.509 361.883C417.056 357.496 431.521 356.765 445.442 359.764C456.19 362.943 454.07 369.452 441.203 374.902L334.328 415.624V456.497L482.681 400.486C493.461 396.402 503.298 390.17 511.595 382.168C519.164 371.874 515.985 356.888 482.681 346.14L482.076 345.837Z" fill="white"></path></g><defs><clipPath id="clip0_1536_15202"><rect width="430" height="430" fill="white" transform="translate(85 85)"></rect></clipPath></defs></svg></span>
-          PlayStation 
+          PlayStation
         </a>
       </li>
       <li>
@@ -531,7 +583,7 @@
         </a>
       </li>
       <li>
-        <a href="/allgames/allgames.html">
+        <a id="nav-allgames" href="/allgames/allgames.html">
           <span><!-- Game SVG --><svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.285645" width="28" height="28" rx="10" fill="#1B1D22"></rect><path d="M8.22314 20.6666C7.38981 20.6666 6.67801 20.368 6.08773 19.7708C5.49745 19.1735 5.18842 18.4513 5.16064 17.6041C5.16064 17.4791 5.16759 17.3541 5.18148 17.2291C5.19537 17.1041 5.2162 16.9791 5.24398 16.8541L6.99398 9.85409C7.18842 9.10409 7.58426 8.49645 8.18148 8.03117C8.7787 7.56589 9.45926 7.33325 10.2231 7.33325H18.3481C19.112 7.33325 19.7926 7.56589 20.3898 8.03117C20.987 8.49645 21.3829 9.10409 21.5773 9.85409L23.3273 16.8541C23.3551 16.9791 23.3794 17.1076 23.4002 17.2395C23.4211 17.3714 23.4315 17.4999 23.4315 17.6249C23.4315 18.4721 23.1294 19.1909 22.5252 19.7812C21.9211 20.3714 21.1954 20.6666 20.3481 20.6666C19.7648 20.6666 19.2231 20.5138 18.7231 20.2083C18.2231 19.9027 17.8481 19.486 17.5981 18.9583L17.0148 17.7499C16.9454 17.611 16.8412 17.5069 16.7023 17.4374C16.5634 17.368 16.4176 17.3333 16.2648 17.3333H12.3065C12.1537 17.3333 12.0079 17.368 11.869 17.4374C11.7301 17.5069 11.6259 17.611 11.5565 17.7499L10.9731 18.9583C10.7231 19.486 10.3481 19.9027 9.84814 20.2083C9.34814 20.5138 8.80648 20.6666 8.22314 20.6666ZM15.5356 13.1666C15.7718 13.1666 15.9697 13.0867 16.1294 12.927C16.2891 12.7673 16.369 12.5694 16.369 12.3333C16.369 12.0971 16.2891 11.8992 16.1294 11.7395C15.9697 11.5798 15.7718 11.4999 15.5356 11.4999C15.2995 11.4999 15.1016 11.5798 14.9419 11.7395C14.7822 11.8992 14.7023 12.0971 14.7023 12.3333C14.7023 12.5694 14.7822 12.7673 14.9419 12.927C15.1016 13.0867 15.2995 13.1666 15.5356 13.1666ZM17.2023 11.4999C17.4384 11.4999 17.6363 11.4201 17.7961 11.2603C17.9558 11.1006 18.0356 10.9027 18.0356 10.6666C18.0356 10.4305 17.9558 10.2326 17.7961 10.0728C17.6363 9.91311 17.4384 9.83325 17.2023 9.83325C16.9662 9.83325 16.7683 9.91311 16.6086 10.0728C16.4488 10.2326 16.369 10.4305 16.369 10.6666C16.369 10.9027 16.4488 11.1006 16.6086 11.2603C16.7683 11.4201 16.9662 11.4999 17.2023 11.4999ZM17.2023 14.8333C17.4384 14.8333 17.6363 14.7534 17.7961 14.5937C17.9558 14.4339 18.0356 14.236 18.0356 13.9999C18.0356 13.7638 17.9558 13.5659 17.7961 13.4062C17.6363 13.2464 17.4384 13.1666 17.2023 13.1666C16.9662 13.1666 16.7683 13.2464 16.6086 13.4062C16.4488 13.5659 16.369 13.7638 16.369 13.9999C16.369 14.236 16.4488 14.4339 16.6086 14.5937C16.7683 14.7534 16.9662 14.8333 17.2023 14.8333ZM18.869 13.1666C19.1051 13.1666 19.303 13.0867 19.4627 12.927C19.6225 12.7673 19.7023 12.5694 19.7023 12.3333C19.7023 12.0971 19.6225 11.8992 19.4627 11.7395C19.303 11.5798 19.1051 11.4999 18.869 11.4999C18.6329 11.4999 18.435 11.5798 18.2752 11.7395C18.1155 11.8992 18.0356 12.0971 18.0356 12.3333C18.0356 12.5694 18.1155 12.7673 18.2752 12.927C18.435 13.0867 18.6329 13.1666 18.869 13.1666ZM11.369 14.4166C11.5495 14.4166 11.6988 14.3576 11.8169 14.2395C11.935 14.1214 11.994 13.9721 11.994 13.7916V12.9583H12.8273C13.0079 12.9583 13.1572 12.8992 13.2752 12.7812C13.3933 12.6631 13.4523 12.5138 13.4523 12.3333C13.4523 12.1527 13.3933 12.0034 13.2752 11.8853C13.1572 11.7673 13.0079 11.7083 12.8273 11.7083H11.994V10.8749C11.994 10.6944 11.935 10.5451 11.8169 10.427C11.6988 10.3089 11.5495 10.2499 11.369 10.2499C11.1884 10.2499 11.0391 10.3089 10.9211 10.427C10.803 10.5451 10.744 10.6944 10.744 10.8749V11.7083H9.91064C9.73009 11.7083 9.58078 11.7673 9.46273 11.8853C9.34467 12.0034 9.28564 12.1527 9.28564 12.3333C9.28564 12.5138 9.34467 12.6631 9.46273 12.7812C9.58078 12.8992 9.73009 12.9583 9.91064 12.9583H10.744V13.7916C10.744 13.9721 10.803 14.1214 10.9211 14.2395C11.0391 14.3576 11.1884 14.4166 11.369 14.4166Z" fill="white"></path></svg></span>
           Игры
         </a>
@@ -545,59 +597,34 @@
     </ul>
   </nav>
   <main class="main-content">
-    <div class="filters" id="filters" style="margin-bottom:32px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:center;background:#f5f5f7;padding:24px 16px 16px 16px;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-      <label style="font-weight:600;font-size:1.08rem;">Платформа:
-        <select id="filter-platform" class="filter-select">
-          <option value="">Все</option>
-          <option value="ps4">Только PS4 (совместимо с PS5)</option>
-          <option value="ps5">Только PS5</option>
-          <option value="ps4ps5">PS4 + PS5 (отдельные версии)</option>
-        </select>
-      </label>
-      <div id="region-buttons" style="display:flex;gap:16px;">
-        <button type="button" class="region-btn active" data-region="in" style="font-size:1.15rem;font-weight:700;padding:16px 40px;border-radius:12px;border:none;cursor:pointer;transition:background 0.2s;">Индия</button>
-        <button type="button" class="region-btn" data-region="tr" style="font-size:1.15rem;font-weight:700;padding:16px 40px;border-radius:12px;border:none;cursor:pointer;transition:background 0.2s;">Турция</button>
-      </div>
-      <label style="font-weight:600;font-size:1.08rem;">Локализация:
-        <select id="filter-localization" class="filter-select">
-          <option value="">Любая</option>
-          <option value="full">Субтитры и озвучка</option>
-          <option value="ru-subs">Русские субтитры</option>
-          <option value="en-full">Полностью на английском</option>
-        </select>
-      </label>
-      <label style="font-weight:600;font-size:1.08rem;">Сортировка по цене:
-        <select id="sort-price" class="filter-select">
-          <option value="">Без сортировки</option>
-          <option value="price-asc">Цена (возрастание)</option>
-          <option value="price-desc">Цена (убывание)</option>
-        </select>
-      </label>
-      <label style="font-weight:600;font-size:1.08rem;">Сортировка:
-        <select id="sort-by" class="filter-select">
-          <option value="title-asc">Название (A-Z)</option>
-          <option value="title-desc">Название (Z-A)</option>
-          <option value="date-desc">Дата выхода (новые)</option>
-          <option value="date-asc">Дата выхода (старые)</option>
-        </select>
-      </label>
-      <button id="reset-filters" style="background:#3d79ff;color:#fff;font-weight:700;font-size:1.08rem;border:none;border-radius:10px;padding:10px 24px;box-shadow:0 2px 8px rgba(61,121,255);cursor:pointer;transition:background 0.2s;">Сбросить фильтры</button>
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:24px;">
+      <span class="region-filter-label" style="font-size:1.08rem;font-weight:700;margin-right:16px;color:#181818;">ВЫБЕРИТЕ РЕГИОН</span>
+      <button type="button" class="region-btn" data-region="us" style="font-size: 1.15rem; font-weight: 700; padding: 16px 40px; border-radius: 12px; border: none; background: rgb(61,121,255); cursor: pointer; transition: background 0.2s; color:#fff;">США</button>
+      <button type="button" class="region-btn" data-region="eu" style="font-size: 1.15rem; font-weight: 700; padding: 16px 40px; border-radius: 12px; border: none; background: rgb(230, 230, 230); cursor: pointer; transition: background 0.2s; color:#fff;">Европа</button>
+    </div>
+    <div style="margin-bottom:16px;padding:12px 16px;background:#f8f9fa;border-radius:8px;border-left:4px solid #3d79ff;">
+      <span style="font-size:0.95rem;color:#666;line-height:1.4;">
+        <strong>Регион "Европа" является обобщенным.</strong> Товары в этой категории подходят для стран: <strong>Бельгия, Германия, Испания, Франция, Италия, Венгрия, Нидерланды, Австрия, Португалия, Словения, Финляндия</strong>.
+      </span>
     </div>
     <div class="sections">
-      <div class="filter-toggle-bar" id="filter-toggle-bar">
-        <button type="button" class="filter-toggle-btn" id="filter-discount">Скидки</button>
-        <button type="button" class="filter-toggle-btn" id="filter-new">Новинки</button>
-        <button type="button" class="filter-toggle-btn" id="filter-preorder">Предзаказы</button>
+      <div class="section">
+        <div class="section-title" style="display:flex;align-items:center;gap:16px;">
+          Nintendo Gift Cards
+        </div>
+        <div class="psw-l-w-1/1">
+          <ul id="psn-wallet-list" class="psw-grid-list psw-l-grid"></ul>
+        </div>
       </div>
       <div class="section">
-        <div class="section-title">Все игры</div>
+        <div class="section-title">Подписки</div>
         <div class="psw-l-w-1/1">
-          <ul id="all-games-list" class="psw-grid-list psw-l-grid"></ul>
-          <div id="pagination" style="display:flex;justify-content:center;align-items:center;margin-top:32px;gap:8px;"></div>
+          <ul id="subscriptions-list" class="psw-grid-list psw-l-grid"></ul>
         </div>
       </div>
     </div>
   </main>
+
 <style>
 .psw-grid-list.psw-l-grid {
   display: grid;
@@ -607,7 +634,6 @@
   padding: 0;
   margin: 0;
   width: 100%;
-  min-height: 380px;
 }
 .psw-grid-list.psw-l-grid > li {
   /* НЕ квадрат! */
@@ -619,6 +645,13 @@
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.06);
   padding: 0;
   margin: 0;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.35s cubic-bezier(.4,0,.2,1), transform 0.35s cubic-bezier(.4,0,.2,1);
+}
+.psw-grid-list.psw-l-grid > li.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 @media (max-width: 1600px) {
   .psw-grid-list.psw-l-grid { grid-template-columns: repeat(4, 1fr); }
@@ -741,641 +774,196 @@
   color: #000000;
   font-weight: 500;
 }
-.filter-select {
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  padding: 8px 16px;
-  font-size: 1.08rem;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-  margin-left: 8px;
-  margin-right: 8px;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-.filter-select:focus {
-  border: 1.5px solid #3d79ff;
-  box-shadow: 0 2px 8px rgba(11,218,81,0.08);
-}
-#reset-filters:hover {
-  background: #d9363e;
-}
-.filter-toggle-bar {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-.filter-toggle-btn {
-  background: #e6e6e6;
-  color: #181818;
-  font-weight: 700;
-  font-size: 1.08rem;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 32px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  outline: none;
-}
-.filter-toggle-btn.active, .filter-toggle-btn:active {
-  background: #3d79ff;
-  color: #fff;
-}
-.filter-toggle-btn:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
 
-/* Стили для кнопок регионов */
-.region-btn.active {
-  background: #3d79ff !important;
-  color: #fff !important;
-  font-weight: 700;
-}
-.region-btn:not(.active) {
-  background: #e6e6e6 !important;
-  color: #181818 !important;
-  font-weight: 700;
-}
-.region-btn:hover {
-  background: #3d79ff;
-  color: #fff;
-}
 </style>
-  <script>
-function normalizeTitle(title) {
-  // Убираем не-буквы в начале и приводим к нижнему регистру
-  return (title || '').replace(/^[^a-zA-Zа-яА-ЯёЁ]+/, '').toLowerCase();
-}
-function daysBetween(dateStr) {
-  // dateStr: '25/6/2025' → Date
-  const [d, m, y] = dateStr.split(/[./-]/).map(Number);
-  if (!d || !m || !y) return Infinity;
-  const date = new Date(y, m - 1, d);
-  const now = new Date();
-  return Math.floor((now - date) / (1000 * 60 * 60 * 24));
-}
-function subscriptionIcon(type) {
-  if (!type) return '';
+<script>
+// --- Nintendo Gift Cards: пусто ---
+document.getElementById('psn-wallet-list').innerHTML = '';
+let allSubs = [];
+window.selectedRegion = 'us';
+function renderSubscriptionCardFlat(sub, plan) {
+  let img = sub.image;
+  if (sub.service.toLowerCase().includes('ea play')) img = 'eaplaysub.png';
+  let tierClass = sub.tier ? sub.tier.toUpperCase() : '';
+  // ВСЕГДА добавляем span для выравнивания
+  const tier = sub.tier
+    ? `<span class='sub-card-tier ${tierClass}'>${sub.tier}</span>`
+    : `<span class='sub-card-tier' style="visibility:hidden">-</span>`;
   
-  // Если несколько иконок через запятую
-  if (type.includes(',')) {
-    const icons = type.split(',').map(icon => icon.trim());
-    // Сортируем: psplus всегда первый
-    const sortedIcons = icons.sort((a, b) => {
-      if (a === 'psplus') return -1;
-      if (b === 'psplus') return 1;
-      return a.localeCompare(b);
+  // Добавляем скидку и старую цену
+  let discountBadge = '';
+  let oldPrice = '';
+  
+  if (plan.discount_percent && plan.discount_percent !== '-0%') {
+    discountBadge = `<span class='psw-badge' style='background:#3d79ff;color:#fff;padding:2px 8px;border-radius:6px;font-size:0.98em;font-weight:700;display:inline-block;margin-left:8px;'>${plan.discount_percent}</span>`;
+  }
+  
+  if (plan.old_price && plan.old_price !== plan.price) {
+    oldPrice = `<s style="color:#888;margin-left:8px;font-weight:normal;">${plan.old_price}</s>`;
+  }
+  
+  // Используем правильные изображения
+  const imgSrc = img.startsWith('http') ? img : '/static/' + img;
+  
+  return `
+    <li>
+      <div class='psw-product-tile psw-interactive-root'>
+        <div class='psw-game-art__container psw-l-anchor-top-left psw-l-top-left psw-fill psw-r-2 psw-clip'>
+          <img class='psw-media-frame psw-fill-x psw-image psw-media psw-media-interactive psw-aspect-1-1' src='${imgSrc}' alt='${sub.service}'>
+        </div>
+        <div class='sub-card-title'>${sub.service} ${tier}</div>
+        ${discountBadge ? `<div style="margin-left:8px;margin-bottom:4px;!">${discountBadge}</div>` : ''}
+        <div class='sub-card-period'>${plan.period}</div>
+        <div class='sub-card-price'>${plan.price}${oldPrice}</div>
+      </div>
+    </li>
+  `;
+}
+function renderSubscriptionsListFlat(subs, region, search = '') {
+  const list = document.getElementById('subscriptions-list');
+  if (!list) return;
+  // Фильтруем только Nintendo подписки
+  let filtered = subs.filter(s => s.region === region && (
+    s.service.toLowerCase().includes('nintendo') ||
+    s.service.toLowerCase().includes('switch online')
+  ));
+  if (search) {
+    const q = search.trim().toLowerCase();
+    filtered = filtered.filter(s => s.service.toLowerCase().includes(q) || (s.plans && s.plans.some(p => p.period.toLowerCase().includes(q))));
+  }
+  if (!filtered.length) {
+    list.innerHTML = '<div style="padding:32px 0;color:#888;font-size:1.2rem;">Нет подписок</div>';
+    return;
+  }
+  let cards = [];
+  filtered.forEach(sub => {
+    sub.plans.forEach(plan => {
+      cards.push(renderSubscriptionCardFlat(sub, plan));
     });
-    
-    // Возвращаем только первую иконку для использования в renderCard
-    const firstIcon = sortedIcons[0];
-    if (firstIcon === "eaplay") return '<img src="../static/eaplay.png" class="psw-icon-psplus" alt="EA Play">';
-    if (firstIcon === "psplus") return '<img src="../static/psplus.png" class="psw-icon-psplus" alt="PS Plus">';
-    if (firstIcon === "gtaplus") return '<img src="../static/gtaplus.png" class="psw-icon-psplus" alt="GTA+">';
-    if (firstIcon === "ubisoft") return '<img src="../static/ubisoft.png" class="psw-icon-psplus" alt="Ubisoft+">';
-    return '';
-  }
-  
-  // Одна иконка
-  if (type === "eaplay") return '<img src="../static/eaplay.png" class="psw-icon-psplus" alt="EA Play">';
-  if (type === "psplus") return '<img src="../static/psplus.png" class="psw-icon-psplus" alt="PS Plus">';
-  if (type === "gtaplus") return '<img src="../static/gtaplus.png" class="psw-icon-psplus" alt="GTA+">';
-  if (type === "ubisoft") return '<img src="../static/ubisoft.png" class="psw-icon-psplus" alt="Ubisoft+">';
-  return '';
-}
-    function renderCard(game) {
-      let details = `<span class='psw-t-body psw-c-t-1 psw-t-truncate-2'>${game.title}</span>`;
-      
-      // Обработка подписок
-      if (game.subscription_icon || game.subscription) {
-        if (game.subscription_icon && game.subscription_icon.includes(',')) {
-          // Несколько подписок
-          const icons = game.subscription_icon.split(',').map(icon => icon.trim());
-          const sortedIcons = icons.sort((a, b) => {
-            if (a === 'psplus') return -1;
-            if (b === 'psplus') return 1;
-            return a.localeCompare(b);
-          });
-          
-          // Показываем первую подписку (PS Plus если есть)
-          const firstIcon = sortedIcons[0];
-          let firstSubscriptionText = game.subscription;
-          
-          // Определяем текст для первой подписки
-          if (firstIcon === 'psplus') {
-            firstSubscriptionText = 'Extra'; // или другой тип PS Plus
-          } else if (firstIcon === 'gtaplus') {
-            firstSubscriptionText = 'GTA+';
-          } else if (firstIcon === 'ubisoft') {
-            firstSubscriptionText = 'Ubisoft+';
-          } else if (firstIcon === 'eaplay') {
-            firstSubscriptionText = 'EA Play';
-          }
-          
-          details += `<div class='psw-service-upsell'>${subscriptionIcon(firstIcon)}${firstSubscriptionText}</div>`;
-          
-          // Если есть другие подписки, показываем их ниже
-          if (sortedIcons.length > 1) {
-            for (let i = 1; i < sortedIcons.length; i++) {
-              const icon = sortedIcons[i];
-              let subscriptionText = '';
-              
-              if (icon === 'gtaplus') {
-                subscriptionText = 'GTA+';
-              } else if (icon === 'ubisoft') {
-                subscriptionText = 'Ubisoft+';
-              } else if (icon === 'eaplay') {
-                subscriptionText = 'EA Play';
-              } else if (icon === 'psplus') {
-                subscriptionText = 'Extra';
-              }
-              
-              details += `<div class='psw-service-upsell'>${subscriptionIcon(icon)}${subscriptionText}</div>`;
-            }
-          }
-        } else {
-          // Одна подписка
-          details += `<div class='psw-service-upsell'>${game.subscription_icon ? subscriptionIcon(game.subscription_icon) : ''}${game.subscription ? game.subscription : ''}</div>`;
-        }
-      }
-      
-      if (game.discount_percent) {
-    details += `<span class='psw-badge'>${game.discount_percent}</span>`;
-      }
-      details += `<div class='psw-price'>${game.price ? game.price : ''}${game.old_price ? `<s>${game.old_price}</s>` : ''}</div>`;
-      return `
-        <li>
-          <div class='psw-product-tile'>
-            <div class='psw-game-art__container'>
-              <img src='${game.img}' alt='${game.title}' class='psw-game-art psw-l-fit-cover' loading='lazy'>
-            </div>
-            <div class='psw-product-tile__details'>
-              ${details}
-            </div>
-          </div>
-        </li>
-      `;
-    }
-function parseDate(dateStr) {
-  if (!dateStr) return -Infinity;
-  // Поддержка d/m/yyyy, d.m.yyyy, yyyy-mm-dd
-  let d, m, y;
-  if (/\d{1,2}[./-]\d{1,2}[./-]\d{4}/.test(dateStr)) {
-    [d, m, y] = dateStr.split(/[./-]/).map(Number);
-    if (!d || !m || !y) return -Infinity;
-    return new Date(y, m - 1, d).getTime();
-  }
-  if (/\d{4}-\d{2}-\d{2}/.test(dateStr)) {
-    [y, m, d] = dateStr.split('-').map(Number);
-    if (!d || !m || !y) return -Infinity;
-    return new Date(y, m - 1, d).getTime();
-  }
-  return -Infinity;
-}
-
-function parsePrice(priceStr, region) {
-  if (!priceStr) return Infinity;
-  let price = priceStr.replace(/[^0-9.,]/g, '');
-  if (region === 'tr') {
-    // Турция: 2.899,99 → 2899.99
-    price = price.replace(/\./g, '').replace(',', '.');
-  } else if (region === 'in') {
-    // Индия: 4,999 → 4999
-    price = price.replace(/,/g, '');
-  } else {
-    // fallback
-    if (price.includes(',')) {
-      price = price.replace(/\./g, '').replace(',', '.');
-    } else {
-      price = price.replace(/,/g, '');
-    }
-  }
-  const num = parseFloat(price);
-  return isNaN(num) ? Infinity : num;
-}
-function hasRuSubOnly(voice, subs) {
-  // Есть русские субтитры, но нет русской озвучки
-  return subs.includes('Русский') && (!voice || !voice.includes('Русский'));
-}
-function hasRuFull(voice, subs) {
-  // Есть и русская озвучка, и субтитры
-  return voice.includes('Русский') && subs.includes('Русский');
-}
-function hasAnyRu(voice, subs) {
-  return (voice && voice.includes('Русский')) || (subs && subs.includes('Русский'));
-}
-function isAllLocEmpty(g) {
-  return !g.voice_ps4 && !g.voice_ps5 && !g.subtitles_ps4 && !g.subtitles_ps5;
-}
-function isAllEnglish(g) {
-  // true если во всех полях нет 'Русский' и хотя бы одно поле не пустое
-  const all = [g.voice_ps4, g.voice_ps5, g.subtitles_ps4, g.subtitles_ps5];
-  if (all.every(x => !x || x === '')) return false;
-  return all.every(x => !x || !x.includes('Русский'));
-}
-function applyFilters(games) {
-  const platform = document.getElementById('filter-platform').value;
-  const localization = document.getElementById('filter-localization').value;
-  const region = window.selectedRegion || '';
-  let filtered = games.filter(g => {
-    // Фильтрация по платформе
-    if (platform === 'ps4' && Array.isArray(g.platforms) && (g.platforms.length !== 1 || g.platforms[0] !== 'PS4')) return false;
-    if (platform === 'ps5' && Array.isArray(g.platforms) && (g.platforms.length !== 1 || g.platforms[0] !== 'PS5')) return false;
-    if (platform === 'ps4ps5' && Array.isArray(g.platforms) && !(g.platforms.includes('PS4') && g.platforms.includes('PS5') && g.platforms.length === 2)) return false;
-    if (region && g.region !== region) return false;
-    // Локализация
-    if (isAllLocEmpty(g)) {
-      // Показываем только если фильтр 'Любая'
-      return localization === '';
-    }
-    // Проверяем по платформам
-    let locMatch = false;
-    const check = (voice, subs) => {
-      if (localization === 'full') return hasRuFull(voice, subs);
-      if (localization === 'ru-subs') return hasRuSubOnly(voice, subs);
-      if (localization === 'en-full') return false; // обработаем ниже
-      return true;
-    };
-    if (localization === 'en-full') {
-      return isAllEnglish(g);
-    }
-    if (!platform || platform === '') {
-      // Любая платформа: если хотя бы для одной подходит
-      if (check(g.voice_ps4 || '', g.subtitles_ps4 || '')) locMatch = true;
-      if (check(g.voice_ps5 || '', g.subtitles_ps5 || '')) locMatch = true;
-    } else if (platform === 'ps4') {
-      locMatch = check(g.voice_ps4 || '', g.subtitles_ps4 || '');
-    } else if (platform === 'ps5') {
-      locMatch = check(g.voice_ps5 || '', g.subtitles_ps5 || '');
-    } else if (platform === 'ps4ps5') {
-      locMatch = (check(g.voice_ps4 || '', g.subtitles_ps4 || '') || check(g.voice_ps5 || '', g.subtitles_ps5 || ''));
-    }
-    return locMatch;
   });
-  // Применяем фильтрацию по кнопкам до сортировки
-  filtered = applyExtraToggles(filtered);
-  // Сортировка
-  const sortBy = document.getElementById('sort-by').value;
-  let sorted = filtered.slice();
-  if (sortBy === 'title-asc') sorted.sort((a, b) => {
-    if (!a.title && !b.title) return 0;
-    if (!a.title) return 1;
-    if (!b.title) return -1;
-    return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
-  });
-  if (sortBy === 'title-desc') sorted.sort((a, b) => {
-    if (!a.title && !b.title) return 0;
-    if (!a.title) return 1;
-    if (!b.title) return -1;
-    return normalizeTitle(b.title).localeCompare(normalizeTitle(a.title));
-  });
-  if (sortBy === 'date-desc') sorted.sort((a, b) => {
-    const ad = parseDate(a.release_date);
-    const bd = parseDate(b.release_date);
-    if (ad === bd) return 0;
-    if (ad === -Infinity) return 1;
-    if (bd === -Infinity) return -1;
-    return bd - ad;
-  });
-  if (sortBy === 'date-asc') sorted.sort((a, b) => {
-    const ad = parseDate(a.release_date);
-    const bd = parseDate(b.release_date);
-    if (ad === bd) return 0;
-    if (ad === -Infinity) return 1;
-    if (bd === -Infinity) return -1;
-    return ad - bd;
-  });
-  // Сортировка по цене
-  const sortPrice = document.getElementById('sort-price');
-  if (sortPrice && sortPrice.value) {
-    if (sortPrice.value === 'price-asc') sorted.sort((a, b) => parsePrice(a.price, a.region) - parsePrice(b.price, b.region));
-    if (sortPrice.value === 'price-desc') sorted.sort((a, b) => parsePrice(b.price, b.region) - parsePrice(a.price, a.region));
-  }
-  return sorted;
+  list.innerHTML = cards.join('');
+  setTimeout(() => {
+    list.querySelectorAll('li').forEach(li => li.classList.add('visible'));
+  }, 10);
 }
-// --- РЕГИОНЫ ---
-window.selectedRegion = 'in';
 function setRegionButtonActive(region) {
   const regionBtns = document.querySelectorAll('.region-btn');
-  regionBtns.forEach(b => {
-    b.classList.remove('active');
-  });
+  regionBtns.forEach(b => b.style.background = '#e6e6e6');
   const btn = Array.from(regionBtns).find(b => b.dataset.region === region);
-  if (btn) btn.classList.add('active');
+  if (btn) btn.style.background = '#3d79ff';
+      }
+// --- Nintendo Gift Cards США ---
+const nintendoGiftCardsUS = [
+  { img: '/static/nsgift.png', title: 'Nintendo eShop $10' },
+  { img: '/static/nsgift.png', title: 'Nintendo eShop $20' },
+  { img: '/static/nsgift.png', title: 'Nintendo eShop $35' },
+  { img: '/static/nsgift.png', title: 'Nintendo eShop $50' },
+  { img: '/static/nso3.png', title: 'Nintendo Switch Online Gift Card 3 месяца' },
+  { img: '/static/nso12.png', title: 'Nintendo Switch Online Gift Card 12 месяцев' },
+];
+const nintendoGiftCardsEU = [
+  { img: '/static/nsgift.png', title: 'Nintendo eShop €15' },
+  { img: '/static/nsgift.png', title: 'Nintendo eShop €25' },
+  { img: '/static/nsgift.png', title: 'Nintendo eShop €50' },
+  { img: '/static/nsgift.png', title: 'Nintendo eShop €100' },
+  { img: '/static/nso3.png', title: 'Nintendo Switch Online Gift Card 3 месяца' },
+  { img: '/static/nso12.png', title: 'Nintendo Switch Online Gift Card 12 месяцев' },
+];
+function renderNintendoGiftCards(region) {
+  const list = document.getElementById('psn-wallet-list');
+  if (!list) return;
+  if (region === 'us') {
+    list.innerHTML = nintendoGiftCardsUS.map(card => `
+      <li>
+        <div class='psw-product-tile'>
+          <div class='psw-game-art__container'>
+            <img src='${card.img}' alt='${card.title}' class='psw-game-art psw-l-fit-cover' loading='lazy'>
+            </div>
+          <div class='psw-product-tile__details'>
+            <span class='psw-t-body psw-c-t-1 psw-t-truncate-2'>${card.title}</span>
+          </div>
+        </div>
+      </li>
+        `).join('');
+  } else if (region === 'eu') {
+    list.innerHTML = nintendoGiftCardsEU.map(card => `
+      <li>
+        <div class='psw-product-tile'>
+          <div class='psw-game-art__container'>
+            <img src='${card.img}' alt='${card.title}' class='psw-game-art psw-l-fit-cover' loading='lazy'>
+          </div>
+          <div class='psw-product-tile__details'>
+            <span class='psw-t-body psw-c-t-1 psw-t-truncate-2'>${card.title}</span>
+          </div>
+        </div>
+      </li>
+    `).join('');
+  } else {
+    list.innerHTML = '';
+  }
+  setTimeout(() => {
+    list.querySelectorAll('li').forEach(li => li.classList.add('visible'));
+  }, 10);
 }
 document.addEventListener('DOMContentLoaded', function() {
-  window.selectedRegion = 'in';
-  setRegionButtonActive('in');
+  // По умолчанию США
+  window.selectedRegion = 'us';
+  setRegionButtonActive('us');
   const regionBtns = document.querySelectorAll('.region-btn');
+  function updateRegionActive() {
+    regionBtns.forEach(btn => btn.classList.remove('active'));
+    const activeBtn = Array.from(regionBtns).find(b => b.dataset.region === window.selectedRegion);
+    if (activeBtn) activeBtn.classList.add('active');
+  }
   regionBtns.forEach(btn => {
     btn.onclick = null;
     btn.addEventListener('click', function() {
-      if (window.selectedRegion === btn.dataset.region) return; // ничего не делаем если уже выбран
+      if (window.selectedRegion === btn.dataset.region) return;
       window.selectedRegion = btn.dataset.region;
-      setRegionButtonActive(btn.dataset.region);
-      const searchInput = document.querySelector('.search-bar input');
-      const list = document.getElementById('all-games-list');
-      // Скрываем все карточки плавно
-      if (list) {
-        list.querySelectorAll('li').forEach(li => {
-          li.classList.add('animated');
-          li.classList.remove('visible');
-        });
+      updateRegionActive();
+      const searchInput = document.getElementById('search-bar-input');
+      if (searchInput && searchInput.value.trim()) {
+        renderSubscriptionsListFlat(allSubs, window.selectedRegion.toUpperCase(), searchInput.value);
+      } else {
+        renderSubscriptionsListFlat(allSubs, window.selectedRegion.toUpperCase());
       }
-      setTimeout(() => {
-        if (searchInput && searchInput.value.trim()) {
-          searchInput.dispatchEvent(new Event('input'));
-        } else {
-          document.getElementById('filters').dispatchEvent(new Event('input'));
-        }
-      }, 200);
+      renderNintendoGiftCards(window.selectedRegion);
     });
   });
-  // Сброс фильтров
-  document.getElementById('reset-filters').addEventListener('click', function() {
-    document.getElementById('filter-platform').value = '';
-    document.getElementById('filter-localization').value = '';
-    document.getElementById('sort-by').value = 'title-asc';
-    document.getElementById('sort-price').value = '';
-    // window.selectedRegion = 'in'; // УБРАНО: не сбрасываем регион
-    // setRegionButtonActive('in'); // УБРАНО: не сбрасываем регион
-    document.getElementById('filters').dispatchEvent(new Event('input'));
-  });
-});
-function renderPagination(total, page, perPage) {
-  const pag = document.getElementById('pagination');
-  if (!pag) return;
-  pag.innerHTML = '';
-  const totalPages = Math.ceil(total / perPage);
-  if (totalPages <= 1) return;
-  // Prev
-  const prev = document.createElement('button');
-  prev.textContent = '←';
-  prev.disabled = page === 1;
-  prev.style = 'padding:8px 16px;border-radius:8px;border:none;background:#e6e6e6;cursor:pointer;font-weight:700;';
-  prev.onclick = () => {
-    window.currentPage = Math.max(1, page - 1);
-    window.renderAllGames();
-  };
-  pag.appendChild(prev);
-  // Page numbers (max 7)
-  let start = Math.max(1, page - 3);
-  let end = Math.min(totalPages, page + 3);
-  if (page <= 4) { start = 1; end = Math.min(7, totalPages); }
-  if (page >= totalPages - 3) { end = totalPages; start = Math.max(1, totalPages - 6); }
-  for (let i = start; i <= end; i++) {
-    const btn = document.createElement('button');
-    btn.textContent = i;
-    btn.disabled = i === page;
-    btn.style = 'padding:8px 14px;border-radius:8px;border:none;background:' + (i === page ? '#3d79ff;color:#fff;' : '#e6e6e6;') + 'cursor:pointer;font-weight:700;';
-    btn.onclick = () => {
-      window.currentPage = i;
-      window.renderAllGames();
-    };
-    pag.appendChild(btn);
-  }
-  // Next
-  const next = document.createElement('button');
-  next.textContent = '→';
-  next.disabled = page === totalPages;
-  next.style = 'padding:8px 16px;border-radius:8px;border:none;background:#e6e6e6;cursor:pointer;font-weight:700;';
-  next.onclick = () => {
-    window.currentPage = Math.min(totalPages, page + 1);
-    window.renderAllGames();
-  };
-  pag.appendChild(next);
-}
-fetch('/parser/games.json')
-      .then(res => res.json())
-      .then(games => {
-      window.currentPage = 1;
-      window.renderAllGames = function() {
-        const filtered = applyFilters(games);
-        const perPage = 12;
-        const page = window.currentPage || 1;
-        const total = filtered.length;
-        const start = (page - 1) * perPage;
-        const end = start + perPage;
-        const pageGames = filtered.slice(start, end);
-        const list = document.getElementById('all-games-list');
-        list.innerHTML = pageGames.length ? pageGames.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
-        renderPagination(total, page, perPage);
-        // Плавная анимация
-        setTimeout(() => {
-          list.querySelectorAll('li').forEach(li => {
-            li.classList.add('animated');
-            setTimeout(() => li.classList.add('visible'), 10);
-          });
-        }, 10);
-      };
-      document.getElementById('filters').addEventListener('input', function() {
-        window.currentPage = 1;
-        window.renderAllGames();
-      });
-      document.getElementById('sort-by').addEventListener('change', function() {
-        window.currentPage = 1;
-        window.renderAllGames();
-      });
-      document.getElementById('reset-filters').addEventListener('click', function() {
-        window.currentPage = 1;
-        window.renderAllGames();
-      });
-      window.renderAllGames();
-    });
-// Исправляю переход на steamtopup.html
-// Для баннера:
-document.addEventListener('DOMContentLoaded', function() {
-  const steamBanner = document.getElementById('steam-banner');
-  if (steamBanner) {
-    steamBanner.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = 'steamtopup.html';
-    });
-  }
-  // Для навигации:
-  const navSteam = document.getElementById('nav-steam');
-  if (navSteam) {
-    navSteam.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = 'steamtopup.html';
-    });
-  }
-});
-// Исправляю переходы на абсолютные пути
-// Навигация "Игры"
-document.addEventListener('DOMContentLoaded', function() {
-  const navAllGames = document.getElementById('nav-allgames');
-  if (navAllGames) {
-    navAllGames.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = '/allgames/allgames.html';
-    });
-  }
-  // Навигация "Пополнить Steam"
-  const navSteam = document.getElementById('nav-steam');
-  if (navSteam) {
-    navSteam.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = '/steamtopup/steamtopup.html';
-    });
-  }
-  // Баннер Steam
-  const steamBanner = document.getElementById('steam-banner');
-  if (steamBanner) {
-    steamBanner.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.location.href = '/steamtopup/steamtopup.html';
-    });
-  }
-});
-document.querySelector('.logo').addEventListener('click', function() {
-  window.location.href = '/';
-});
-document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.querySelector('.search-bar input');
+  updateRegionActive();
+  // Поиск (если нужен)
+  const searchInput = document.getElementById('search-bar-input');
   if (searchInput) {
     searchInput.addEventListener('input', function() {
-      const q = this.value.trim().toLowerCase();
-      const list = document.getElementById('all-games-list');
-      if (!q) {
-        window.currentPage = 1;
-        document.getElementById('filters').dispatchEvent(new Event('input'));
-        return;
-      }
-      fetch('/parser/games.json')
-        .then(res => res.json())
-        .then(games => {
-          // --- Сначала применяем applyFilters (регион, локализация, платформа, скидки, новинки, предзаказы и т.д.) ---
-          let filteredGames = applyFilters(games);
-          // --- Поиск по названию только среди отфильтрованных игр ---
-          const foundGamesStarts = filteredGames.filter(g => {
-            if (!g.title) return false;
-            const words = g.title.toLowerCase().split(/\s+/);
-            return words.some(word => word.startsWith(q));
-          }).sort((a, b) => {
-            const aWords = a.title.toLowerCase().split(/\s+/);
-            const bWords = b.title.toLowerCase().split(/\s+/);
-            const aPos = Math.min(...aWords.map(word => word.startsWith(q) ? a.title.toLowerCase().indexOf(word) : 9999));
-            const bPos = Math.min(...bWords.map(word => word.startsWith(q) ? b.title.toLowerCase().indexOf(word) : 9999));
-            if (aPos !== bPos) return aPos - bPos;
-            return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
-          });
-          const foundGamesIncludes = filteredGames.filter(g => {
-            if (!g.title) return false;
-            const title = g.title.toLowerCase();
-            if (foundGamesStarts.includes(g)) return false;
-            return title.includes(q);
-          }).sort((a, b) => {
-            const aPos = a.title.toLowerCase().indexOf(q);
-            const bPos = b.title.toLowerCase().indexOf(q);
-            if (aPos !== bPos) return aPos - bPos;
-            return normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
-          });
-          const filtered = [...foundGamesStarts, ...foundGamesIncludes];
-          list.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '<div style="padding:32px">Нет игр</div>';
-          renderPagination(filtered.length, 1, 12);
-          setTimeout(() => {
-            list.querySelectorAll('li').forEach(li => {
-              li.classList.add('animated');
-              setTimeout(() => li.classList.add('visible'), 10);
-            });
-          }, 10);
-        });
+      renderSubscriptionsListFlat(allSubs, window.selectedRegion.toUpperCase(), this.value);
     });
   }
-  // --- ДОБАВЛЕНО: при смене региона, если есть текст в поиске, применяем фильтр поиска ---
-  const regionBtns = document.querySelectorAll('.region-btn');
-  regionBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      window.currentPage = 1;
-      if (searchInput && searchInput.value.trim()) {
-        searchInput.dispatchEvent(new Event('input'));
-      }
+  // Логотип
+  const logo = document.querySelector('.logo');
+  if (logo) {
+    logo.style.cursor = 'pointer';
+    logo.addEventListener('click', function() {
+      window.location.href = '/';
     });
-  });
-});
-function isDiscountGame(g) {
-  return g.discount_percent && g.discount_percent.trim() !== '';
-}
-function isNewGame(g) {
-  if (!g.release_date) return false;
-  const [d, m, y] = g.release_date.split(/[./-]/).map(Number);
-  if (!d || !m || !y) return false;
-  const date = new Date(y, m - 1, d);
-  const now = new Date();
-  const days = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-  return days >= 0 && days <= 21;
-}
-function isPreorderGame(g) {
-  if (!g.release_date) return false;
-  const [d, m, y] = g.release_date.split(/[./-]/).map(Number);
-  if (!d || !m || !y) return false;
-  const date = new Date(y, m - 1, d);
-  const now = new Date();
-  return date > now;
-}
-function applyExtraToggles(games) {
-  // region filter
-  const region = window.selectedRegion || '';
-  let filtered = games.filter(g => !region || g.region === region);
-  const discountActive = document.getElementById('filter-discount').classList.contains('active');
-  const newActive = document.getElementById('filter-new').classList.contains('active');
-  const preorderActive = document.getElementById('filter-preorder').classList.contains('active');
-  // Логика пересечений
-  if (discountActive && !newActive && !preorderActive) {
-    filtered = filtered.filter(isDiscountGame);
-  } else if (!discountActive && newActive && !preorderActive) {
-    filtered = filtered.filter(isNewGame);
-  } else if (discountActive && newActive && !preorderActive) {
-    filtered = filtered.filter(g => isNewGame(g) && isDiscountGame(g));
-  } else if (!discountActive && !newActive && preorderActive) {
-    filtered = filtered.filter(isPreorderGame);
-  } else if (discountActive && !newActive && preorderActive) {
-    filtered = filtered.filter(g => isPreorderGame(g) && isDiscountGame(g));
-  } else if ((!discountActive && newActive && preorderActive) || (discountActive && newActive && preorderActive)) {
-    // невозможные комбинации
-    filtered = [];
   }
-  // если все выключены — не фильтруем (возвращаем исходный массив по региону)
-  return filtered;
+  // Рендерим Nintendo Gift Cards при загрузке и смене региона
+  renderNintendoGiftCards(window.selectedRegion);
+
+});
+fetch('/parser/subscriptions.json')
+  .then(res => res.json())
+  .then(subs => {
+    allSubs = subs;
+    renderSubscriptionsListFlat(allSubs, window.selectedRegion.toUpperCase());
+  })
+  .catch(e => {
+    document.getElementById('subscriptions-list').innerHTML = '<div style="padding:32px 0;color:#e44;font-size:1.2rem;">Ошибка загрузки подписок</div>';
+});
+
+function subscriptionIcon(type) {
+  if (type === "nintendo") return '<img src="/static/nsonline.png" class="psw-icon-psplus" alt="Nintendo Switch Online">';
+  return '';
 }
-document.addEventListener('DOMContentLoaded', function() {
-  // ... существующий код ...
-  // --- КНОПКИ-ФИЛЬТРЫ ---
-  const btnDiscount = document.getElementById('filter-discount');
-  const btnNew = document.getElementById('filter-new');
-  const btnPreorder = document.getElementById('filter-preorder');
-  [btnDiscount, btnNew, btnPreorder].forEach(btn => {
-    btn.addEventListener('click', function() {
-      btn.classList.toggle('active');
-      window.currentPage = 1;
-      window.renderAllGames();
-    });
-  });
-  // Сброс фильтров — снимаем все кнопки
-  document.getElementById('reset-filters').addEventListener('click', function() {
-    [btnDiscount, btnNew, btnPreorder].forEach(btn => btn.classList.remove('active'));
-  });
-});
-document.addEventListener('DOMContentLoaded', function() {
-  // ... существующий код ...
-  // --- АВТОАКТИВАЦИЯ ФИЛЬТРА ПО ПАРАМЕТРУ ---
-  const params = new URLSearchParams(window.location.search);
-  const filter = params.get('filter');
-  if (filter) {
-    const btnMap = {
-      discount: document.getElementById('filter-discount'),
-      new: document.getElementById('filter-new'),
-      preorder: document.getElementById('filter-preorder')
-    };
-    if (btnMap[filter]) {
-      btnMap[filter].classList.add('active');
-      window.currentPage = 1;
-      window.renderAllGames();
-    }
-  }
-});
-  </script>
+</script>
 </body>
 </html> 

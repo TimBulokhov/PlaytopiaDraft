@@ -126,9 +126,7 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "34,00 TL",
-        "old_price": "139,00 TL",
-        "discount_percent": "-75%"
+        "price": "139,00 TL"
       }
     ]
   },
@@ -139,9 +137,7 @@
     "plans": [
       {
         "period": "1 месяц",
-        "price": "Rs 80",
-        "old_price": "Rs 399",
-        "discount_percent": "-79%"
+        "price": "Rs 399"
       }
     ]
   },
@@ -283,6 +279,120 @@
       {
         "period": "12 месяцев",
         "price": "2.999,00 TL"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online",
+    "region": "US",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "$3.99"
+      },
+      {
+        "period": "3 месяца",
+        "price": "$7.99",
+        "monthly_price": "$2.67/month"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "$19.99",
+        "monthly_price": "$1.67/month"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online Family",
+    "region": "US",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "12 месяцев",
+        "price": "$34.99",
+        "monthly_price": "$2.92/month"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online + Expansion Pack",
+    "region": "US",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "12 месяцев",
+        "price": "$49.99",
+        "monthly_price": "$4.17/month"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online + Expansion Pack Family",
+    "region": "US",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "12 месяцев",
+        "price": "$79.99",
+        "monthly_price": "$6.67/month"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online",
+    "region": "EU",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "1 месяц",
+        "price": "€3.99"
+      },
+      {
+        "period": "3 месяца",
+        "price": "€7.99",
+        "monthly_price": "€2.67/month"
+      },
+      {
+        "period": "12 месяцев",
+        "price": "€19.99",
+        "monthly_price": "€1.67/month"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online Family",
+    "region": "EU",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "12 месяцев",
+        "price": "€34.99",
+        "monthly_price": "€2.92/month"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online + Expansion Pack",
+    "region": "EU",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "12 месяцев",
+        "price": "€49.99",
+        "monthly_price": "€4.17/month"
+      }
+    ]
+  },
+  {
+    "service": "Nintendo Switch Online + Expansion Pack Family",
+    "region": "EU",
+    "image": "nsonline.png",
+    "plans": [
+      {
+        "period": "12 месяцев",
+        "price": "€79.99",
+        "monthly_price": "€6.67/month"
       }
     ]
   }
