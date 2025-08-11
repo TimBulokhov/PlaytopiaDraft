@@ -140,7 +140,8 @@ def safe_get(url, headers, retries=3, delay=3):
 async def parse_playstation_async(url, region):
     games = []
     page = 1
-    while page <= 3:
+    while page <= 417:
+        print(f"Парсинг страницы {page}/417...")
         page_url = re.sub(r'/browse/\d+', f'/browse/{page}', url)
         resp = safe_get(page_url, HEADERS)
         if resp is None:
@@ -294,10 +295,14 @@ async def parse_playstation_async(url, region):
 
 async def main_async():
     all_games = []
+    print('Начинаем парсинг региона Турция (TR)...')
     all_games += await parse_playstation_async('https://store.playstation.com/en-tr/pages/browse/1', 'tr')
+    print('Начинаем парсинг региона Индия (IN)...')
     all_games += await parse_playstation_async('https://store.playstation.com/en-in/pages/browse/1', 'in')
+    print('Записываем все игры в файл...')
     with open(GAMES_JSON, 'w', encoding='utf-8') as f:
         json.dump(all_games, f, ensure_ascii=False, indent=2)
+    print('Парсинг завершен!')
 
 if __name__ == '__main__':
     print('Парсинг запущен...')

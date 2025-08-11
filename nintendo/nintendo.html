@@ -3,7 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Nintendo Switch Online - Playtopia Store</title>
+  
+  <!-- Favicon with multiple formats and preloading -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/logo.png?v=1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/logo.png?v=1">
+  <link rel="shortcut icon" href="/static/logo.png?v=1">
+  <link rel="apple-touch-icon" href="/static/logo.png?v=1">
+  <link rel="preload" as="image" href="/static/logo.png?v=1">
+  
+  <script>
+      // Force favicon loading immediately
+      (function() {
+          var link = document.createElement('link');
+          link.rel = 'icon';
+          link.type = 'image/png';
+          link.href = '/static/logo.png?v=' + Date.now();
+          document.head.appendChild(link);
+      })();
+  </script>
+  
   <style>
     html, body {
       height: 100%;
@@ -561,7 +583,7 @@
       <li>
         <a id="nav-steam" href="/steamtopup/steamtopup.html">
           <span><svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.714355" width="28" height="28" rx="10" fill="black"></rect><path d="M19.9644 5.25C17.1168 5.25 14.7972 7.52866 14.7212 10.3582L11.51 14.9485C11.272 14.9034 11.0277 14.875 10.7769 14.875C9.94707 14.875 9.17879 15.1355 8.54321 15.5757L4.21436 13.8633V18.5681L6.93164 19.6431C7.31443 21.416 8.89119 22.75 10.7769 22.75C12.705 22.75 14.3069 21.3545 14.6426 19.5217L19.6943 15.7363C19.7843 15.7409 19.8733 15.75 19.9644 15.75C22.8597 15.75 25.2144 13.3954 25.2144 10.5C25.2144 7.60462 22.8597 5.25 19.9644 5.25ZM19.9644 7C21.8946 7 23.4644 8.56975 23.4644 10.5C23.4644 12.4303 21.8946 14 19.9644 14C18.0341 14 16.4644 12.4303 16.4644 10.5C16.4644 8.56975 18.0341 7 19.9644 7ZM19.9644 7.875C19.2682 7.875 18.6005 8.15156 18.1082 8.64384C17.6159 9.13613 17.3394 9.80381 17.3394 10.5C17.3394 11.1962 17.6159 11.8639 18.1082 12.3562C18.6005 12.8484 19.2682 13.125 19.9644 13.125C20.6605 13.125 21.3282 12.8484 21.8205 12.3562C22.3128 11.8639 22.5894 11.1962 22.5894 10.5C22.5894 9.80381 22.3128 9.13613 21.8205 8.64384C21.3282 8.15156 20.6605 7.875 19.9644 7.875ZM10.7769 15.75C12.4656 15.75 13.8394 17.1238 13.8394 18.8125C13.8394 20.5012 12.4656 21.875 10.7769 21.875C9.53323 21.875 8.46523 21.1272 7.98608 20.0601L9.97192 20.8462C10.2362 20.9512 10.5074 21.0017 10.7751 21.0017C11.6466 21.0017 12.471 20.4784 12.8105 19.6191C13.2559 18.4956 12.7053 17.2233 11.5818 16.7788L9.58911 15.9893C9.95446 15.835 10.356 15.75 10.7769 15.75Z" fill="white"></path></svg></span>
-          Пополнить Steam
+          Steam
         </a>
       </li>
       <li>

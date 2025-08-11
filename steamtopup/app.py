@@ -8,6 +8,17 @@ import os
 app = Flask(__name__)
 CORS(app)  # Добавляем поддержку CORS
 
+# Добавляем маршрут для статических файлов
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    static_dir = os.path.join(os.path.dirname(__file__), 'static')
+    return send_from_directory(static_dir, filename)
+
+# Специальный маршрут для favicon с правильными заголовками
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(os.path.dirname(__file__), 'static'), 'logo.png', mimetype='image/png')
+
 # Читаем HTML файл
 def get_html_content():
     main_html_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'main', 'main.html')
